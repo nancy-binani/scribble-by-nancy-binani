@@ -2,7 +2,7 @@
 
 class ArticlesController < ApplicationController
   def index
-    tasks = Task.all
-    render status: :ok, json: { tasks: tasks }
-  end
+    articles = Article.all
+    render status: :ok, json: { articles: articles }
+   end
 end

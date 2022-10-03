@@ -3,19 +3,31 @@ import React, { useEffect, useState } from "react";
 import { PageLoader, Button, Dropdown } from "@bigbinary/neetoui";
 import { Container, Header } from "@bigbinary/neetoui/layouts";
 
+import articlesApi from "apis/articles";
+
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
 const Articles = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     fetchArticles();
   }, []);
 
-  const fetchArticles = () => {
-    setLoading(false);
+  const fetchArticles = async () => {
+    try {
+      const {
+        data: { articles },
+      } = await articlesApi.list();
+      setArticles(articles);
+      setLoading(false);
+    } catch (error) {
+      logger.error(error);
+      setLoading(false);
+    }
   };
 
   if (loading) {
@@ -40,7 +52,7 @@ const Articles = () => {
           }}
         />
         <h4 className="mb-3 ml-3">67 Articles</h4>
-        <Table />
+        <Table data={articles} />
       </Container>
     </div>
   );
