@@ -38,8 +38,8 @@ const SideMenu = () => {
         onCollapse={() => setIsSearchCollapsed(true)}
       />
       <MenuBar.Block active count={10} label="Getting Started" />
-      <MenuBar.Block count={10} label="Apps  Integration" />
-      <MenuBar.Block count={20} label="Security  Privacy" />
+      <MenuBar.Block count={10} label="Apps & Integration" />
+      <MenuBar.Block count={20} label="Security & Privacy" />
       <MenuBar.Block count={27} label="Misc" />
     </MenuBar>
   );

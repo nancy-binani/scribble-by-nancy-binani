@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import { PageLoader, Button, Dropdown } from "@bigbinary/neetoui";
-import { Container, Header as NeetouiHeader } from "@bigbinary/neetoui/layouts";
+import { Container, Header } from "@bigbinary/neetoui/layouts";
 
 import SideMenu from "./SideMenu";
+import Table from "./Table";
 
 const Articles = () => {
   const [loading, setLoading] = useState(true);
@@ -25,7 +26,7 @@ const Articles = () => {
     <div className="flex h-screen w-full">
       <SideMenu />
       <Container>
-        <NeetouiHeader
+        <Header
           actionBlock={
             <>
               <Dropdown buttonStyle="secondary" label="Columns" />
@@ -38,6 +39,8 @@ const Articles = () => {
             onChange: e => setSearchTerm(e.target.value),
           }}
         />
+        <h4 className="mb-3 ml-3">67 Articles</h4>
+        <Table />
       </Container>
     </div>
   );
