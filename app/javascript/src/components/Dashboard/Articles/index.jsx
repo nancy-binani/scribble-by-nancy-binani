@@ -26,8 +26,8 @@ const Articles = () => {
       setLoading(false);
     } catch (error) {
       logger.error(error);
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   if (loading) {

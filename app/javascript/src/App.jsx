@@ -28,7 +28,7 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Route exact component={Dashboard} path="/articles" />
+      <Route exact component={Dashboard} path="/" />
     </Router>
   );
 };

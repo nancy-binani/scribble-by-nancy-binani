@@ -12,7 +12,7 @@ export const buildContactsColumnData = () => [
   },
   {
     title: "DATE",
-    dataIndex: "date",
+    dataIndex: "created_at",
     key: "date",
     width: "15%",
   },

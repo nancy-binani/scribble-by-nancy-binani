@@ -4,8 +4,6 @@ import { Table as NeetoUITable, Pagination } from "neetoui";
 
 import { buildContactsColumnData } from "./utils";
 
-//import { ARTICLE_DETAILS } from "../constants";
-
 const Table = ({ data }) => (
   <>
     <NeetoUITable
