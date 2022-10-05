@@ -1,74 +1,29 @@
-export const ARTICLES_FROM_INITIAL_VALUES = {
+import { buildSelectOptions } from "src/utils";
+import * as yup from "yup";
+
+export const ARTICLES_FORM_INITIAL_VALUES = {
   title: "",
-  date: "",
-  author: "",
-  category: "",
-  status: "",
+  body: "",
+  categories: [],
 };
 
-export const ARTICLE_DETAILS = [
-  {
-    id: 1,
-    title: "Welcome to Scribble",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Getting Started",
-    status: "Draft",
-  },
-  {
-    id: 2,
-    title: "Welcome to Neeto",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Misc",
-    status: "Published",
-  },
-  {
-    id: 3,
-    title: "Setting Up",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Security & Privacy",
-    status: "Draft",
-  },
-  {
-    id: 4,
-    title: "Writing an article",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Misc",
-    status: "Published",
-  },
-  {
-    id: 5,
-    title: "Redirections",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Getting Started",
-    status: "Draft",
-  },
-  {
-    id: 6,
-    title: "301 and 302 redirections",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Security & Privacy",
-    status: "Published",
-  },
-  {
-    id: 7,
-    title: "Typography",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Misc",
-    status: "Draft",
-  },
-  {
-    id: 7,
-    title: "Password Protection",
-    date: "October 9th,2022",
-    author: "Oliver Smith",
-    category: "Getting Started",
-    status: "Published",
-  },
-];
+export const CATEGORIES = buildSelectOptions([
+  "Getting Started",
+  "Security & Privacy",
+  "Misc",
+]);
+
+export const ARTICLES_FORM_VALIDATION_SCHEMA = yup.object().shape({
+  title: yup.string().required("Title is required"),
+  body: yup.string().required("Description is required"),
+  categories: yup
+    .array()
+    .of(
+      yup.object().shape({
+        label: yup.string().oneOf(CATEGORIES.map(category => category.label)),
+        value: yup.string().oneOf(CATEGORIES.map(category => category.value)),
+      })
+    )
+    .min(1, "Please select atleast one category")
+    .required("Please select atleast one category"),
+});

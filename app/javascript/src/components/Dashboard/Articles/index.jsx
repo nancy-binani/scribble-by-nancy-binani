@@ -8,7 +8,7 @@ import articlesApi from "apis/articles";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
-const Articles = () => {
+const Articles = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [articles, setArticles] = useState([]);
@@ -21,13 +21,14 @@ const Articles = () => {
     try {
       const {
         data: { articles },
-      } = await articlesApi.list();
+      } = await articlesApi.fetch();
       setArticles(articles);
       setLoading(false);
     } catch (error) {
       logger.error(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (loading) {
@@ -42,7 +43,10 @@ const Articles = () => {
           actionBlock={
             <>
               <Dropdown buttonStyle="secondary" label="Columns" />
-              <Button label="Add New Article" />
+              <Button
+                label="Add New Article"
+                onClick={() => history.push("/articles/create")}
+              />
             </>
           }
           searchProps={{
@@ -51,7 +55,7 @@ const Articles = () => {
             onChange: e => setSearchTerm(e.target.value),
           }}
         />
-        <h4 className="mb-3 ml-3">67 Articles</h4>
+        <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
         <Table data={articles} />
       </Container>
     </div>
