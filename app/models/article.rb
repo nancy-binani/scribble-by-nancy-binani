@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
-  before_create :set_slug
-
   validates :title, presence: true, length: { maximum: 50 }
   validates :body, length: { maximum: 1000 }
-  validates :author, presence: true
-  validates :category, presence: true
-  validates :status, presence: true
   validates :slug, uniqueness: true
   validate :slug_not_changed
+  before_create :set_slug
 
   private
 
@@ -26,7 +22,7 @@ class Article < ApplicationRecord
 
     def slug_not_changed
       if slug_changed? && self.persisted?
-        errors.add(:slug, "is immutable!")
+        errors.add(:slug, t("task.slug.immutable"))
       end
     end
 end

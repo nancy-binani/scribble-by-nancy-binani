@@ -2,7 +2,9 @@ import React from "react";
 
 import { Delete, Edit } from "@bigbinary/neeto-icons";
 
-export const buildContactsColumnData = () => [
+import { formatDateAndTime } from "../utils";
+
+export const buildArticlesColumnData = () => [
   {
     title: "TITLE",
     dataIndex: "title",
@@ -15,6 +17,7 @@ export const buildContactsColumnData = () => [
     dataIndex: "created_at",
     key: "date",
     width: "15%",
+    render: date => formatDateAndTime(date),
   },
   {
     title: "AUTHOR",
@@ -25,10 +28,11 @@ export const buildContactsColumnData = () => [
   },
   {
     title: "CATEGORY",
-    dataIndex: "category",
+    dataIndex: "categories",
     key: "category",
     width: "15%",
     className: "text-gray-600",
+    render: categories => categories.join(","),
   },
   {
     title: "STATUS",

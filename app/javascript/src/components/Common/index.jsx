@@ -11,7 +11,6 @@ const NavBar = () => (
         <div className="flex px-2 lg:px-0">
           <span
             name="Scribble"
-            path="/"
             className="mr-3 inline-flex items-center px-1 pt-1
       text-sm font-semibold leading-5
       text-gray-800"

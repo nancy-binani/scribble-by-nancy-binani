@@ -2,13 +2,6 @@ import React from "react";
 
 import Articles from "./Articles";
 
-import NavBar from "../Common";
-
-const Dashboard = () => (
-  <>
-    <NavBar />
-    <Articles />
-  </>
-);
+const Dashboard = ({ history }) => <Articles history={history} />;
 
 export default Dashboard;
