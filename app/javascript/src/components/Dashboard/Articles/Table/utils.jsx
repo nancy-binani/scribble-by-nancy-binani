@@ -4,7 +4,7 @@ import { Delete, Edit } from "@bigbinary/neeto-icons";
 
 import { formatDateAndTime } from "../utils";
 
-export const buildArticlesColumnData = history => [
+export const buildArticlesColumnData = (history, handleDelete) => [
   {
     title: "TITLE",
     dataIndex: "title",
@@ -47,7 +47,12 @@ export const buildArticlesColumnData = history => [
     className: "text-gray-600",
     render: ({ ...props }) => (
       <span className="flex flex-row gap-2 ">
-        <Delete size={20} />
+        <Delete
+          size={20}
+          onClick={() => {
+            handleDelete(props.slug, props.title);
+          }}
+        />
         <Edit
           size={20}
           onClick={() =>

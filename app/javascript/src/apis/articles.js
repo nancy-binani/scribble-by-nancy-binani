@@ -9,6 +9,8 @@ const update = (payload, slug) => {
   });
 };
 
-const articlesApi = { fetch, create, update };
+const destroy = slug => axios.delete(`/articles/${slug}`);
+
+const articlesApi = { fetch, create, update, destroy };
 
 export default articlesApi;
