@@ -9,7 +9,6 @@ import articlesApi from "apis/articles";
 import { ARTICLES_FORM_VALIDATION_SCHEMA, CATEGORIES } from "../constants";
 
 const { Menu, MenuItem } = ActionDropdown;
-
 const Form = ({ isEdit, article }) => {
   const STATUS = ["Draft", "Published"];
   const [submitted, setSubmitted] = useState(false);
