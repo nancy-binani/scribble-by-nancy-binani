@@ -11,13 +11,12 @@ class ArticlesController < ApplicationController
   def create
     article = Article.new(article_params)
     article.save!
-    respond_with_success("Task was successfully created")
+    respond_with_success("Article was successfully created")
   end
 
   def update
-    task = Task.find_by!(slug: params[:slug])
-    task.update!(task_params)
-    respond_with_success("Task was successfully updated!")
+    @article.update!(article_params)
+    respond_with_success("Article was successfully updated!")
   end
 
   private

@@ -56,7 +56,7 @@ const Articles = ({ history }) => {
           }}
         />
         <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
-        <Table data={articles} />
+        <Table data={articles} history={history} />
       </Container>
     </div>
   );

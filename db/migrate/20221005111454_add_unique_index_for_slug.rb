@@ -2,8 +2,6 @@
 
 class AddUniqueIndexForSlug < ActiveRecord::Migration[6.1]
   def change
-    def change
-      add_index :articles, :slug, unique: true
-    end
+    add_index :articles, :slug, unique: true
   end
 end
