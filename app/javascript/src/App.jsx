@@ -39,7 +39,7 @@ const App = () => {
       <ToastContainer />
       <NavBar />
       <Switch history={history}>
-        <Route exact component={Edit} path="/articles/:slug/edit" />
+        <Route exact component={Edit} path="/tasks/:slug/edit" />
         <Route exact component={Create} path="/articles/create" />
         <Route exact component={Dashboard} path="/" />
       </Switch>
