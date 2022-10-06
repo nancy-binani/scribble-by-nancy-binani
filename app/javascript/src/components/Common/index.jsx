@@ -17,7 +17,7 @@ const NavBar = () => (
           >
             Scribble
           </span>
-          <NavItem name="Articles" path="/articles" />
+          <NavItem name="Articles" path="/" />
           <NavItem name="Settings" path="/settings" />
         </div>
         <div className="flex items-center justify-end">
