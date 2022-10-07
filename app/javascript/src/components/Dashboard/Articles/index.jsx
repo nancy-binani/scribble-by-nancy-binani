@@ -5,6 +5,7 @@ import { Container, Header } from "@bigbinary/neetoui/layouts";
 
 import articlesApi from "apis/articles";
 
+import DeleteAlert from "./DeleteAlert";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
@@ -12,6 +13,9 @@ const Articles = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [articles, setArticles] = useState([]);
+  const [slugToBeDeleted, setSlugToBeDeleted] = useState("");
+  const [title, setTitle] = useState("");
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   useEffect(() => {
     fetchArticles();
@@ -29,6 +33,21 @@ const Articles = ({ history }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const destroyArticle = async slugToBeDeleted => {
+    try {
+      await articlesApi.destroy(slugToBeDeleted);
+      await fetchArticles();
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  const handleDelete = (slugToBeDeleted, title) => {
+    setSlugToBeDeleted(slugToBeDeleted);
+    setShowDeleteAlert(true);
+    setTitle(title);
   };
 
   if (loading) {
@@ -56,7 +75,15 @@ const Articles = ({ history }) => {
           }}
         />
         <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
-        <Table data={articles} />
+        <Table data={articles} handleDelete={handleDelete} history={history} />
+        {showDeleteAlert && articles.length > 1 && (
+          <DeleteAlert
+            destroyArticle={destroyArticle}
+            slug={slugToBeDeleted}
+            title={title}
+            onClose={() => setShowDeleteAlert(false)}
+          />
+        )}
       </Container>
     </div>
   );

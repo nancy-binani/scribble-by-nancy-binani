@@ -18,21 +18,24 @@ const Form = ({ isEdit, article }) => {
     setSubmitted(true);
     handleSubmit(values);
   };
-
   const handleSubmit = async values => {
-    const arr = values.categories.map(({ label }) => label);
+    const categoriesArray = values.categories.map(({ label }) => label);
     try {
       if (isEdit) {
-        await articlesApi.update(article.id, values);
+        await articlesApi.update(
+          { ...values, author: "Oliver Smith", categories: categoriesArray },
+          values.slug
+        );
+        Toastr.success("Article is updated successfully");
       } else {
         await articlesApi.create({
           ...values,
           author: "Oliver Smith",
-          categories: arr,
+          categories: categoriesArray,
         });
         Toastr.success("Article is created successfully");
       }
-      history.push("/");
+      await articlesApi.fetch();
     } catch (error) {
       logger.error(error);
     }

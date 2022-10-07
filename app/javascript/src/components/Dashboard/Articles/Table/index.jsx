@@ -4,11 +4,11 @@ import { Table as NeetoUITable, Pagination } from "neetoui";
 
 import { buildArticlesColumnData } from "./utils";
 
-const Table = ({ data }) => (
+const Table = ({ data, history, handleDelete }) => (
   <>
     <NeetoUITable
       allowRowClick
-      columnData={buildArticlesColumnData()}
+      columnData={buildArticlesColumnData(history, handleDelete)}
       rowData={data}
       onRowClick={() => {}}
       onRowSelect={() => {}}
