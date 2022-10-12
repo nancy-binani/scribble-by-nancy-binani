@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { PageLoader, Button, Dropdown } from "@bigbinary/neetoui";
+import { Plus } from "@bigbinary/neeto-icons";
+import { PageLoader, Button, Dropdown, Checkbox } from "@bigbinary/neetoui";
 import { Container, Header } from "@bigbinary/neetoui/layouts";
 
 import articlesApi from "apis/articles";
@@ -9,6 +10,8 @@ import DeleteAlert from "./DeleteAlert";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
+const { Menu, MenuItem } = Dropdown;
+
 const Articles = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +19,8 @@ const Articles = ({ history }) => {
   const [slugToBeDeleted, setSlugToBeDeleted] = useState("");
   const [title, setTitle] = useState("");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+
+  const filteringOptions = ["Title", "Categories", "Date", "Author", "Status"];
 
   useEffect(() => {
     fetchArticles();
@@ -61,8 +66,20 @@ const Articles = ({ history }) => {
         <Header
           actionBlock={
             <>
-              <Dropdown buttonStyle="secondary" label="Columns" />
+              <Dropdown buttonStyle="secondary" label="Columns">
+                <Menu>
+                  {filteringOptions.map((item, idx) => (
+                    <MenuItem.Button
+                      key={idx}
+                      prefix={<Checkbox checked id={idx} />}
+                    >
+                      {item}
+                    </MenuItem.Button>
+                  ))}
+                </Menu>
+              </Dropdown>
               <Button
+                icon={Plus}
                 label="Add New Article"
                 onClick={() => history.push("/articles/create")}
               />

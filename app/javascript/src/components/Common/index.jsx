@@ -1,5 +1,6 @@
 import React from "react";
 
+import { ExternalLink } from "@bigbinary/neeto-icons";
 import { Button } from "@bigbinary/neetoui";
 
 import NavItem from "./NavItem";
@@ -21,7 +22,7 @@ const NavBar = () => (
           <NavItem name="Settings" path="/settings" />
         </div>
         <div className="flex items-center justify-end">
-          <Button label="Preview" style="secondary" />
+          <Button icon={ExternalLink} label="Preview" style="secondary" />
         </div>
       </div>
     </div>

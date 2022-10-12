@@ -6,7 +6,6 @@ class CreateArticles < ActiveRecord::Migration[6.1]
       t.text :title
       t.text :body
       t.string :author
-      t.string :categories, array: true, default: []
       t.string :status
       t.timestamps
     end
