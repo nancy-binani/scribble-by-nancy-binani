@@ -32,7 +32,7 @@ export const buildArticlesColumnData = (history, handleDelete) => [
     key: "category",
     width: "15%",
     className: "text-gray-600",
-    render: categories => categories.join(","),
+    // render: categories => categories.join(","),
   },
   {
     title: "STATUS",

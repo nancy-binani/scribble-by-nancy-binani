@@ -9,7 +9,7 @@ import articlesApi from "apis/articles";
 import { ARTICLES_FORM_VALIDATION_SCHEMA, CATEGORIES } from "../constants";
 
 const { Menu, MenuItem } = ActionDropdown;
-const Form = ({ isEdit, article }) => {
+const Form = ({ isEdit, article, history }) => {
   const STATUS = ["Draft", "Published"];
   const [submitted, setSubmitted] = useState(false);
 
@@ -19,11 +19,10 @@ const Form = ({ isEdit, article }) => {
     handleSubmit(values);
   };
   const handleSubmit = async values => {
-    const categoriesArray = values.categories.map(({ label }) => label);
     try {
       if (isEdit) {
         await articlesApi.update(
-          { ...values, author: "Oliver Smith", categories: categoriesArray },
+          { ...values, author: "Oliver Smith" },
           values.slug
         );
         Toastr.success("Article is updated successfully");
@@ -31,11 +30,11 @@ const Form = ({ isEdit, article }) => {
         await articlesApi.create({
           ...values,
           author: "Oliver Smith",
-          categories: categoriesArray,
         });
         Toastr.success("Article is created successfully");
       }
       await articlesApi.fetch();
+      history.push("/");
     } catch (error) {
       logger.error(error);
     }

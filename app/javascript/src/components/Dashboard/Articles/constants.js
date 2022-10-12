@@ -7,6 +7,11 @@ export const ARTICLES_FORM_INITIAL_VALUES = {
   categories: [],
 };
 
+export const CATEGORY_INITIAL_VALUE = {
+  id: "",
+  category: "",
+};
+
 export const CATEGORIES = buildSelectOptions([
   "Getting Started",
   "Security & Privacy",
