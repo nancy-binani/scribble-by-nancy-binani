@@ -13,6 +13,9 @@ const SideMenu = () => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filtering, setFiltering] = useState(false);
+  const [filteredList, setFilteredList] = useState([]);
 
   const fetchCategories = async () => {
     const categoriesArray = [];
@@ -34,6 +37,19 @@ const SideMenu = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  const handleSearch = () => {
+    const query = searchTerm;
+    setFiltering(true);
+    let updatedCategoryList = [...categories];
+    updatedCategoryList = categories.filter(
+      category => category.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
+
+    searchTerm === ""
+      ? setFilteredList(categories)
+      : setFilteredList(updatedCategoryList);
+  };
 
   return (
     <MenuBar class showMenu title="Articles">
@@ -65,7 +81,10 @@ const SideMenu = () => {
       </MenuBar.SubTitle>
       <MenuBar.Search
         collapse={isSearchCollapsed}
+        value={searchTerm}
+        onChange={e => setSearchTerm(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
+        onKeyDown={handleSearch}
       />
       {createNewCategory && (
         <CreateCategory
@@ -76,9 +95,13 @@ const SideMenu = () => {
           setCreateNewCategory={setCreateNewCategory}
         />
       )}
-      {categories.map((category, idx) => (
-        <MenuBar.Block count={27} key={idx} label={category} />
-      ))}
+      {filtering
+        ? filteredList.map((category, idx) => (
+            <MenuBar.Block count={27} key={idx} label={category} />
+          ))
+        : categories.map((category, idx) => (
+            <MenuBar.Block count={27} key={idx} label={category} />
+          ))}
     </MenuBar>
   );
 };

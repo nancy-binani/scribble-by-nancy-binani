@@ -22,6 +22,8 @@ const Articles = ({ history }) => {
   const [title, setTitle] = useState("");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [filtering, setFiltering] = useState(false);
   const filteringOptions = ["Title", "Categories", "Date", "Author", "Status"];
 
   useEffect(() => {
@@ -69,6 +71,20 @@ const Articles = ({ history }) => {
     setTitle(title);
   };
 
+  const handleSearch = e => {
+    if (e.key === "Enter") {
+      setFiltering(true);
+      const query = searchTerm;
+      let updatedList = [...articles];
+      updatedList = articles.filter(
+        ({ title }) => title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+      searchTerm === ""
+        ? setFilteredList(articles)
+        : setFilteredList(updatedList);
+    }
+  };
+
   if (loading) {
     return <PageLoader />;
   }
@@ -103,15 +119,27 @@ const Articles = ({ history }) => {
             value: searchTerm,
             placeholder: "Search article title",
             onChange: e => setSearchTerm(e.target.value),
+            onKeyDown: e => handleSearch(e),
           }}
         />
         <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
-        <Table
-          categories={categories}
-          data={articles}
-          handleDelete={handleDelete}
-          history={history}
-        />
+        {filtering ? (
+          <Table
+            categories={categories}
+            data={filteredList}
+            handleDelete={handleDelete}
+            history={history}
+            searchTerm={searchTerm}
+          />
+        ) : (
+          <Table
+            categories={categories}
+            data={articles}
+            handleDelete={handleDelete}
+            history={history}
+            searchTerm={searchTerm}
+          />
+        )}
         {showDeleteAlert && articles.length > 1 && (
           <DeleteAlert
             destroyArticle={destroyArticle}
