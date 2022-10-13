@@ -10,6 +10,8 @@ const update = (payload, id) => {
 };
 const destroy = id => axios.delete(`/categories/${id}`);
 
-const categoriesApi = { fetch, create, update, destroy };
+const fetchCategory = id => axios.get(`/categories/${id}`);
+
+const categoriesApi = { fetch, create, update, destroy, fetchCategory };
 
 export default categoriesApi;

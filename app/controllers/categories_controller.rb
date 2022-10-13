@@ -14,6 +14,11 @@ class CategoriesController < ApplicationController
     respond_with_success("Category was successfully created")
   end
 
+  def show
+    category = Category.find_by(id: params[:id])
+    render status: :ok, json: { category: category }
+  end
+
   def update
     @category.update!(category_params)
     respond_with_success("Category was successfully updated!")

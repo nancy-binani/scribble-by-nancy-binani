@@ -42,6 +42,7 @@ const App = () => {
         <Route exact component={Edit} path="/articles/:slug/edit" />
         <Route exact component={Create} path="/articles/create" />
         <Route exact component={Dashboard} path="/" />
+        {/* <Route exact component={Authenticate} path="/" /> */}
       </Switch>
     </Router>
   );

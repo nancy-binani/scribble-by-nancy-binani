@@ -1,20 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { ActionDropdown, Button, Toastr } from "@bigbinary/neetoui";
+import { ActionDropdown, Button, PageLoader, Toastr } from "@bigbinary/neetoui";
 import { Input, Textarea, Select } from "@bigbinary/neetoui/formik";
 import { Formik, Form as FormikForm } from "formik";
 
 import articlesApi from "apis/articles";
+import categoriesApi from "apis/categories";
 
-import { ARTICLES_FORM_VALIDATION_SCHEMA, CATEGORIES } from "../constants";
+import { ARTICLES_FORM_VALIDATION_SCHEMA } from "../constants";
 
 const { Menu, MenuItem } = ActionDropdown;
 const Form = ({ isEdit, article, history }) => {
   const STATUS = ["Draft", "Published"];
   const [submitted, setSubmitted] = useState(false);
+  const [categories, setCategories] = useState();
+  const [loading, setLoading] = useState(true);
+
+  const fetchCategories = async () => {
+    try {
+      const {
+        data: { categories },
+      } = await categoriesApi.fetch();
+      setCategories(categories);
+      setLoading(false);
+      const categoriesArray = categories.map(element => ({
+        value: element.id,
+        label: element.category,
+      }));
+      setCategories(categoriesArray);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleStatus = (values, item) => {
     values.status = item;
+
     setSubmitted(true);
     handleSubmit(values);
   };
@@ -22,7 +47,7 @@ const Form = ({ isEdit, article, history }) => {
     try {
       if (isEdit) {
         await articlesApi.update(
-          { ...values, author: "Oliver Smith" },
+          { ...values, author: "Oliver Smith", assigned_category: "abc" },
           values.slug
         );
         Toastr.success("Article is updated successfully");
@@ -30,6 +55,8 @@ const Form = ({ isEdit, article, history }) => {
         await articlesApi.create({
           ...values,
           author: "Oliver Smith",
+          category_id: values.category.value,
+          assigned_category: "abc",
         });
         Toastr.success("Article is created successfully");
       }
@@ -39,6 +66,8 @@ const Form = ({ isEdit, article, history }) => {
       logger.error(error);
     }
   };
+
+  if (loading) return <PageLoader />;
 
   return (
     <Formik
@@ -58,13 +87,12 @@ const Form = ({ isEdit, article, history }) => {
               placeholder="Enter article title"
             />
             <Select
-              isMulti
               isSearchable
               required
               className="h-2 w-10"
               label="Category"
-              name="categories"
-              options={CATEGORIES}
+              name="category"
+              options={categories}
               placeholder="Select Category"
             />
           </div>

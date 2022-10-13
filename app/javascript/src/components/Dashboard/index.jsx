@@ -1,8 +1,8 @@
 import React from "react";
 
-import Settings from "./Settings";
+import Articles from "./Articles";
 
-//const Dashboard = ({ history }) => <Articles history={history} />;
-const Dashboard = () => <Settings />;
+const Dashboard = ({ history }) => <Articles history={history} />;
+// const Dashboard = () => <Settings />;
 
 export default Dashboard;

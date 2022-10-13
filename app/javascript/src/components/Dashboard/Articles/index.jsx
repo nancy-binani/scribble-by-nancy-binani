@@ -10,6 +10,8 @@ import DeleteAlert from "./DeleteAlert";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
+import categoriesApi from "../../../apis/categories";
+
 const { Menu, MenuItem } = Dropdown;
 
 const Articles = ({ history }) => {
@@ -19,7 +21,7 @@ const Articles = ({ history }) => {
   const [slugToBeDeleted, setSlugToBeDeleted] = useState("");
   const [title, setTitle] = useState("");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-
+  const [categories, setCategories] = useState([]);
   const filteringOptions = ["Title", "Categories", "Date", "Author", "Status"];
 
   useEffect(() => {
@@ -37,9 +39,21 @@ const Articles = ({ history }) => {
       logger.error(error);
     } finally {
       setLoading(false);
+      fetchCategories();
     }
   };
-
+  const fetchCategories = async () => {
+    try {
+      const {
+        data: { categories },
+      } = await categoriesApi.fetch();
+      setCategories(categories);
+      setLoading(false);
+    } catch (error) {
+      logger.error(error);
+      setLoading(false);
+    }
+  };
   const destroyArticle = async slugToBeDeleted => {
     try {
       await articlesApi.destroy(slugToBeDeleted);
@@ -92,7 +106,12 @@ const Articles = ({ history }) => {
           }}
         />
         <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
-        <Table data={articles} handleDelete={handleDelete} history={history} />
+        <Table
+          categories={categories}
+          data={articles}
+          handleDelete={handleDelete}
+          history={history}
+        />
         {showDeleteAlert && articles.length > 1 && (
           <DeleteAlert
             destroyArticle={destroyArticle}
