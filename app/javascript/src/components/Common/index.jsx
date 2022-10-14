@@ -19,7 +19,7 @@ const NavBar = () => (
             Scribble
           </span>
           <NavItem name="Articles" path="/" />
-          <NavItem name="Settings" path="/settings" />
+          <NavItem name="Settings" path="/settings/" />
         </div>
         <div className="flex items-center justify-end">
           <Button icon={ExternalLink} label="Preview" style="secondary" />

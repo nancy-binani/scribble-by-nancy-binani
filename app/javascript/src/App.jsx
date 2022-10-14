@@ -16,6 +16,8 @@ import NavBar from "./components/Common";
 import Dashboard from "./components/Dashboard";
 import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
+import Settings from "./components/Dashboard/Settings";
+import EUI from "./components/EUI";
 
 const App = () => {
   const history = useHistory();
@@ -41,8 +43,9 @@ const App = () => {
       <Switch history={history}>
         <Route exact component={Edit} path="/articles/:slug/edit" />
         <Route exact component={Create} path="/articles/create" />
+        <Route exact component={Settings} path="/settings/*" />
+        <Route exact component={EUI} path="/eui" />
         <Route exact component={Dashboard} path="/" />
-        {/* <Route exact component={Authenticate} path="/" /> */}
       </Switch>
     </Router>
   );
