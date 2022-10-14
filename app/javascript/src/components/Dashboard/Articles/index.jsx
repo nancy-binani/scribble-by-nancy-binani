@@ -19,7 +19,8 @@ const Articles = ({ history }) => {
   const [slugToBeDeleted, setSlugToBeDeleted] = useState("");
   const [title, setTitle] = useState("");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-
+  const [filteredList, setFilteredList] = useState([]);
+  const [filtering, setFiltering] = useState(false);
   const filteringOptions = ["Title", "Categories", "Date", "Author", "Status"];
 
   useEffect(() => {
@@ -39,7 +40,6 @@ const Articles = ({ history }) => {
       setLoading(false);
     }
   };
-
   const destroyArticle = async slugToBeDeleted => {
     try {
       await articlesApi.destroy(slugToBeDeleted);
@@ -55,13 +55,39 @@ const Articles = ({ history }) => {
     setTitle(title);
   };
 
+  const handleSearch = e => {
+    if (e.key === "Enter") {
+      setFiltering(true);
+      const query = searchTerm;
+      let updatedList = [...articles];
+      updatedList = articles.filter(
+        ({ title }) => title.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+      searchTerm === ""
+        ? setFilteredList(articles)
+        : setFilteredList(updatedList);
+    }
+  };
+
+  const handleFilter = query => {
+    setFiltering(true);
+    let updatedList = [...articles];
+    updatedList = articles.filter(
+      article =>
+        article["status"].toLowerCase() === query.toLowerCase() ||
+        article["assigned_category"]["category"].toLowerCase() ===
+          query.toLowerCase()
+    );
+    query === "All" ? setFilteredList(articles) : setFilteredList(updatedList);
+  };
+
   if (loading) {
     return <PageLoader />;
   }
 
   return (
     <div className="flex h-screen w-full">
-      <SideMenu />
+      <SideMenu handleFilter={handleFilter} />
       <Container>
         <Header
           actionBlock={
@@ -89,10 +115,25 @@ const Articles = ({ history }) => {
             value: searchTerm,
             placeholder: "Search article title",
             onChange: e => setSearchTerm(e.target.value),
+            onKeyDown: e => handleSearch(e),
           }}
         />
         <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
-        <Table data={articles} handleDelete={handleDelete} history={history} />
+        {filtering ? (
+          <Table
+            data={filteredList}
+            handleDelete={handleDelete}
+            history={history}
+            searchTerm={searchTerm}
+          />
+        ) : (
+          <Table
+            data={articles}
+            handleDelete={handleDelete}
+            history={history}
+            searchTerm={searchTerm}
+          />
+        )}
         {showDeleteAlert && articles.length > 1 && (
           <DeleteAlert
             destroyArticle={destroyArticle}
