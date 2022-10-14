@@ -10,8 +10,6 @@ import DeleteAlert from "./DeleteAlert";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
 
-import categoriesApi from "../../../apis/categories";
-
 const { Menu, MenuItem } = Dropdown;
 
 const Articles = ({ history }) => {
@@ -21,7 +19,6 @@ const Articles = ({ history }) => {
   const [slugToBeDeleted, setSlugToBeDeleted] = useState("");
   const [title, setTitle] = useState("");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [filtering, setFiltering] = useState(false);
   const filteringOptions = ["Title", "Categories", "Date", "Author", "Status"];
@@ -40,19 +37,6 @@ const Articles = ({ history }) => {
     } catch (error) {
       logger.error(error);
     } finally {
-      setLoading(false);
-      fetchCategories();
-    }
-  };
-  const fetchCategories = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.fetch();
-      setCategories(categories);
-      setLoading(false);
-    } catch (error) {
-      logger.error(error);
       setLoading(false);
     }
   };
@@ -85,13 +69,25 @@ const Articles = ({ history }) => {
     }
   };
 
+  const handleFilter = query => {
+    setFiltering(true);
+    let updatedList = [...articles];
+    updatedList = articles.filter(
+      article =>
+        article["status"].toLowerCase() === query.toLowerCase() ||
+        article["assigned_category"]["category"].toLowerCase() ===
+          query.toLowerCase()
+    );
+    query === "All" ? setFilteredList(articles) : setFilteredList(updatedList);
+  };
+
   if (loading) {
     return <PageLoader />;
   }
 
   return (
     <div className="flex h-screen w-full">
-      <SideMenu />
+      <SideMenu handleFilter={handleFilter} />
       <Container>
         <Header
           actionBlock={
@@ -125,7 +121,6 @@ const Articles = ({ history }) => {
         <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
         {filtering ? (
           <Table
-            categories={categories}
             data={filteredList}
             handleDelete={handleDelete}
             history={history}
@@ -133,7 +128,6 @@ const Articles = ({ history }) => {
           />
         ) : (
           <Table
-            categories={categories}
             data={articles}
             handleDelete={handleDelete}
             history={history}

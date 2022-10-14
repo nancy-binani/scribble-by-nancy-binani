@@ -47,7 +47,7 @@ const Form = ({ isEdit, article, history }) => {
     try {
       if (isEdit) {
         await articlesApi.update(
-          { ...values, author: "Oliver Smith", assigned_category: "abc" },
+          { ...values, author: "Oliver Smith" },
           values.slug
         );
         Toastr.success("Article is updated successfully");
@@ -56,7 +56,6 @@ const Form = ({ isEdit, article, history }) => {
           ...values,
           author: "Oliver Smith",
           category_id: values.category.value,
-          assigned_category: "abc",
         });
         Toastr.success("Article is created successfully");
       }

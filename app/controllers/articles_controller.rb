@@ -4,7 +4,7 @@ class ArticlesController < ApplicationController
   before_action :load_article!, only: %i[show update destroy]
 
   def index
-    articles = Article.all
+    articles = Article.all.as_json(include: { assigned_category: { only: %i[category id] } })
     render status: :ok, json: { articles: articles }
   end
 
@@ -26,7 +26,7 @@ class ArticlesController < ApplicationController
 
   def show
     article = Article.find_by!(slug: params[:slug])
-    render status: :ok, json: { article: article }
+    render status: :ok, json: { article: article, assigned_category: article.assigned_category }
   end
 
   private

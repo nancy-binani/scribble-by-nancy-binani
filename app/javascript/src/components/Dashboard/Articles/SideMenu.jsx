@@ -6,16 +6,22 @@ import { MenuBar } from "@bigbinary/neetoui/layouts";
 
 import categoriesApi from "apis/categories";
 
-import { CATEGORY_INITIAL_VALUE } from "./constants";
+import { CATEGORY_INITIAL_VALUE, MENU_OPTIONS } from "./constants";
 import CreateCategory from "./CreateCategory";
 
-const SideMenu = () => {
+const SideMenu = ({ handleFilter }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtering, setFiltering] = useState(false);
   const [filteredList, setFilteredList] = useState([]);
+  const [active, setActive] = useState(null);
+
+  const handleClick = menu => {
+    setActive(menu);
+    handleFilter(menu);
+  };
 
   const fetchCategories = async () => {
     const categoriesArray = [];
@@ -53,9 +59,15 @@ const SideMenu = () => {
 
   return (
     <MenuBar class showMenu title="Articles">
-      <MenuBar.Block active count={67} label="All" />
-      <MenuBar.Block count={15} label="Draft" />
-      <MenuBar.Block count={52} label="Published" />
+      {MENU_OPTIONS.map((menu, idx) => (
+        <MenuBar.Block
+          className={`${active === menu && "bg-white"}`}
+          count={28}
+          key={idx}
+          label={menu}
+          onClick={() => handleClick(menu)}
+        />
+      ))}
       <MenuBar.SubTitle
         iconProps={[
           {
@@ -97,10 +109,20 @@ const SideMenu = () => {
       )}
       {filtering
         ? filteredList.map((category, idx) => (
-            <MenuBar.Block count={27} key={idx} label={category} />
+            <MenuBar.Block
+              count={27}
+              key={idx}
+              label={category}
+              onClick={() => handleClick(category)}
+            />
           ))
         : categories.map((category, idx) => (
-            <MenuBar.Block count={27} key={idx} label={category} />
+            <MenuBar.Block
+              count={27}
+              key={idx}
+              label={category}
+              onClick={() => handleClick(category)}
+            />
           ))}
     </MenuBar>
   );

@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
   before_action :load_category!, only: %i[ show edit update destroy ]
 
   def index
-    categories = Category.all
+    categories = Category.all.as_json(include: { assigned_articles: { only: %i[title body created_at] } })
     render status: :ok, json: { categories: categories }
   end
 

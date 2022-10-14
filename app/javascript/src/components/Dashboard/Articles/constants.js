@@ -11,6 +11,8 @@ export const CATEGORY_INITIAL_VALUE = {
   category: "",
 };
 
+export const MENU_OPTIONS = ["All", "Draft", "Published"];
+
 export const CATEGORIES = buildSelectOptions([
   "Getting Started",
   "Security & Privacy",
@@ -20,7 +22,7 @@ export const CATEGORIES = buildSelectOptions([
 export const ARTICLES_FORM_VALIDATION_SCHEMA = yup.object().shape({
   title: yup.string().required("Title is required"),
   body: yup.string().required("Description is required"),
-  categories: yup
+  category: yup
     .object()
     .nullable()
     .shape({

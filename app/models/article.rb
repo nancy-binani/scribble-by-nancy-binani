@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
-  belongs_to :category, foreign_key: "category_id", class_name: "Category"
+  belongs_to :assigned_category, foreign_key: "category_id", class_name: "Category"
+
   validates :title, presence: true, length: { maximum: 50 }
-  validates :body, length: { maximum: 1000 }
   validates :slug, uniqueness: true
   validate :slug_not_changed
   before_create :set_slug

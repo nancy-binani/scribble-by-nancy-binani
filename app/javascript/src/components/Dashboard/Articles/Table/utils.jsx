@@ -4,7 +4,7 @@ import { Delete, Edit } from "@bigbinary/neeto-icons";
 
 import { formatDateAndTime } from "../utils";
 
-export const buildArticlesColumnData = (history, handleDelete, categories) => [
+export const buildArticlesColumnData = (history, handleDelete) => [
   {
     title: "TITLE",
     dataIndex: "title",
@@ -28,14 +28,11 @@ export const buildArticlesColumnData = (history, handleDelete, categories) => [
   },
   {
     title: "CATEGORY",
-    dataIndex: "category_id",
-    key: "category_id",
+    dataIndex: "assigned_category",
+    key: "assigned_category",
     width: "15%",
     className: "text-gray-600",
-    render: category_id =>
-      categories[category_id] === undefined
-        ? "Scribble"
-        : categories[category_id]["category"],
+    render: assigned_category => assigned_category["category"],
   },
   {
     title: "STATUS",
