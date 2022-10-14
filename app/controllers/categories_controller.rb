@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
   before_action :load_category!, only: %i[ show edit update destroy ]
 
   def index
-    categories = Category.all
+    categories = Category.all.as_json(include: { assigned_articles: { only: %i[title body created_at] } })
     render status: :ok, json: { categories: categories }
   end
 
@@ -12,6 +12,11 @@ class CategoriesController < ApplicationController
     category = Category.new(category_params)
     category.save!
     respond_with_success("Category was successfully created")
+  end
+
+  def show
+    category = Category.find_by(id: params[:id])
+    render status: :ok, json: { category: category }
   end
 
   def update

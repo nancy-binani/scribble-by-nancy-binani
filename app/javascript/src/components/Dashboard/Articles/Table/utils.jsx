@@ -28,11 +28,11 @@ export const buildArticlesColumnData = (history, handleDelete) => [
   },
   {
     title: "CATEGORY",
-    dataIndex: "categories",
-    key: "category",
+    dataIndex: "assigned_category",
+    key: "assigned_category",
     width: "15%",
     className: "text-gray-600",
-    // render: categories => categories.join(","),
+    render: assigned_category => assigned_category["category"],
   },
   {
     title: "STATUS",
