@@ -78,26 +78,30 @@ const ManageCategories = () => {
       )}
       {categories.map((element, idx) => (
         <div
-          className="border-b my-6 flex border-solid tracking-tight"
+          className="border-b my-6 flex justify-between border-solid tracking-tight"
           key={idx}
         >
-          <Reorder color="gray" size={20} />
-          <Typography className="ml-3" style="h4">
-            {element["category"]}
-          </Typography>
-          <Edit
-            className="ml-3"
-            color="gray"
-            size={20}
-            onClick={() =>
-              handleEditCategory(element["category"], element["id"])
-            }
-          />
-          <Delete
-            color="gray"
-            size={20}
-            onClick={() => handleDeleteCategory(element["id"])}
-          />
+          <div className="flex">
+            <Reorder color="gray" size={20} />
+            <Typography className="ml-3" style="h4">
+              {element["category"]}
+            </Typography>
+          </div>
+          <div className="flex">
+            <Edit
+              className="ml-3"
+              color="gray"
+              size={20}
+              onClick={() =>
+                handleEditCategory(element["category"], element["id"])
+              }
+            />
+            <Delete
+              color="gray"
+              size={20}
+              onClick={() => handleDeleteCategory(element["id"])}
+            />
+          </div>
         </div>
       ))}
     </div>
