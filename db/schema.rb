@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_12_141345) do
+ActiveRecord::Schema.define(version: 2022_10_14_131552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,21 @@ ActiveRecord::Schema.define(version: 2022_10_12_141345) do
 
   create_table "categories", force: :cascade do |t|
     t.string "category"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "site_details", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "password_digest", null: false
+  end
+
+  create_table "sites", force: :cascade do |t|
+    t.string "password_digest", null: false
+    t.string "sitename"
+    t.string "checked", default: "unchecked"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

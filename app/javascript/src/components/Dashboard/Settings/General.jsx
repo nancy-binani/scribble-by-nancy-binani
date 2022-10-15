@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Check, Close } from "@bigbinary/neeto-icons";
 import { Typography, Checkbox, Button } from "@bigbinary/neetoui";
 import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
 
+import authApi from "apis/authApi";
+
 import { REGEXP } from "./constants";
 
-const General = () => {
+const General = ({ status, setStatus }) => {
   const [passwordRegexChecked, setPasswordRegexChecked] = useState(false);
   const [passwordLengthChecked, setPasswordLengthChecked] = useState(false);
   const [validationBoxOpen, setValidationBoxOpen] = useState(false);
 
   const handleSubmit = async values => {
     const password = values.password;
+    const sitename = values.title;
     setValidationBoxOpen(true);
     if (REGEXP.test(password)) {
       setPasswordRegexChecked(true);
@@ -21,6 +24,43 @@ const General = () => {
 
     if (password.length >= 6) {
       setPasswordLengthChecked(true);
+    }
+
+    try {
+      const toggledStatus = status ? "checked" : "unchecked";
+      await authApi.update({
+        sitename,
+        password,
+        status: toggledStatus,
+      });
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+  const fetchSiteDetails = async () => {
+    try {
+      const {
+        data: { sites },
+      } = await authApi.fetch();
+      sites[0]["checked"] === "checked" ? setStatus(true) : setStatus(false);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSiteDetails();
+  });
+
+  const handleStatus = async () => {
+    setStatus(!status);
+    try {
+      const toggledStatus = status ? "unchecked" : "checked";
+      await authApi.update({
+        checked: toggledStatus,
+      });
+    } catch (error) {
+      logger.error(error);
     }
   };
 
@@ -45,10 +85,12 @@ const General = () => {
             </Typography>
           </div>
           <Checkbox
+            checked={status}
             className="my-6"
             id="checkbox_name"
             label="Password Protect Knowledge Base"
-            onChange={() => {}}
+            name="checked"
+            onChange={handleStatus}
           />
           <Input
             className="my-3"

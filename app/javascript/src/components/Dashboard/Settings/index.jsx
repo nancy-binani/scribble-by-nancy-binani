@@ -7,11 +7,17 @@ import ManageCategories from "./ManageCategories";
 import Redirections from "./Redirections";
 import SideMenu from "./SideMenu";
 
-const Settings = ({ history }) => (
+const Settings = ({ history, status, setStatus }) => (
   <div className="flex h-screen w-full">
     <SideMenu history={history} />
     <Switch>
-      <Route exact component={General} path="/settings/" />
+      <Route
+        exact
+        path="/settings/"
+        render={props => (
+          <General {...props} setStatus={setStatus} status={status} />
+        )}
+      />
       <Route exact component={Redirections} path="/settings/redirections" />
       <Route
         exact
