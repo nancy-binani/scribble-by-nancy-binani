@@ -3,7 +3,7 @@ import React from "react";
 import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
 
-import categoriesApi from "../../../apis/categories";
+import categoriesApi from "apis/categories";
 
 const CreateCategory = ({
   category,

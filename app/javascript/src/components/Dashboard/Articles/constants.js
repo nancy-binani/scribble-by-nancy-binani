@@ -1,5 +1,6 @@
-import { buildSelectOptions } from "src/utils";
 import * as yup from "yup";
+
+import { buildSelectOptions } from "../../../utils";
 
 export const ARTICLES_FORM_INITIAL_VALUES = {
   title: "",
@@ -31,3 +32,5 @@ export const ARTICLES_FORM_VALIDATION_SCHEMA = yup.object().shape({
     })
     .required("Please select a contact"),
 });
+
+export const STATUS = ["Draft", "Published"];

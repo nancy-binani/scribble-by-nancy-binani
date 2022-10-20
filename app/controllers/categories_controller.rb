@@ -16,7 +16,7 @@ class CategoriesController < ApplicationController
 
   def show
     category = Category.find_by(id: params[:id])
-    render status: :ok, json: { category: category }
+    render status: :ok, json: { category: category, assigned_articles: category.assigned_articles }
   end
 
   def update
@@ -25,6 +25,7 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
+    category = Category.find_by(id: params[:id])
     @category.destroy!
     respond_with_json
   end

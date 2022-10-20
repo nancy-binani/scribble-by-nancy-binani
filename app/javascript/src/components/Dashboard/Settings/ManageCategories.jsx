@@ -21,6 +21,7 @@ const ManageCategories = () => {
         data: { categories },
       } = await categoriesApi.fetch();
       setCategories(categories);
+
       setLoading(false);
     } catch (error) {
       logger.error(error);
@@ -42,8 +43,17 @@ const ManageCategories = () => {
     setIsEdit(true);
     setCategoryValue({ category, id });
   };
-  const handleDeleteCategory = async id => {
+  const handleDeleteCategory = async (id, idx) => {
     try {
+      if (categories[idx]["assigned_articles"].length !== 0) {
+        categories.map(category => {
+          if (category["category"] === "General") {
+            category["assigned_articles"].push(
+              categories[idx]["assigned_articles"]
+            );
+          }
+        });
+      }
       await categoriesApi.destroy(id);
       await fetchCategories();
     } catch (error) {
@@ -99,7 +109,7 @@ const ManageCategories = () => {
             <Delete
               color="gray"
               size={20}
-              onClick={() => handleDeleteCategory(element["id"])}
+              onClick={() => handleDeleteCategory(element["id"], idx)}
             />
           </div>
         </div>

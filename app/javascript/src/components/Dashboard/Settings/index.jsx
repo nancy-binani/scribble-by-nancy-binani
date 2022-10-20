@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import General from "./General";
 import ManageCategories from "./ManageCategories";
@@ -11,9 +11,10 @@ const Settings = ({ history, status, setStatus }) => (
   <div className="flex h-screen w-full">
     <SideMenu history={history} />
     <Switch>
+      <Redirect exact from="/settings" to="/settings/general" />
       <Route
         exact
-        path="/settings/"
+        path="/settings/general"
         render={props => (
           <General {...props} setStatus={setStatus} status={status} />
         )}
