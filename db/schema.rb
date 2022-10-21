@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2022_10_20_150523) do
     t.string "checked", default: "unchecked"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "authentication_token"
   end
 
   add_foreign_key "articles", "categories"

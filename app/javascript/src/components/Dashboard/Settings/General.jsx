@@ -5,7 +5,7 @@ import { Typography, Checkbox, Button } from "@bigbinary/neetoui";
 import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
 
-import authApi from "apis/authApi";
+import authApi from "apis/auth";
 
 import { REGEXP } from "./constants";
 
@@ -56,7 +56,8 @@ const General = ({ status, setStatus }) => {
     setStatus(!status);
     try {
       const toggledStatus = status ? "unchecked" : "checked";
-      await authApi.update({
+      await authApi.updateStatus({
+        sitename: "Spinkart",
         checked: toggledStatus,
       });
     } catch (error) {
@@ -90,7 +91,7 @@ const General = ({ status, setStatus }) => {
             id="checkbox_name"
             label="Password Protect Knowledge Base"
             name="checked"
-            onChange={handleStatus}
+            onClick={handleStatus}
           />
           <Input
             className="my-3"

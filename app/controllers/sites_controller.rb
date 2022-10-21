@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SitesController < ApplicationController
-  before_action :load_site!, only: %i[ show update ]
+  before_action :load_site!, only: %i[ show update update_status]
 
   def index
     sites = Site.all
@@ -9,8 +9,13 @@ class SitesController < ApplicationController
   end
 
   def update
-    @site.update!(site_params)
+    site = Site.find_by(sitename: site_params[:sitename]).update!(site_params)
     respond_with_success("Site was successfully updated!")
+  end
+
+  def update_status
+    site = Site.find_by(sitename: site_status_update_params[:sitename]).update!(site_status_update_params)
+    respond_with_success("Site status was successfully updated!")
   end
 
   def show
@@ -32,5 +37,9 @@ class SitesController < ApplicationController
 
     def site_params
       params.require(:site).permit(:sitename, :password, :checked)
+    end
+
+    def site_status_update_params
+      params.require(:site).permit(:sitename, :checked)
     end
 end

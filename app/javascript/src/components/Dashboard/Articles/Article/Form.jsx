@@ -7,11 +7,10 @@ import { Formik, Form as FormikForm } from "formik";
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
-import { ARTICLES_FORM_VALIDATION_SCHEMA } from "../constants";
+import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
 
 const { Menu, MenuItem } = ActionDropdown;
 const Form = ({ isEdit, article, history }) => {
-  const STATUS = ["Draft", "Published"];
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState();
   const [loading, setLoading] = useState(true);
@@ -39,7 +38,6 @@ const Form = ({ isEdit, article, history }) => {
 
   const handleStatus = (values, item) => {
     values.status = item;
-
     setSubmitted(true);
     handleSubmit(values);
   };
@@ -93,6 +91,7 @@ const Form = ({ isEdit, article, history }) => {
               name="category"
               options={categories}
               placeholder="Select Category"
+              value={categories[article.category_id - 1]}
             />
           </div>
           <Textarea
