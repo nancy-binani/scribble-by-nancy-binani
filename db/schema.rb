@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_20_150523) do
+ActiveRecord::Schema.define(version: 2022_10_23_141105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,12 +26,15 @@ ActiveRecord::Schema.define(version: 2022_10_20_150523) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug"
     t.integer "category_id"
+    t.integer "assigned_site_id"
   end
 
   create_table "categories", force: :cascade do |t|
     t.string "category"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position"
+    t.integer "assigned_site_id"
   end
 
   create_table "redirections", force: :cascade do |t|
@@ -39,6 +42,7 @@ ActiveRecord::Schema.define(version: 2022_10_20_150523) do
     t.string "newurl"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "assigned_site_id"
   end
 
   create_table "site_details", force: :cascade do |t|
@@ -58,4 +62,7 @@ ActiveRecord::Schema.define(version: 2022_10_20_150523) do
   end
 
   add_foreign_key "articles", "categories"
+  add_foreign_key "articles", "sites", column: "assigned_site_id"
+  add_foreign_key "categories", "sites", column: "assigned_site_id"
+  add_foreign_key "redirections", "sites", column: "assigned_site_id"
 end

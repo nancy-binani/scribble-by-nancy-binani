@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Check, Delete, Edit, Plus } from "@bigbinary/neeto-icons";
-import { PageLoader, Typography, Input } from "@bigbinary/neetoui";
+import { PageLoader, Typography, Input, Toastr } from "@bigbinary/neetoui";
 
 import redirectionsApi from "apis/redirection";
 
@@ -46,6 +46,7 @@ const Redirections = () => {
     try {
       await redirectionsApi.destroy(id);
       await fetchRedirections();
+      Toastr.success("Redirection is deleted successfully.");
     } catch (error) {
       logger.error(error);
     }
@@ -54,22 +55,25 @@ const Redirections = () => {
   const handleSubmit = async () => {
     try {
       if (isEdit) {
-        redirectionsApi.update(
+        await redirectionsApi.update(
           {
             oldurl,
             newurl,
           },
           id
         );
+        Toastr.success("Redirection is updated successfully.");
       } else {
         await redirectionsApi.create({
           oldurl,
           newurl,
         });
+        Toastr.success("Redirection is created successfully.");
       }
       await fetchRedirections();
     } catch (error) {
       logger.error(error);
+      Toastr.error("Cyclic redirections is not possible.");
     }
     setCreateNewRedirection(!createNewRedirection);
   };
@@ -93,36 +97,41 @@ const Redirections = () => {
           <span className="text-gray-500">Actions</span>
         </div>
         {redirections.map(({ oldurl, newurl, id }) => (
-          <div
-            className="mx-3 flex justify-between bg-white px-8 py-4 tracking-tight"
-            key={id}
-          >
-            <span>{oldurl}</span>
-            <span>{newurl}</span>
-            <span className="flex">
-              <Edit
-                className="mr-2"
-                color="gray"
-                size={20}
-                onClick={() => handleEditRedirection({ id })}
-              />
-              <Delete
-                color="gray"
-                size={20}
-                onClick={() => handleDeleteRedirection(id)}
-              />
-            </span>
-          </div>
+          <>
+            <div
+              className="mx-3 flex justify-between bg-white px-8 py-4 tracking-tight"
+              key={id}
+            >
+              <span>{`localhost:3000${oldurl}`}</span>
+              <span>{`localhost:3000${newurl}`}</span>
+              <span className="flex">
+                <Edit
+                  className="mr-2"
+                  color="gray"
+                  size={20}
+                  onClick={() => handleEditRedirection({ id })}
+                />
+                <Delete
+                  color="gray"
+                  size={20}
+                  onClick={() => handleDeleteRedirection(id)}
+                />
+              </span>
+            </div>
+            <br />
+          </>
         ))}
         {createNewRedirection && (
-          <div className="mx-3 flex justify-between bg-white px-8 py-4 tracking-tight">
+          <div className="flex p-4 tracking-tight">
             <Input
+              className="mr-10"
               name="oldurl"
               placeholder="https://scribble.com"
               value={oldurl}
               onChange={e => setOldurl(e.target.value)}
             />
             <Input
+              className="mr-8"
               name="newurl"
               placeholder="https://scribble.com"
               value={newurl}

@@ -4,7 +4,11 @@ class SitesController < ApplicationController
   before_action :load_site!, only: %i[ show update update_status]
 
   def index
-    sites = Site.all
+    sites = Site.all.as_json(
+      include: {
+        assigned_articles: { only: %i[title body created_at] },
+        assigned_categories: { only: %i[category position] }, assigned_redirections: { only: %i[oldurl newurl] }
+      })
     respond_with_json({ sites: sites })
   end
 

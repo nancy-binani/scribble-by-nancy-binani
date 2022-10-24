@@ -63,7 +63,7 @@ const SideMenu = ({ history }) => {
     fetchCategories();
     if (params[0] === "") {
       history.push({
-        pathname: `/public/Scribble/abc`,
+        pathname: `/public/General/abc`,
         state: { title: "", body: "", created_at: "" },
       });
     }

@@ -19,9 +19,8 @@ import Dashboard from "./components/Dashboard";
 import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
 import Settings from "./components/Dashboard/Settings";
-import Eui from "./components/EUI";
-import Authenticate from "./components/EUI/Authenticate";
-import Detail from "./components/EUI/Detail";
+import Eui from "./components/Eui";
+import Detail from "./components/Eui/Detail";
 
 const App = () => {
   const history = useHistory();
@@ -61,14 +60,20 @@ const App = () => {
       <ToastContainer />
       <NavBar history={history} />
       <Switch history={history}>
+        {redirections.map(({ oldurl, newurl, id }) => (
+          <Route exact from={oldurl} key={id}>
+            <Redirect to={{ pathname: newurl, state: { status: 301 } }} />
+          </Route>
+        ))}
         <Route component={Edit} path="/articles/:slug/edit" />
         <Route component={Create} path="/articles/create" />
         <Route
-          path="/settings"
+          path="/settings/*"
           render={props => (
             <Settings {...props} setStatus={setStatus} status={status} />
           )}
         />
+        <Route exact component={Dashboard} path="/" />
         <Route
           path="/public/*"
           render={props => (
@@ -76,15 +81,7 @@ const App = () => {
           )}
         />
         <Route component={Detail} path="/public/*" />
-        <Route component={Dashboard} path="/" />
-        <Route component={Authenticate} path="/login" />
       </Switch>
-      {redirections.map(() => {
-        <>
-          <Redirect from="/settings" to="/settingsabc" />
-          <Route exact from="/settings" />
-        </>;
-      })}
     </Router>
   );
 };

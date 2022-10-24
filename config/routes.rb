@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :categories, only: %i[index create update destroy show]
-  resources :redirections, only: %i[index create update destroy show]
+  resources :categories do
+    member do
+      put :update_with_position
+    end
+  end
+  resources :redirections, except: %i[new edit]
   resources :articles, only: %i[index create update destroy show], param: :slug
   resources :sites do
     member do

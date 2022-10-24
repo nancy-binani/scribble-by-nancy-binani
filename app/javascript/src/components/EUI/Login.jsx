@@ -6,8 +6,9 @@ import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
 
 import authApi from "apis/auth";
+import { setToLocalStorage } from "utils/storage";
 
-const Authenticate = ({ setLoggedIn }) => {
+const Login = ({ history }) => {
   const [sitename, setSitename] = useState("");
 
   const fetchSiteDetails = async () => {
@@ -21,12 +22,12 @@ const Authenticate = ({ setLoggedIn }) => {
   const handleSubmit = async values => {
     try {
       const response = await authApi.login(values.password, sitename);
-      if (response.status === 200) {
-        setLoggedIn(true);
-      }
+      setToLocalStorage({
+        authToken: response.data.authentication_token,
+      });
+      history.push("/public/");
     } catch (error) {
       logger.error(error);
-      setLoggedIn(false);
     }
   };
 
@@ -80,4 +81,4 @@ const Authenticate = ({ setLoggedIn }) => {
   );
 };
 
-export default Authenticate;
+export default Login;
