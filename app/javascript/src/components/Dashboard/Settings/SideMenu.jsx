@@ -1,28 +1,31 @@
 import React from "react";
 
 import { MenuBar } from "@bigbinary/neetoui/layouts";
+import { useParams } from "react-router-dom";
 
-const SideMenu = ({ history }) => (
-  <div className="flex">
-    <MenuBar showMenu>
-      <MenuBar.Block
-        active
-        description="Page Title, Brand Name & Meta Description"
-        label="General"
-        onClick={() => history.push("/settings/")}
-      />
-      <MenuBar.Block
-        description="Create & configure redirection rules"
-        label="Redirections"
-        onClick={() => history.push("/settings/redirections")}
-      />
-      <MenuBar.Block
-        description="Edit and Reorder KB Structure"
-        label="Manage categories"
-        onClick={() => history.push("/settings/managecategories")}
-      />
-    </MenuBar>
-  </div>
-);
+import { MENU_OPTIONS } from "./constants";
+
+const SideMenu = ({ history }) => {
+  const params = useParams()[0];
+  const handleClick = url => {
+    history.push(url);
+  };
+
+  return (
+    <div className="flex">
+      <MenuBar showMenu>
+        {MENU_OPTIONS.map(({ label, description, id, url }) => (
+          <MenuBar.Item
+            className={`${params === label} && bg-white`}
+            description={description}
+            key={id}
+            label={label}
+            onClick={() => handleClick(url)}
+          />
+        ))}
+      </MenuBar>
+    </div>
+  );
+};
 
 export default SideMenu;

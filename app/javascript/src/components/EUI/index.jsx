@@ -1,44 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { PageLoader } from "@bigbinary/neetoui";
+import { either, isEmpty, isNil } from "ramda";
 import { ProSidebarProvider } from "react-pro-sidebar";
 
-import categoriesApi from "apis/categories";
+import { getFromLocalStorage } from "utils/storage";
 
-import Authenticate from "./Authenticate";
+import Login from "./Login";
 import SideMenu from "./SideMenu";
 
-const Eui = ({ status }) => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const fetchCategories = async () => {
-    try {
-      const {
-        data: { categories },
-      } = await categoriesApi.fetch();
-      setCategories(categories);
-      setLoading(false);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
+const Eui = ({ history }) => {
+  const authToken = getFromLocalStorage("authToken");
+  const isLoggedIn = !either(isNil, isEmpty)(authToken);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  if (loading) {
-    <PageLoader />;
-  }
-  {
-    return status ? (
-      <Authenticate />
-    ) : (
-      <ProSidebarProvider>
-        <SideMenu categories={categories} />
-      </ProSidebarProvider>
-    );
-  }
+  return !isLoggedIn ? (
+    <Login history={history} />
+  ) : (
+    <ProSidebarProvider>
+      <SideMenu history={history} />
+    </ProSidebarProvider>
+  );
 };
 
 export default Eui;

@@ -2,6 +2,7 @@
 
 class Article < ApplicationRecord
   belongs_to :assigned_category, foreign_key: "category_id", class_name: "Category"
+  belongs_to :assigned_site, foreign_key: "assigned_site_id", class_name: "Site"
 
   validates :title, presence: true, length: { maximum: 50 }
   validates :slug, uniqueness: true

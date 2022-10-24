@@ -1,27 +1,36 @@
 # frozen_string_literal: true
 
 class CategoriesController < ApplicationController
-  before_action :load_category!, only: %i[ show edit update destroy ]
+  before_action :load_category!, only: %i[ show update destroy update_with_position]
+  before_action :set_current_site
 
   def index
     categories = Category.all.as_json(include: { assigned_articles: { only: %i[title body created_at] } })
-    render status: :ok, json: { categories: categories }
+    respond_with_json({ categories: categories })
   end
 
   def create
-    category = Category.new(category_params)
-    category.save!
-    respond_with_success("Category was successfully created")
+    category = Category.create!(category_params.merge(assigned_site_id: @current_site.id))
+    respond_with_success(t("successfully_created", entity: "Category"))
   end
 
   def show
-    category = Category.find_by(id: params[:id])
-    render status: :ok, json: { category: category }
+    respond_with_json({ category: @category, assigned_articles: @category.assigned_articles })
   end
 
   def update
     @category.update!(category_params)
-    respond_with_success("Category was successfully updated!")
+    respond_with_success(t("successfully_updated", entity: "Category"))
+  end
+
+  def update_with_position
+    category_list = Category.all
+    category_list.each_with_index do |category, index|
+      category_items = Category.find_by!(id: category)
+      category_items.position = index
+      category_items.save!
+    end
+    respond_with_success(t("successfully_updated", entity: "Category"))
   end
 
   def destroy
@@ -36,6 +45,6 @@ class CategoriesController < ApplicationController
     end
 
     def category_params
-      params.permit(:category)
+      params.permit(:category, :position)
     end
 end

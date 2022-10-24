@@ -110,6 +110,7 @@ const SideMenu = ({ handleFilter }) => {
       {filtering
         ? filteredList.map((category, idx) => (
             <MenuBar.Block
+              className={`${active === category && "bg-white"}`}
               count={27}
               key={idx}
               label={category}
@@ -118,6 +119,7 @@ const SideMenu = ({ handleFilter }) => {
           ))
         : categories.map((category, idx) => (
             <MenuBar.Block
+              className={`${active === category && "bg-white"}`}
               count={27}
               key={idx}
               label={category}

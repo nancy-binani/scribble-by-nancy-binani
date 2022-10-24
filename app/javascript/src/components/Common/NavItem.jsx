@@ -1,9 +1,10 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const NavItem = ({ iconClass, name, path }) => (
-  <Link
+  <NavLink
+    exact
     to={path}
     className="mr-3 inline-flex items-center px-1 pt-1
       text-sm font-semibold leading-5
@@ -11,7 +12,7 @@ const NavItem = ({ iconClass, name, path }) => (
   >
     {iconClass && <i className={`${iconClass} text-gray-800`} />}
     {name}
-  </Link>
+  </NavLink>
 );
 
 export default NavItem;

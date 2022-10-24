@@ -1,4 +1,10 @@
 en:
+  successfully_created: "%{entity} was successfully created!"
+  successfully_updated: "%{entity} was successfully updated!"
+  successfully_deleted: "%{entity} was successfully deleted!"
+  redirection:
+    redirection_loop: "Creating redirection cycle"
+    to_from_check: "To and from cannot be equal"
   article:
     slug:
       immutable: "is immutable!"

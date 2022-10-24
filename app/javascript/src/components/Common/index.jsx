@@ -9,7 +9,7 @@ import NavItem from "./NavItem";
 const NavBar = () => {
   const history = useHistory();
   const handleClick = () => {
-    history.push("/eui");
+    history.push("/public/");
   };
 
   return (

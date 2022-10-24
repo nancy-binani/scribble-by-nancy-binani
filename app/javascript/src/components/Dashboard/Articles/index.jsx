@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Plus } from "@bigbinary/neeto-icons";
-import { PageLoader, Button, Dropdown, Checkbox } from "@bigbinary/neetoui";
+import { Dropdown, Checkbox, PageLoader, Button } from "@bigbinary/neetoui";
 import { Container, Header } from "@bigbinary/neetoui/layouts";
 
 import articlesApi from "apis/articles";

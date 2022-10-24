@@ -5,10 +5,12 @@ import {
   Switch,
   Route,
   useHistory,
+  Redirect,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { setAuthHeaders } from "apis/axios";
+import redirectionsApi from "apis/redirection";
 import { initializeLogger } from "common/logger";
 import PageLoader from "components/PageLoader";
 
@@ -17,18 +19,33 @@ import Dashboard from "./components/Dashboard";
 import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
 import Settings from "./components/Dashboard/Settings";
-import Eui from "./components/EUI";
-import Authenticate from "./components/EUI/Authenticate";
+import Eui from "./components/Eui";
+import Detail from "./components/Eui/Detail";
 
 const App = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(false);
+  const [redirections, setRedirections] = useState([]);
 
   useEffect(() => {
     initializeLogger();
     setAuthHeaders(setLoading);
+    fetchRedirections();
   }, []);
+
+  const fetchRedirections = async () => {
+    try {
+      const {
+        data: { redirections },
+      } = await redirectionsApi.fetch();
+      setRedirections(redirections);
+      setLoading(false);
+    } catch (error) {
+      logger.error(error);
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -43,24 +60,27 @@ const App = () => {
       <ToastContainer />
       <NavBar history={history} />
       <Switch history={history}>
-        <Route exact component={Edit} path="/articles/:slug/edit" />
-        <Route exact component={Create} path="/articles/create" />
+        {redirections.map(({ oldurl, newurl, id }) => (
+          <Route exact from={oldurl} key={id}>
+            <Redirect to={{ pathname: newurl, state: { status: 301 } }} />
+          </Route>
+        ))}
+        <Route component={Edit} path="/articles/:slug/edit" />
+        <Route component={Create} path="/articles/create" />
         <Route
-          exact
           path="/settings/*"
           render={props => (
             <Settings {...props} setStatus={setStatus} status={status} />
           )}
         />
+        <Route exact component={Dashboard} path="/" />
         <Route
-          exact
-          path="/eui"
+          path="/public/*"
           render={props => (
             <Eui {...props} setStatus={setStatus} status={status} />
           )}
         />
-        <Route exact component={Dashboard} path="/" />
-        <Route exact component={Authenticate} path="/login" />
+        <Route component={Detail} path="/public/*" />
       </Switch>
     </Router>
   );
