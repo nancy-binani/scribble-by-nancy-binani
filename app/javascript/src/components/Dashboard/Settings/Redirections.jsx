@@ -73,7 +73,7 @@ const Redirections = () => {
       await fetchRedirections();
     } catch (error) {
       logger.error(error);
-      Toastr.error("Cyclic redirections is not possible.");
+      Toastr.error("Cyclic redirection is not possible.");
     }
     setCreateNewRedirection(!createNewRedirection);
   };

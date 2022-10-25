@@ -5,7 +5,7 @@ import { Container } from "@bigbinary/neetoui/layouts";
 
 import { formatDateAndTime } from "../Dashboard/Articles/utils";
 
-const Detail = ({ title, category, created_at, body }) => (
+const Detail = ({ title, category, date, body }) => (
   <Container className="mx-10">
     <Typography className="my-5" style="h1">
       {title}
@@ -14,9 +14,7 @@ const Detail = ({ title, category, created_at, body }) => (
       <span className="my-3 flex">
         {" "}
         <Tag label={category} />{" "}
-        <span className="mx-2 text-gray-600">
-          {formatDateAndTime(created_at)}
-        </span>
+        <span className="mx-2 text-gray-600">{formatDateAndTime(date)}</span>
       </span>
     )}
     <p>{body}</p>

@@ -4,7 +4,8 @@ require "test_helper"
 
 class CategoriesControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @category = create(:category)
+    @site = create(:site)
+    @category = create(:category, assigned_site_id: @site.id)
   end
 
   def test_should_show_all_categories
@@ -23,7 +24,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_can_update_category
-    updated_category = "Neeto"
+    updated_category = "Hello"
     category_params = { category: updated_category }
     put category_path(@category.id), params: category_params
     assert_response :success

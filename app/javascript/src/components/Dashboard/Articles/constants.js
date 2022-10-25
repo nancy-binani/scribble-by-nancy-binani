@@ -5,6 +5,10 @@ import { buildSelectOptions } from "../../../utils";
 export const ARTICLES_FORM_INITIAL_VALUES = {
   title: "",
   body: "",
+  assigned_category: {
+    id: "",
+    category: "",
+  },
 };
 
 export const CATEGORY_INITIAL_VALUE = {
@@ -34,3 +38,10 @@ export const ARTICLES_FORM_VALIDATION_SCHEMA = yup.object().shape({
 });
 
 export const STATUS = ["Draft", "Published"];
+export const FILTERING_OPTIONS = [
+  "Title",
+  "Categories",
+  "Date",
+  "Author",
+  "Status",
+];

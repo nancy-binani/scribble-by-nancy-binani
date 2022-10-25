@@ -35,7 +35,7 @@ class CategoriesController < ApplicationController
 
   def destroy
     @category.destroy!
-    respond_with_json
+    respond_with_success(t("successfully_deleted", entity: "Category"))
   end
 
   private

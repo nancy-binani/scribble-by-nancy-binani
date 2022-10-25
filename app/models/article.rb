@@ -5,6 +5,8 @@ class Article < ApplicationRecord
   belongs_to :assigned_site, foreign_key: "assigned_site_id", class_name: "Site"
 
   validates :title, presence: true, length: { maximum: 50 }
+  validates :body, presence: true, length: { maximum: 10000 }
+  validates :status, presence: true
   validates :slug, uniqueness: true
   validate :slug_not_changed
   before_create :set_slug

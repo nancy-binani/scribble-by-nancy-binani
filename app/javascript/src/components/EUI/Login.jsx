@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-//import {Vector} from "../../../../assets/images";
 import { Typography, Button } from "@bigbinary/neetoui";
 import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
 
 import authApi from "apis/auth";
 import { setToLocalStorage } from "utils/storage";
+
+import Vector from "../../../../assets/images/Vector.png";
 
 const Login = ({ history }) => {
   const [sitename, setSitename] = useState("");
@@ -44,6 +45,9 @@ const Login = ({ history }) => {
         {sitename}
       </Typography>
       <div className="my-8 flex justify-center">
+        <img alt="no" src={Vector} />
+      </div>
+      <div className="my-8 flex justify-center">
         <Formik initialValues={{ password: "" }} onSubmit={handleSubmit}>
           <Form>
             <Typography
@@ -75,8 +79,6 @@ const Login = ({ history }) => {
           </Form>
         </Formik>
       </div>
-      {/*
-      <img src={Vector} height={250} width={250} alt="no"></img> */}
     </>
   );
 };

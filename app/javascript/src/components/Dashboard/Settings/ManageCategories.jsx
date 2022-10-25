@@ -31,10 +31,6 @@ const ManageCategories = () => {
     setOrderUpdated(false);
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, [orderUpdated]);
-
   const handleCreateCategory = () => {
     setIsEdit(false);
     setCategoryValue(CATEGORY_INITIAL_VALUE);
@@ -73,6 +69,10 @@ const ManageCategories = () => {
     handle_update_with_position(positions, reorderedItem);
   };
 
+  useEffect(() => {
+    fetchCategories();
+  }, [orderUpdated]);
+
   if (loading) {
     return <PageLoader />;
   }
@@ -102,11 +102,11 @@ const ManageCategories = () => {
         <Droppable droppableId="categories">
           {provided => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {categories.map((element, idx) => (
+              {categories.map((category, idx) => (
                 <Draggable
-                  draggableId={String(element["id"])}
+                  draggableId={String(category["id"])}
                   index={idx}
-                  key={element["id"]}
+                  key={category["id"]}
                 >
                   {provided => (
                     <div
@@ -118,7 +118,7 @@ const ManageCategories = () => {
                       <div className="flex">
                         <Reorder color="gray" size={20} />
                         <Typography className="ml-3" style="h4">
-                          {element["category"]}
+                          {category["category"]}
                         </Typography>
                       </div>
                       <div className="flex">
@@ -128,8 +128,8 @@ const ManageCategories = () => {
                           size={20}
                           onClick={() =>
                             handleEditCategory(
-                              element["category"],
-                              element["id"]
+                              category["category"],
+                              category["id"]
                             )
                           }
                         />
@@ -137,7 +137,7 @@ const ManageCategories = () => {
                           color="gray"
                           size={20}
                           onClick={() =>
-                            handleDeleteCategory(element["id"], idx)
+                            handleDeleteCategory(category["id"], idx)
                           }
                         />
                       </div>

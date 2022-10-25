@@ -10,6 +10,7 @@ import authApi from "apis/auth";
 import { REGEXP } from "./constants";
 
 const General = ({ status, setStatus }) => {
+  const [id, setId] = useState("");
   const [passwordRegexChecked, setPasswordRegexChecked] = useState(false);
   const [passwordLengthChecked, setPasswordLengthChecked] = useState(false);
   const [validationBoxOpen, setValidationBoxOpen] = useState(false);
@@ -29,6 +30,7 @@ const General = ({ status, setStatus }) => {
     try {
       const toggledStatus = status ? "checked" : "unchecked";
       await authApi.update({
+        id,
         sitename,
         password,
         status: toggledStatus,
@@ -43,6 +45,7 @@ const General = ({ status, setStatus }) => {
         data: { sites },
       } = await authApi.fetch();
       sites[0]["checked"] === "checked" ? setStatus(true) : setStatus(false);
+      await setId(sites[0]["id"]);
     } catch (error) {
       logger.error(error);
     }
@@ -57,7 +60,7 @@ const General = ({ status, setStatus }) => {
     try {
       const toggledStatus = status ? "unchecked" : "checked";
       await authApi.updateStatus({
-        sitename: "Spinkart",
+        id,
         checked: toggledStatus,
       });
     } catch (error) {

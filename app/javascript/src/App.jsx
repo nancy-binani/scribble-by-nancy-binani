@@ -20,7 +20,6 @@ import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
 import Settings from "./components/Dashboard/Settings";
 import Eui from "./components/Eui";
-import Detail from "./components/Eui/Detail";
 
 const App = () => {
   const history = useHistory();
@@ -58,7 +57,11 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <NavBar history={history} />
+      <Route
+        exact
+        component={NavBar}
+        path={["/", "/articles/", "/settings/*"]}
+      />
       <Switch history={history}>
         {redirections.map(({ oldurl, newurl, id }) => (
           <Route exact from={oldurl} key={id}>
@@ -66,21 +69,20 @@ const App = () => {
           </Route>
         ))}
         <Route component={Edit} path="/articles/:slug/edit" />
-        <Route component={Create} path="/articles/create" />
+        <Route component={Create} path="/articles/new_article" />
         <Route
           path="/settings/*"
           render={props => (
             <Settings {...props} setStatus={setStatus} status={status} />
           )}
         />
-        <Route exact component={Dashboard} path="/" />
         <Route
           path="/public/*"
           render={props => (
             <Eui {...props} setStatus={setStatus} status={status} />
           )}
         />
-        <Route component={Detail} path="/public/*" />
+        <Route exact component={Dashboard} path="/" />
       </Switch>
     </Router>
   );

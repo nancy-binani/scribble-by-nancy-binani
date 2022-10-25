@@ -11,7 +11,7 @@ import Detail from "./Detail";
 const SideMenu = ({ history }) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [created_at, setCreated_at] = useState("");
+  const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
   const [active, setActive] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,14 +19,14 @@ const SideMenu = ({ history }) => {
 
   const params = useParams();
   const [paramCategory, paramTitle] = params[0].split("/");
-  const handleClick = ({ title, body, created_at }) => {
+  const handleClick = ({ title, body, date }) => {
     setTitle(title);
     setBody(body);
-    setCreated_at(created_at);
+    setDate(date);
     setActive(title);
     history.push({
       pathname: `/public/${category}/${title}`,
-      state: { title, body, created_at },
+      state: { title, body, date },
     });
   };
 
@@ -53,7 +53,7 @@ const SideMenu = ({ history }) => {
       );
       setTitle(val[0].title);
       setBody(val[0].body);
-      setCreated_at(val[0].created_at);
+      setDate(val[0].created_at);
       setActive(val[0].title);
       setCategory(cat[0]["category"]);
     }
@@ -63,8 +63,8 @@ const SideMenu = ({ history }) => {
     fetchCategories();
     if (params[0] === "") {
       history.push({
-        pathname: `/public/General/abc`,
-        state: { title: "", body: "", created_at: "" },
+        pathname: `/public/General/edited`,
+        state: { title: "", body: "", date: "" },
       });
     }
   }, [history, params]);
@@ -113,7 +113,7 @@ const SideMenu = ({ history }) => {
               {...props}
               body={body}
               category={category}
-              created_at={created_at}
+              date={date}
               title={title}
             />
           )}

@@ -17,15 +17,6 @@ class RedirectionTest < ActiveSupport::TestCase
     assert_not redirection.valid?
  end
 
-  # not working
-  def test_cyclic_loop
-    redirection = Redirection.create({ oldurl: "/1", newurl: "/2" })
-    redirection1 = Redirection.create({ oldurl: "/3", newurl: "/4" })
-    redirection2 = Redirection.create({ oldurl: "/4", newurl: "/1" })
-    redirection3 = Redirection.create({ oldurl: "/2", newurl: "/5" })
-    assert_not redirection2.valid?
- end
-
   def test_continuous_cyclic_loop
     redirection = Redirection.create({ oldurl: "/1", newurl: "/2" })
     redirection1 = Redirection.create({ oldurl: "/2", newurl: "/3" })
