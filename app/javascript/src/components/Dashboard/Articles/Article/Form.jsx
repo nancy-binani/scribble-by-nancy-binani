@@ -41,11 +41,16 @@ const Form = ({ isEdit, article, history }) => {
     setSubmitted(true);
     handleSubmit(values);
   };
+
   const handleSubmit = async values => {
     try {
       if (isEdit) {
         await articlesApi.update(
-          { ...values, author: "Oliver Smith" },
+          {
+            ...values,
+            author: "Oliver Smith",
+            category_id: values.category.value,
+          },
           values.slug
         );
         Toastr.success("Article is updated successfully");
@@ -91,7 +96,10 @@ const Form = ({ isEdit, article, history }) => {
               name="category"
               options={categories}
               placeholder="Select Category"
-              value={categories[article.category_id - 1]}
+              defaultValue={{
+                label: article["assigned_category"]["category"],
+                value: article["assigned_category"]["id"],
+              }}
             />
           </div>
           <Textarea
@@ -122,6 +130,7 @@ const Form = ({ isEdit, article, history }) => {
             size="large"
             style="text"
             type="reset"
+            onClick={() => history.push("/")}
           />
         </FormikForm>
       )}

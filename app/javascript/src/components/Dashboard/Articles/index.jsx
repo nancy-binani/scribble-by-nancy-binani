@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 
-import { Plus } from "@bigbinary/neeto-icons";
-import { Dropdown, Checkbox, PageLoader, Button } from "@bigbinary/neetoui";
-import { Container, Header } from "@bigbinary/neetoui/layouts";
+import { PageLoader } from "@bigbinary/neetoui";
+import { Container } from "@bigbinary/neetoui/layouts";
 
 import articlesApi from "apis/articles";
 
 import DeleteAlert from "./DeleteAlert";
+import Header from "./Header";
 import SideMenu from "./SideMenu";
 import Table from "./Table";
-
-const { Menu, MenuItem } = Dropdown;
 
 const Articles = ({ history }) => {
   const [loading, setLoading] = useState(true);
@@ -21,7 +19,7 @@ const Articles = ({ history }) => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [filteredList, setFilteredList] = useState([]);
   const [filtering, setFiltering] = useState(false);
-  const filteringOptions = ["Title", "Categories", "Date", "Author", "Status"];
+  const [columns, setColumns] = useState([]);
 
   useEffect(() => {
     fetchArticles();
@@ -49,12 +47,6 @@ const Articles = ({ history }) => {
     }
   };
 
-  const handleDelete = (slugToBeDeleted, title) => {
-    setSlugToBeDeleted(slugToBeDeleted);
-    setShowDeleteAlert(true);
-    setTitle(title);
-  };
-
   const handleSearch = e => {
     if (e.key === "Enter") {
       setFiltering(true);
@@ -67,6 +59,12 @@ const Articles = ({ history }) => {
         ? setFilteredList(articles)
         : setFilteredList(updatedList);
     }
+  };
+
+  const handleDelete = (slugToBeDeleted, title) => {
+    setSlugToBeDeleted(slugToBeDeleted);
+    setShowDeleteAlert(true);
+    setTitle(title);
   };
 
   const handleFilter = query => {
@@ -90,37 +88,17 @@ const Articles = ({ history }) => {
       <SideMenu handleFilter={handleFilter} />
       <Container>
         <Header
-          actionBlock={
-            <>
-              <Dropdown buttonStyle="secondary" label="Columns">
-                <Menu>
-                  {filteringOptions.map((item, idx) => (
-                    <MenuItem.Button
-                      key={idx}
-                      prefix={<Checkbox checked id={idx} />}
-                    >
-                      {item}
-                    </MenuItem.Button>
-                  ))}
-                </Menu>
-              </Dropdown>
-              <Button
-                icon={Plus}
-                label="Add New Article"
-                onClick={() => history.push("/articles/create")}
-              />
-            </>
-          }
-          searchProps={{
-            value: searchTerm,
-            placeholder: "Search article title",
-            onChange: e => setSearchTerm(e.target.value),
-            onKeyDown: e => handleSearch(e),
-          }}
+          columns={columns}
+          handleSearch={handleSearch}
+          history={history}
+          searchTerm={searchTerm}
+          setColumns={setColumns}
+          setSearchTerm={setSearchTerm}
         />
         <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
         {filtering ? (
           <Table
+            columns={columns}
             data={filteredList}
             handleDelete={handleDelete}
             history={history}
@@ -128,6 +106,7 @@ const Articles = ({ history }) => {
           />
         ) : (
           <Table
+            columns={columns}
             data={articles}
             handleDelete={handleDelete}
             history={history}

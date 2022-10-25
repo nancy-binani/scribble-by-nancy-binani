@@ -3,13 +3,13 @@ import axios from "axios";
 const fetch = () => axios.get("/sites");
 
 const update = payload => {
-  axios.put(`/sites/2`, {
+  axios.put(`/sites/${payload.id}`, {
     site: payload,
   });
 };
 
 const updateStatus = payload => {
-  axios.put(`/sites/2`, {
+  axios.put(`/sites/${payload.id}`, {
     site: payload,
   });
 };

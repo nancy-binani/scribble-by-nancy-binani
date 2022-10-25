@@ -25,7 +25,7 @@ class RedirectionsController < ApplicationController
 
   def destroy
     @redirection.destroy!
-    respond_with_json
+    respond_with_success(t("successfully_deleted", entity: "Redirection"))
   end
 
   private

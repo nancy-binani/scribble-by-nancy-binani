@@ -7,7 +7,8 @@ Rails.application.routes.draw do
     end
   end
   resources :redirections, except: %i[new edit]
-  resources :articles, only: %i[index create update destroy show], param: :slug
+
+  resources :articles, only: %i[index create update destroy], param: :slug
   resources :sites do
     member do
       patch :update_status
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
     end
   end
   resource :session, only: :create
+  resources :filters
   root "home#index"
   get "*path", to: "home#index", via: :all
 end

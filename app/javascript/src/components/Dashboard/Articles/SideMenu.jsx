@@ -62,7 +62,6 @@ const SideMenu = ({ handleFilter }) => {
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
-          count={28}
           key={idx}
           label={menu}
           onClick={() => handleClick(menu)}
@@ -111,7 +110,6 @@ const SideMenu = ({ handleFilter }) => {
         ? filteredList.map((category, idx) => (
             <MenuBar.Block
               className={`${active === category && "bg-white"}`}
-              count={27}
               key={idx}
               label={category}
               onClick={() => handleClick(category)}
@@ -120,7 +118,6 @@ const SideMenu = ({ handleFilter }) => {
         : categories.map((category, idx) => (
             <MenuBar.Block
               className={`${active === category && "bg-white"}`}
-              count={27}
               key={idx}
               label={category}
               onClick={() => handleClick(category)}

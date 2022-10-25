@@ -6,28 +6,41 @@ class ArticlesController < ApplicationController
 
   def index
     articles = Article.all.as_json(include: { assigned_category: { only: %i[category id] } })
-    render status: :ok, json: { articles: articles }
+    respond_with_json({ articles: articles })
   end
 
   def create
-    article = Article.new(article_params.merge(assigned_site_id: @current_site.id))
-    article.save!
-    respond_with_success("Article was successfully created")
+    article = Article.create!(article_params.merge(assigned_site_id: @current_site.id))
+    respond_with_success(t("successfully_created", entity: "Article"))
   end
 
   def update
     @article.update!(article_params)
-    respond_with_success("Article was successfully updated!")
+    respond_with_success(t("successfully_updated", entity: "Article"))
   end
 
   def destroy
     @article.destroy!
-    respond_with_json
+    respond_with_success(t("successfully_deleted", entity: "Article"))
   end
 
   def show
-    article = Article.find_by!(slug: params[:slug])
-    render status: :ok, json: { article: article, assigned_category: article.assigned_category }
+    render status: :ok, json: { article: @article, assigned_category: @article.assigned_category }
+  end
+
+  def filter_status
+    articles = Article.filter_status
+    respond_with_json({ articles: articles })
+  end
+
+  def filter_by_category
+    articles = Article.filter_by_category
+    respond_with_json({ articles: articles })
+  end
+
+  def filter_articles
+    articles = Article.filter_columns
+    respond_with_json({ articles: articles })
   end
 
   private

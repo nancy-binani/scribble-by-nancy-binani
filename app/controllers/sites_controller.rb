@@ -12,25 +12,23 @@ class SitesController < ApplicationController
     respond_with_json({ sites: sites })
   end
 
+  def create
+    site = Site.create!(site_params)
+    respond_with_success(t("successfully_created", entity: "Site"))
+  end
+
   def update
-    site = Site.find_by(sitename: site_params[:sitename]).update!(site_params)
-    respond_with_success("Site was successfully updated!")
+    site = Site.find_by!(id: site_params[:id]).update!(site_status_update_params)
+    respond_with_success(t("successfully_updated", entity: "Site"))
   end
 
   def update_status
-    site = Site.find_by(sitename: site_status_update_params[:sitename]).update!(site_status_update_params)
-    respond_with_success("Site status was successfully updated!")
+    site = Site.find_by(id: site_status_update_params[:id]).update!(site_status_update_params)
+    respond_with_success(t("successfully_updated", entity: "Site"))
   end
 
   def show
-    site = Site.find_by!(id: params[:id])
     render status: :ok, json: { site: site }
-  end
-
-  def create
-    site = Site.new(site_params)
-    site.save!
-    respond_with_success("Site Details was successfully created!")
   end
 
   private
@@ -40,7 +38,7 @@ class SitesController < ApplicationController
     end
 
     def site_params
-      params.require(:site).permit(:sitename, :password, :checked)
+      params.require(:site).permit(:sitename, :password, :checked, :id)
     end
 
     def site_status_update_params

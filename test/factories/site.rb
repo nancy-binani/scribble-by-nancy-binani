@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-   factory :redirection do
-
-   end
- end
+  factory :site do
+    sitename { Faker::Name.name }
+    password { Faker::Internet.password }
+  end
+end

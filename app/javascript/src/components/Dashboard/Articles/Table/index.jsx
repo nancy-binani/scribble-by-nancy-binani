@@ -1,14 +1,15 @@
 import React from "react";
 
-import { Table as NeetoUITable, Pagination } from "neetoui";
+import { Pagination } from "@bigbinary/neetoui";
+import { Table as NeetoUITable } from "neetoui";
 
 import { buildArticlesColumnData } from "./utils";
 
-const Table = ({ data, history, handleDelete }) => (
+const Table = ({ data, history, handleDelete, columns }) => (
   <>
     <NeetoUITable
       allowRowClick
-      columnData={buildArticlesColumnData(history, handleDelete)}
+      columnData={buildArticlesColumnData(history, handleDelete, columns)}
       rowData={data}
       onRowClick={() => {}}
       onRowSelect={() => {}}
