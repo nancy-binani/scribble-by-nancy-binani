@@ -50,14 +50,22 @@ ActiveRecord::Schema.define(version: 2022_10_26_035423) do
     t.string "newurl"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "assigned_site_id"
   end
 
-  create_table "site_details", force: :cascade do |t|
-    t.string "name", null: false
+  create_table "options", force: :cascade do |t|
+    t.string "columns", default: [], array: true
+    t.string "status"
+    t.string "category"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "password_digest", null: false
+  end
+
+  create_table "redirections", force: :cascade do |t|
+    t.string "oldurl"
+    t.string "newurl"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "assigned_site_id"
   end
 
   create_table "sites", force: :cascade do |t|
