@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_25_082004) do
+ActiveRecord::Schema.define(version: 2022_10_26_035423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,20 +45,19 @@ ActiveRecord::Schema.define(version: 2022_10_25_082004) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "options", force: :cascade do |t|
-    t.string "columns", default: [], array: true
-    t.string "status"
-    t.string "category"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "redirections", force: :cascade do |t|
     t.string "oldurl"
     t.string "newurl"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "assigned_site_id"
+  end
+
+  create_table "site_details", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "password_digest", null: false
   end
 
   create_table "sites", force: :cascade do |t|
@@ -68,6 +67,14 @@ ActiveRecord::Schema.define(version: 2022_10_25_082004) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "authentication_token"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "email"
+    t.integer "assigned_site_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "articles", "categories"
