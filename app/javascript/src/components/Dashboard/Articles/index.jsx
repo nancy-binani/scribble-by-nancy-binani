@@ -5,6 +5,7 @@ import { Container } from "@bigbinary/neetoui/layouts";
 
 import articlesApi from "apis/articles";
 
+import { FILTERING_OPTIONS } from "./constants";
 import DeleteAlert from "./DeleteAlert";
 import Header from "./Header";
 import SideMenu from "./SideMenu";
@@ -19,7 +20,7 @@ const Articles = ({ history }) => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [filteredList, setFilteredList] = useState([]);
   const [filtering, setFiltering] = useState(false);
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState(FILTERING_OPTIONS);
 
   useEffect(() => {
     fetchArticles();

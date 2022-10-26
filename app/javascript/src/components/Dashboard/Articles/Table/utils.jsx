@@ -71,6 +71,5 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
     column =>
       column.key === "Options" ||
       columns.includes(column?.key) ||
-      column.key === "slug" ||
       (columns.includes("Categories") && column.key === "category")
   );
