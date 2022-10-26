@@ -38,11 +38,6 @@ class ArticlesController < ApplicationController
     respond_with_json({ articles: articles })
   end
 
-  def filter_articles
-    articles = Article.filter_columns
-    respond_with_json({ articles: articles })
-  end
-
   private
 
     def load_article!

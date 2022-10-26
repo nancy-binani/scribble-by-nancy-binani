@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const list = () => axios.get("/filters");
+const fetch = () => axios.get("/filters");
 
 const update = (payload, id) => {
   axios.put(`/filters/${id}`, {
@@ -8,6 +8,6 @@ const update = (payload, id) => {
   });
 };
 
-const filterApi = { list, update };
+const filterApi = { fetch, update };
 
 export default filterApi;

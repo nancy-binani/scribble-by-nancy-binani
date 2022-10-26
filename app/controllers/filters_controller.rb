@@ -29,6 +29,6 @@ class FiltersController < ApplicationController
     end
 
     def filter_params
-      params.require(:filter).permit(:status, columns: [], categories: [])
+      params.require(:filter).permit(:status, categories: [])
     end
 end
