@@ -8,11 +8,12 @@ const update = (payload, id) => {
     category: payload,
   });
 };
-const update_with_position = (position, id) => {
-  axios.put(`/categories/${id}/update_with_position`, {
+const updateWithPosition = async (position, id) => {
+  await axios.put(`/categories/${id}/update_with_position`, {
     position,
     id,
   });
+  await fetch();
 };
 const destroy = id => axios.delete(`/categories/${id}`);
 
@@ -22,7 +23,7 @@ const categoriesApi = {
   fetch,
   create,
   update,
-  update_with_position,
+  updateWithPosition,
   destroy,
   fetchCategory,
 };

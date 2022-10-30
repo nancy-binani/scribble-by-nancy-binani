@@ -31,11 +31,4 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     @category.reload
     assert_equal @category.category, updated_category
   end
-
-  def test_should_destroy_category
-    assert_difference "Category.count", -1 do
-      delete category_path(@category.id)
-    end
-    assert_response :ok
-  end
 end

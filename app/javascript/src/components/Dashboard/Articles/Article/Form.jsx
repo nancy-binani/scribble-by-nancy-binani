@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { ActionDropdown, Button, PageLoader, Toastr } from "@bigbinary/neetoui";
-import { Input, Textarea, Select } from "@bigbinary/neetoui/formik";
 import { Formik, Form as FormikForm } from "formik";
+import { ActionDropdown, Button, PageLoader, Toastr } from "neetoui";
+import { Input, Textarea, Select } from "neetoui/formik";
 
 import articlesApi from "apis/articles";
 import categoriesApi from "apis/categories";
@@ -12,7 +12,7 @@ import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
 const { Menu, MenuItem } = ActionDropdown;
 const Form = ({ isEdit, article, history }) => {
   const [submitted, setSubmitted] = useState(false);
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchCategories = async () => {
@@ -51,7 +51,7 @@ const Form = ({ isEdit, article, history }) => {
             author: "Oliver Smith",
             category_id: values.category.value,
           },
-          values.slug
+          values.id
         );
         Toastr.success("Article is updated successfully");
       } else {
@@ -96,10 +96,6 @@ const Form = ({ isEdit, article, history }) => {
               name="category"
               options={categories}
               placeholder="Select Category"
-              defaultValue={{
-                label: article["assigned_category"]["category"],
-                value: article["assigned_category"]["id"],
-              }}
             />
           </div>
           <Textarea
@@ -116,6 +112,7 @@ const Form = ({ isEdit, article, history }) => {
                 <MenuItem.Button
                   disabled={isSubmitting}
                   key={idx}
+                  type="submit"
                   value={item}
                   onClick={() => handleStatus(values, item)}
                 >

@@ -1,15 +1,9 @@
 import axios from "axios";
 
-const fetch = () => axios.get("/sites");
+const fetch = () => axios.get("/site");
 
 const update = payload => {
-  axios.put(`/sites/${payload.id}`, {
-    site: payload,
-  });
-};
-
-const updateStatus = payload => {
-  axios.put(`/sites/${payload.id}`, {
+  axios.put(`/site`, {
     site: payload,
   });
 };
@@ -22,7 +16,6 @@ const login = (password, sitename) =>
 const authApi = {
   fetch,
   update,
-  updateStatus,
   login,
 };
 

@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Alert, Toastr } from "@bigbinary/neetoui";
+import { Alert, Toastr } from "neetoui";
 
-const DeleteAlert = ({ destroyArticle, slug, title, onClose }) => {
+const DeleteAlert = ({ destroyArticle, id, title, onClose }) => {
   const handleDelete = () => {
-    destroyArticle(slug);
+    destroyArticle(id);
     onClose();
     Toastr.success("Article is deleted successfully.");
   };

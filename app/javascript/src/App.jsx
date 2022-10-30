@@ -24,7 +24,6 @@ import Eui from "./components/Eui";
 const App = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState(false);
   const [redirections, setRedirections] = useState([]);
 
   useEffect(() => {
@@ -57,31 +56,17 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Route
-        exact
-        component={NavBar}
-        path={["/", "/articles/", "/settings/*"]}
-      />
+      <Route exact component={NavBar} path={["/", "/articles/", "/settings"]} />
       <Switch history={history}>
         {redirections.map(({ oldurl, newurl, id }) => (
           <Route exact from={oldurl} key={id}>
             <Redirect to={{ pathname: newurl, state: { status: 301 } }} />
           </Route>
         ))}
-        <Route component={Edit} path="/articles/:slug/edit" />
+        <Route component={Edit} path="/articles/:id/edit" />
         <Route component={Create} path="/articles/new_article" />
-        <Route
-          path="/settings/*"
-          render={props => (
-            <Settings {...props} setStatus={setStatus} status={status} />
-          )}
-        />
-        <Route
-          path="/public/*"
-          render={props => (
-            <Eui {...props} setStatus={setStatus} status={status} />
-          )}
-        />
+        <Route path="/settings" render={props => <Settings {...props} />} />
+        <Route path="/public/*" render={props => <Eui {...props} />} />
         <Route exact component={Dashboard} path="/" />
       </Switch>
     </Router>

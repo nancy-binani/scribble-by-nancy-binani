@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import { Button, Checkbox, Dropdown } from "@bigbinary/neetoui";
-import { Header as NeetoUIHeader } from "@bigbinary/neetoui/layouts";
+import { Button, Checkbox, Dropdown } from "neetoui";
+import { Header as NeetoUIHeader } from "neetoui/layouts";
 
 import { FILTERING_OPTIONS } from "./constants";
 
@@ -47,21 +47,24 @@ const Header = ({
             onClick={handleClick}
           >
             <Menu>
-              {FILTERING_OPTIONS.map((item, idx) => (
-                <MenuItem.Button
-                  key={idx}
-                  prefix={
-                    <Checkbox
-                      checked={checked[idx]}
-                      id={idx}
-                      onChange={() => {}}
-                      onClick={() => handleColumns(item, idx)}
-                    />
-                  }
-                >
-                  {item}
-                </MenuItem.Button>
-              ))}
+              {FILTERING_OPTIONS.map(
+                (item, idx) =>
+                  item !== "Title" && (
+                    <MenuItem.Button
+                      key={idx}
+                      prefix={
+                        <Checkbox
+                          checked={checked[idx]}
+                          id={idx}
+                          onChange={() => {}}
+                          onClick={() => handleColumns(item, idx)}
+                        />
+                      }
+                    >
+                      {item}
+                    </MenuItem.Button>
+                  )
+              )}
             </Menu>
           </Dropdown>
           <Button
@@ -73,6 +76,7 @@ const Header = ({
       }
       searchProps={{
         value: searchTerm,
+        placeholder: "Search for title and press enter!",
         onChange: e => setSearchTerm(e.target.value),
         onKeyDown: e => handleSearch(e, searchTerm),
       }}

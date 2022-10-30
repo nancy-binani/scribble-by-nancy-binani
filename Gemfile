@@ -64,3 +64,5 @@ group :development, :test do
   # For auto-generating demo data
   gem "faker"
 end
+
+gem "simplecov", require: false, group: :test

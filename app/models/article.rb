@@ -4,14 +4,22 @@ class Article < ApplicationRecord
   belongs_to :assigned_category, foreign_key: :category_id, class_name: "Category"
   belongs_to :assigned_site, foreign_key: :assigned_site_id, class_name: "Site"
 
-  validates :title, presence: true, length: { maximum: 50 }
+  validates :title, presence: true, length: { maximum: 50 }, format: { with: /\A[a-zA-Z0-9]+\z/ }
+  validate :slug_not_changed
+
   validates :body, presence: true, length: { maximum: 10000 }
   validates :status, presence: true
-  validates :slug, uniqueness: true
-  validate :slug_not_changed
-  before_create :set_slug
+
+  before_create :check_status
+  before_update :check_status
 
   private
+
+    def check_status
+      if status === "Published"
+        set_slug
+      end
+    end
 
     def set_slug
       itr = 1

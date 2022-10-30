@@ -1,7 +1,7 @@
 import React from "react";
 
-import { ExternalLink } from "@bigbinary/neeto-icons";
-import { Button } from "@bigbinary/neetoui";
+import { ExternalLink } from "neetoicons";
+import { Button } from "neetoui";
 import { useHistory } from "react-router-dom";
 
 import NavItem from "./NavItem";
@@ -26,13 +26,17 @@ const NavBar = () => {
               Scribble
             </span>
             <NavItem name="Articles" path="/" />
-            <NavItem name="Settings" path="/settings/" />
+            <NavItem name="Settings" path="/settings" />
           </div>
           <div className="flex items-center justify-end">
             <Button
               icon={ExternalLink}
               label="Preview"
               style="secondary"
+              tooltipProps={{
+                content: "See article details",
+                position: "bottom",
+              }}
               onClick={handleClick}
             />
           </div>

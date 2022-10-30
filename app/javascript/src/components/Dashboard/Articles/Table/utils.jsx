@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Delete, Edit } from "@bigbinary/neeto-icons";
+import { Delete, Edit } from "neetoicons";
 
 import { formatDateAndTime } from "../utils";
 
@@ -12,13 +12,30 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       key: "Title",
       width: "20%",
       className: "text-indigo-500",
+      render: (title, { assigned_category }) => (
+        <span
+          onClick={() =>
+            history.push(`/public/${assigned_category.category}/${title}`)
+          }
+        >
+          {title}
+        </span>
+      ),
     },
     {
       title: "DATE",
       dataIndex: "created_at",
       key: "Date",
       width: "15%",
-      render: date => formatDateAndTime(date),
+      render: (created_at, { status }) => (
+        <div>
+          {status === "Draft" ? (
+            <span>-----</span>
+          ) : (
+            <span>{formatDateAndTime(created_at)}</span>
+          )}
+        </div>
+      ),
     },
     {
       title: "AUTHOR",
@@ -52,7 +69,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
           <Delete
             size={20}
             onClick={() => {
-              handleDelete(props.slug, props.title);
+              handleDelete(props.id, props.title);
             }}
           />
           <Edit
@@ -70,6 +87,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
   ].filter(
     column =>
       column.key === "Options" ||
+      column.key === "Title" ||
       columns.includes(column?.key) ||
       (columns.includes("Categories") && column.key === "category")
   );
