@@ -92,7 +92,7 @@ const Articles = ({ history }) => {
           setSearchTerm={setSearchTerm}
         />
         <Typography className="mb-3 ml-3">
-          {articles.length} Articles
+          {filtering ? filteredList.length : articles.length} Articles
         </Typography>
         {filtering ? (
           <Table
