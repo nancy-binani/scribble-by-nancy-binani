@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { PageLoader } from "@bigbinary/neetoui";
-import { Container } from "@bigbinary/neetoui/layouts";
+import { PageLoader, Typography } from "neetoui";
+import { Container } from "neetoui/layouts";
 
-import articlesApi from "apis/articles";
+import articleApi from "apis/articles";
 
 import { FILTERING_OPTIONS } from "./constants";
 import DeleteAlert from "./DeleteAlert";
@@ -15,7 +15,7 @@ const Articles = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [articles, setArticles] = useState([]);
-  const [slugToBeDeleted, setSlugToBeDeleted] = useState("");
+  const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [filteredList, setFilteredList] = useState([]);
@@ -30,18 +30,19 @@ const Articles = ({ history }) => {
     try {
       const {
         data: { articles },
-      } = await articlesApi.fetch();
+      } = await articleApi.fetch();
       setArticles(articles);
       setLoading(false);
+      setFilteredList(articles);
     } catch (error) {
       logger.error(error);
     } finally {
       setLoading(false);
     }
   };
-  const destroyArticle = async slugToBeDeleted => {
+  const destroyArticle = async id => {
     try {
-      await articlesApi.destroy(slugToBeDeleted);
+      await articleApi.destroy(id);
       await fetchArticles();
     } catch (error) {
       logger.error(error);
@@ -62,22 +63,10 @@ const Articles = ({ history }) => {
     }
   };
 
-  const handleDelete = (slugToBeDeleted, title) => {
-    setSlugToBeDeleted(slugToBeDeleted);
+  const handleDelete = (id, title) => {
+    setId(id);
     setShowDeleteAlert(true);
     setTitle(title);
-  };
-
-  const handleFilter = query => {
-    setFiltering(true);
-    let updatedList = [...articles];
-    updatedList = articles.filter(
-      article =>
-        article["status"].toLowerCase() === query.toLowerCase() ||
-        article["assigned_category"]["category"].toLowerCase() ===
-          query.toLowerCase()
-    );
-    query === "All" ? setFilteredList(articles) : setFilteredList(updatedList);
   };
 
   if (loading) {
@@ -86,7 +75,13 @@ const Articles = ({ history }) => {
 
   return (
     <div className="flex h-screen w-full">
-      <SideMenu handleFilter={handleFilter} />
+      <SideMenu
+        fetchArticles={fetchArticles}
+        filteredList={filteredList}
+        filtering={filtering}
+        setFilteredList={setFilteredList}
+        setFiltering={setFiltering}
+      />
       <Container>
         <Header
           columns={columns}
@@ -96,7 +91,9 @@ const Articles = ({ history }) => {
           setColumns={setColumns}
           setSearchTerm={setSearchTerm}
         />
-        <h4 className="mb-3 ml-3">{articles.length} Articles</h4>
+        <Typography className="mb-3 ml-3">
+          {filtering ? filteredList.length : articles.length} Articles
+        </Typography>
         {filtering ? (
           <Table
             columns={columns}
@@ -117,7 +114,7 @@ const Articles = ({ history }) => {
         {showDeleteAlert && articles.length > 1 && (
           <DeleteAlert
             destroyArticle={destroyArticle}
-            slug={slugToBeDeleted}
+            id={id}
             title={title}
             onClose={() => setShowDeleteAlert(false)}
           />

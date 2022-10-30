@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { Check, Delete, Edit, Plus } from "@bigbinary/neeto-icons";
-import { PageLoader, Typography, Input, Toastr } from "@bigbinary/neetoui";
+import { Check, Delete, Edit, Plus } from "neetoicons";
+import { PageLoader, Typography, Input, Toastr } from "neetoui";
 
 import redirectionsApi from "apis/redirection";
 
@@ -10,8 +10,8 @@ const Redirections = () => {
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [createNewRedirection, setCreateNewRedirection] = useState(false);
-  const [oldurl, setOldurl] = useState("");
-  const [newurl, setNewurl] = useState("");
+  const [oldurl, setOldurl] = useState("https://localhost:3000/");
+  const [newurl, setNewurl] = useState("https://localhost:3000/");
   const [id, setId] = useState("");
 
   const fetchRedirections = async () => {
@@ -29,7 +29,7 @@ const Redirections = () => {
 
   useEffect(() => {
     fetchRedirections();
-  }, []);
+  }, [createNewRedirection]);
 
   const handleCreateRedirection = () => {
     setIsEdit(false);
@@ -37,8 +37,8 @@ const Redirections = () => {
   };
 
   const handleEditRedirection = ({ id }) => {
-    setCreateNewRedirection(createNewRedirection => !createNewRedirection);
     setIsEdit(true);
+    setCreateNewRedirection(!createNewRedirection);
     setId(id);
   };
 
@@ -62,6 +62,7 @@ const Redirections = () => {
           },
           id
         );
+
         Toastr.success("Redirection is updated successfully.");
       } else {
         await redirectionsApi.create({
@@ -70,7 +71,6 @@ const Redirections = () => {
         });
         Toastr.success("Redirection is created successfully.");
       }
-      await fetchRedirections();
     } catch (error) {
       logger.error(error);
       Toastr.error("Cyclic redirection is not possible.");
@@ -102,8 +102,8 @@ const Redirections = () => {
               className="mx-3 flex justify-between bg-white px-8 py-4 tracking-tight"
               key={id}
             >
-              <span>{`localhost:3000${oldurl}`}</span>
-              <span>{`localhost:3000${newurl}`}</span>
+              <span>{`${oldurl}`}</span>
+              <span>{`${newurl}`}</span>
               <span className="flex">
                 <Edit
                   className="mr-2"

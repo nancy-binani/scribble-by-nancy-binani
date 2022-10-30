@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :article do
-    title { Faker::Name.name }
+    title { "hello" }
     body { Faker::Lorem.paragraph }
     category { Faker::Name.name }
-    status { Faker::Name.name }
+    status { "Published" }
   end
 end

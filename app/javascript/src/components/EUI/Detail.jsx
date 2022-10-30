@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Tag, Typography } from "@bigbinary/neetoui";
-import { Container } from "@bigbinary/neetoui/layouts";
+import { Tag, Typography } from "neetoui";
+import { Container } from "neetoui/layouts";
 
 import { formatDateAndTime } from "../Dashboard/Articles/utils";
 

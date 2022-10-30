@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
 class CategoriesController < ApplicationController
-  before_action :load_category!, only: %i[ show update destroy update_with_position]
+  before_action :load_category!, only: %i[ show update destroy]
   before_action :set_current_site
 
   def index
-    categories = Category.all.as_json(include: { assigned_articles: { only: %i[title body created_at] } })
+    categories = Category.all.order(:position).as_json(
+      include: {
+        assigned_articles: {
+          only: %i[title body created_at
+          slug]
+        }
+      })
     respond_with_json({ categories: categories })
   end
 
@@ -24,11 +30,9 @@ class CategoriesController < ApplicationController
   end
 
   def update_with_position
-    category_list = Category.all
-    category_list.each_with_index do |category, index|
-      category_items = Category.find_by!(id: category)
-      category_items.position = index
-      category_items.save!
+    params.require(:category).permit!
+    params[:category][:position].each_with_index do |category, index|
+      required_category = Category.find_by!(id: category).update!(position: index + 1)
     end
     respond_with_success(t("successfully_updated", entity: "Category"))
   end

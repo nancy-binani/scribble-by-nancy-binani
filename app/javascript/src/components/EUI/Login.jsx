@@ -1,25 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { Typography, Button } from "@bigbinary/neetoui";
-import { Input } from "@bigbinary/neetoui/formik";
 import { Formik, Form } from "formik";
+import { Typography, Button } from "neetoui";
+import { Input } from "neetoui/formik";
 
 import authApi from "apis/auth";
 import { setToLocalStorage } from "utils/storage";
 
 import Vector from "../../../../assets/images/Vector.png";
 
-const Login = ({ history }) => {
-  const [sitename, setSitename] = useState("");
-
-  const fetchSiteDetails = async () => {
-    try {
-      const { data } = await authApi.fetch();
-      setSitename(data.sites[0].sitename);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
+const Login = ({ history, sitename }) => {
   const handleSubmit = async values => {
     try {
       const response = await authApi.login(values.password, sitename);
@@ -32,18 +22,8 @@ const Login = ({ history }) => {
     }
   };
 
-  useEffect(() => {
-    fetchSiteDetails();
-  }, []);
-
   return (
     <>
-      <Typography
-        className="border-text-gray-400 border-b flex justify-center border-solid bg-white py-3"
-        style="h4"
-      >
-        {sitename}
-      </Typography>
       <div className="my-8 flex justify-center">
         <img alt="no" src={Vector} />
       </div>

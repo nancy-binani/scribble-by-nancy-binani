@@ -1,26 +1,67 @@
 import React, { useEffect, useState } from "react";
 
-import { Search, Plus } from "@bigbinary/neeto-icons";
-import { Typography } from "@bigbinary/neetoui";
-import { MenuBar } from "@bigbinary/neetoui/layouts";
+import { Search, Plus, Close } from "neetoicons";
+import { PageLoader, Typography } from "neetoui";
+import { MenuBar } from "neetoui/layouts";
 
+import articleApi from "apis/articles";
 import categoriesApi from "apis/categories";
 
 import { CATEGORY_INITIAL_VALUE, MENU_OPTIONS } from "./constants";
 import CreateCategory from "./CreateCategory";
 
-const SideMenu = ({ handleFilter }) => {
+const SideMenu = ({
+  fetchArticles,
+  filtering,
+  setFiltering,
+  setFilteredList,
+}) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filtering, setFiltering] = useState(false);
-  const [filteredList, setFilteredList] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [active, setActive] = useState(null);
+  const [searchCategories, setSearchCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleClick = menu => {
+  const handleFilterByStatus = async menu => {
     setActive(menu);
-    handleFilter(menu);
+    setFiltering(true);
+    setSelectedCategories([]);
+    try {
+      if (menu === "All") {
+        await fetchArticles();
+      } else {
+        const {
+          data: { articles },
+        } = await articleApi.filterStatus({ status: menu });
+        setFilteredList(articles);
+      }
+    } catch (error) {
+      logger.error(error);
+      setLoading(false);
+    }
+  };
+
+  const handleFilterByCategories = async category => {
+    setActive(category);
+    setFiltering(true);
+    try {
+      const newSelectedCategories = [
+        ...new Set([...selectedCategories, category]),
+      ];
+      setSelectedCategories(Array.from(newSelectedCategories));
+      const {
+        data: { articles },
+      } = await articleApi.filterByCategory({
+        category: newSelectedCategories,
+      });
+      setFilteredList(articles);
+    } catch (error) {
+      logger.error(error);
+      setLoading(false);
+    }
   };
 
   const fetchCategories = async () => {
@@ -30,7 +71,6 @@ const SideMenu = ({ handleFilter }) => {
         data: { categories },
       } = await categoriesApi.fetch();
       setCategories(categories);
-
       categories.forEach(element => {
         categoriesArray.push(element["category"]);
       });
@@ -38,11 +78,8 @@ const SideMenu = ({ handleFilter }) => {
     } catch (error) {
       logger.error(error);
     }
+    setLoading(false);
   };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const handleSearch = () => {
     const query = searchTerm;
@@ -53,9 +90,17 @@ const SideMenu = ({ handleFilter }) => {
     );
 
     searchTerm === ""
-      ? setFilteredList(categories)
-      : setFilteredList(updatedCategoryList);
+      ? setSearchCategories(categories)
+      : setSearchCategories(updatedCategoryList);
   };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <MenuBar class showMenu title="Articles">
@@ -64,15 +109,16 @@ const SideMenu = ({ handleFilter }) => {
           className={`${active === menu && "bg-white"}`}
           key={idx}
           label={menu}
-          onClick={() => handleClick(menu)}
+          onClick={() => handleFilterByStatus(menu)}
         />
       ))}
       <MenuBar.SubTitle
         iconProps={[
           {
-            icon: Plus,
-            onClick: () =>
-              setCreateNewCategory(createNewCategory => !createNewCategory),
+            icon: !createNewCategory ? Plus : Close,
+            onClick: () => {
+              setCreateNewCategory(createNewCategory => !createNewCategory);
+            },
           },
           {
             icon: Search,
@@ -92,6 +138,7 @@ const SideMenu = ({ handleFilter }) => {
       </MenuBar.SubTitle>
       <MenuBar.Search
         collapse={isSearchCollapsed}
+        placeholder="Type Category & press Enter"
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
@@ -106,21 +153,25 @@ const SideMenu = ({ handleFilter }) => {
           setCreateNewCategory={setCreateNewCategory}
         />
       )}
-      {filtering
-        ? filteredList.map((category, idx) => (
+      {filtering && !isSearchCollapsed
+        ? searchCategories.map((category, idx) => (
             <MenuBar.Block
-              className={`${active === category && "bg-white"}`}
               key={idx}
               label={category}
-              onClick={() => handleClick(category)}
+              className={`${
+                selectedCategories.includes(category) && "bg-white"
+              }`}
+              onClick={() => handleFilterByCategories(category)}
             />
           ))
         : categories.map((category, idx) => (
             <MenuBar.Block
-              className={`${active === category && "bg-white"}`}
               key={idx}
               label={category}
-              onClick={() => handleClick(category)}
+              className={`${
+                selectedCategories.includes(category) && "bg-white"
+              }`}
+              onClick={() => handleFilterByCategories(category)}
             />
           ))}
     </MenuBar>

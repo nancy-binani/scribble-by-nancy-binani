@@ -31,10 +31,10 @@ export const ARTICLES_FORM_VALIDATION_SCHEMA = yup.object().shape({
     .object()
     .nullable()
     .shape({
-      label: yup.string().oneOf(CATEGORIES.map(contact => contact.label)),
-      value: yup.string().oneOf(CATEGORIES.map(contact => contact.value)),
+      label: yup.string().oneOf(CATEGORIES.map(category => category.label)),
+      value: yup.string().oneOf(CATEGORIES.map(category => category.value)),
     })
-    .required("Please select a contact"),
+    .required("Please select a category"),
 });
 
 export const STATUS = ["Draft", "Published"];

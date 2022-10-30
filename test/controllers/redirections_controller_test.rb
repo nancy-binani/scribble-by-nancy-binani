@@ -4,12 +4,13 @@ require "test_helper"
 
 class RedirectionsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @redirection = create(:redirection)
+    @site = create(:site)
+    @redirection = create(:redirection, assigned_site_id: @site.id)
   end
 
   def test_should_create_valid_redirection
     post redirections_path,
-      params: { redirection: { oldurl: "managecategories", newurl: "manage" } }
+      params: { redirection: { oldurl: "managecategories", newurl: "manage", assigned_site_id: @site.id } }
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Redirection")
