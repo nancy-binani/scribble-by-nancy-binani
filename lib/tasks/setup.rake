@@ -34,7 +34,7 @@ def create_sample_site_data!
 puts "Seeding with sample user..."
 Site.create!(
   sitename: 'Spinkart',
-  status: 'unchecked',
+  status: 'checked',
   password: 'welcome1'
 )
 puts "Done! site is created successfully."
