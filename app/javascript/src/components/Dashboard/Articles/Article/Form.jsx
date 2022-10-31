@@ -11,6 +11,7 @@ import categoriesApi from "apis/categories";
 import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
 
 const { Menu, MenuItem } = ActionDropdown;
+
 const Form = ({ isEdit, article, history }) => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -41,7 +42,7 @@ const Form = ({ isEdit, article, history }) => {
   };
 
   useEffect(() => {
-    Promise.all[(fetchCategories(), fetchUser())];
+    Promise.all([fetchCategories(), fetchUser()]);
   }, []);
 
   const fetchUser = async () => {
@@ -63,15 +64,15 @@ const Form = ({ isEdit, article, history }) => {
 
   const handleInitialValueOnEdit = categories => {
     if (isEdit) {
-      const matchingCategory = categories.map(
+      const editedCategory = categories.map(
         ({ id }) => id === article.category_id
       );
-      const matchingId = matchingCategory.indexOf(true);
+      const editedId = editedCategory.indexOf(true);
       setUpdatedCategory({
-        value: categories[matchingId].id,
-        label: categories[matchingId].category,
+        value: categories[editedId].id,
+        label: categories[editedId].category,
       });
-      setCategoryId(matchingId);
+      setCategoryId(editedId);
     }
   };
 
@@ -110,7 +111,7 @@ const Form = ({ isEdit, article, history }) => {
       initialValues={article}
       validateOnBlur={submitted}
       validateOnChange={submitted}
-      validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA}
+      validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA(categories)}
       onSubmit={handleSubmit}
     >
       {({ isSubmitting, values }) => (

@@ -37,7 +37,7 @@ const General = () => {
     const checkPassword = validatePassword(values.password);
     const updatedSiteSettings = updatedValuesForSiteSettings(values);
     try {
-      if (updatedSiteSettings.validateEntry || checkPassword) {
+      if (updatedSiteSettings.validateUserInputValues || checkPassword) {
         await authApi.update(updatedSiteSettings.updatedSiteSettings);
         Toastr.success("Settings updated successfully");
       } else {
@@ -53,21 +53,19 @@ const General = () => {
     const password = values.password;
     const sitename = values.sitename;
     let updatedSiteSettings = {};
-    if (password === "******") {
-      updatedSiteSettings = { status: toggledStatus, sitename };
-    } else {
-      updatedSiteSettings = {
-        status: toggledStatus,
-        password,
-        sitename,
-      };
-    }
-    let validateEntry = null;
+    password === "******"
+      ? (updatedSiteSettings = { status: toggledStatus, sitename })
+      : (updatedSiteSettings = {
+          status: toggledStatus,
+          password,
+          sitename,
+        });
+    let validateUserInputValues = null;
     if (
       sitename !== siteDetails["sitename"] ||
       toggledStatus !== siteDetails["status"]
     ) {
-      validateEntry = true;
+      validateUserInputValues = true;
     }
 
     if (
@@ -75,10 +73,10 @@ const General = () => {
       toggledStatus === siteDetails["status"] &&
       password === "******"
     ) {
-      validateEntry = false;
+      validateUserInputValues = false;
     }
 
-    return { updatedSiteSettings, validateEntry };
+    return { updatedSiteSettings, validateUserInputValues };
   };
 
   const fetchSiteDetails = async () => {
