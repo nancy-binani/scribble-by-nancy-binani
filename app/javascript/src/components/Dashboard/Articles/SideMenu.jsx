@@ -15,6 +15,7 @@ const SideMenu = ({
   filtering,
   setFiltering,
   setFilteredList,
+  length,
 }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
@@ -82,7 +83,8 @@ const SideMenu = ({
     setFiltering(true);
     let updatedCategoryList = [...categories];
     updatedCategoryList = categories.filter(
-      category => category.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      category =>
+        category.category.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
 
     searchTerm === ""
@@ -102,9 +104,9 @@ const SideMenu = ({
     setLoading(false);
   };
 
-  useEffect(() => {
+   useEffect(() => {
     Promise.all([fetchCategories(), fetchCount()]);
-  }, []);
+  }, [createNewCategory]);
 
   if (loading) {
     return <PageLoader />;
@@ -115,7 +117,7 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
-          count={count["count_by_status"][menu]}
+          count={menu === "All" ? length : count["count_by_status"][menu]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}
@@ -167,11 +169,11 @@ const SideMenu = ({
             <MenuBar.Block
               count={count["count_by_category"][category.id]}
               key={idx}
-              label={category}
+              label={category.category}
               className={`${
-                selectedCategories.includes(category) && "bg-white"
+                selectedCategories.includes(category.category) && "bg-white"
               }`}
-              onClick={() => handleFilterByCategories(category)}
+              onClick={() => handleFilterByCategories(category.category)}
             />
           ))
         : categories.map((category, idx) => (
@@ -180,9 +182,9 @@ const SideMenu = ({
               key={idx}
               label={category.category}
               className={`${
-                selectedCategories.includes(category) && "bg-white"
+                selectedCategories.includes(category.category) && "bg-white"
               }`}
-              onClick={() => handleFilterByCategories(category)}
+              onClick={() => handleFilterByCategories(category.category)}
             />
           ))}
     </MenuBar>
