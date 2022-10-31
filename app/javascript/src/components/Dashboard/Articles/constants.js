@@ -5,9 +5,9 @@ import { buildSelectOptions } from "../../../utils";
 export const ARTICLES_FORM_INITIAL_VALUES = {
   title: "",
   body: "",
-  assigned_category: {
-    id: "",
-    category: "",
+  category: {
+    value: "",
+    label: "",
   },
 };
 
