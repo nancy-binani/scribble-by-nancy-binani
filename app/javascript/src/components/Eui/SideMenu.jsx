@@ -91,24 +91,25 @@ const SideMenu = ({ history, sitename }) => {
                 label={category["category"]}
               >
                 {category["assigned_articles"].map(
-                  ({ title, body, created_at, slug }, idx) => (
-                    <MenuItem
-                      className={`${active === slug && "text-indigo-600"}`}
-                      key={idx}
-                      active={
-                        category["category"] === paramCategory &&
-                        title === paramsSlug
-                      }
-                      onClick={() =>
-                        handleClick(
-                          { title, body, created_at, slug },
-                          category["category"]
-                        )
-                      }
-                    >
-                      {title}
-                    </MenuItem>
-                  )
+                  ({ title, body, created_at, slug }, idx) =>
+                    slug && (
+                      <MenuItem
+                        className={`${active === slug && "text-indigo-600"}`}
+                        key={idx}
+                        active={
+                          category["category"] === paramCategory &&
+                          title === paramsSlug
+                        }
+                        onClick={() =>
+                          handleClick(
+                            { title, body, created_at, slug },
+                            category["category"]
+                          )
+                        }
+                      >
+                        {title}
+                      </MenuItem>
+                    )
                 )}
               </SubMenu>
             ))}

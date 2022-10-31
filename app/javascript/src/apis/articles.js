@@ -8,7 +8,6 @@ const update = (payload, id) => {
     article: payload,
   });
 };
-const filteredArticles = () => axios.get("/articles/filters");
 
 const filterByCategory = params =>
   axios.get("/articles/filter_by_category", { params });
@@ -22,7 +21,6 @@ const articlesApi = {
   create,
   update,
   destroy,
-  filteredArticles,
   filterByCategory,
   filterStatus,
 };
