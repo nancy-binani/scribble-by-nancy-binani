@@ -76,7 +76,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
             size={20}
             onClick={() =>
               history.push({
-                pathname: `/articles/${props.slug}/edit`,
+                pathname: `/articles/${props.id}/edit`,
                 state: { article: props },
               })
             }

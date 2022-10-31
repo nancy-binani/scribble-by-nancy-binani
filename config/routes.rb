@@ -12,7 +12,8 @@ Rails.application.routes.draw do
     get "filter_by_category", on: :collection
     get "filter_status", on: :collection
   end
-  resource :site
+  resource :site, except: %i[new edit index destroy]
+  resources :users, only: [:index]
   resource :session, only: :create
   root "home#index"
   get "*path", to: "home#index", via: :all

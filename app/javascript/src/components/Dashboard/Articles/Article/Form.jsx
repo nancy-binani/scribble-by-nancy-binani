@@ -5,6 +5,7 @@ import { ActionDropdown, Button, PageLoader, Toastr } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
 
 import articlesApi from "apis/articles";
+import authApi from "apis/auth";
 import categoriesApi from "apis/categories";
 
 import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
@@ -14,6 +15,12 @@ const Form = ({ isEdit, article, history }) => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState("");
+  const [updatedCategory, setUpdatedCategory] = useState({
+    value: "",
+    label: "",
+  });
+  const [categoryId, setCategoryId] = useState("");
 
   const fetchCategories = async () => {
     try {
@@ -26,6 +33,7 @@ const Form = ({ isEdit, article, history }) => {
         value: element.id,
         label: element.category,
       }));
+      handleInitialValueOnEdit(categories);
       setCategories(categoriesArray);
     } catch (error) {
       logger.error(error);
@@ -33,8 +41,19 @@ const Form = ({ isEdit, article, history }) => {
   };
 
   useEffect(() => {
-    fetchCategories();
+    Promise.all[(fetchCategories(), fetchUser())];
   }, []);
+
+  const fetchUser = async () => {
+    try {
+      const {
+        data: { users },
+      } = await authApi.fetchUser();
+      setUser(users);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
 
   const handleStatus = (values, item) => {
     values.status = item;
@@ -42,14 +61,29 @@ const Form = ({ isEdit, article, history }) => {
     handleSubmit(values);
   };
 
+  const handleInitialValueOnEdit = categories => {
+    if (isEdit) {
+      const matchingCategory = categories.map(
+        ({ id }) => id === article.category_id
+      );
+      const matchingId = matchingCategory.indexOf(true);
+      setUpdatedCategory({
+        value: categories[matchingId].id,
+        label: categories[matchingId].category,
+      });
+      setCategoryId(matchingId);
+    }
+  };
+
   const handleSubmit = async values => {
+    const author = user[0].username;
     try {
       if (isEdit) {
         await articlesApi.update(
           {
             ...values,
-            author: "Oliver Smith",
-            category_id: values.category.value,
+            author,
+            category_id: updatedCategory.value,
           },
           values.id
         );
@@ -57,8 +91,8 @@ const Form = ({ isEdit, article, history }) => {
       } else {
         await articlesApi.create({
           ...values,
-          author: "Oliver Smith",
-          category_id: values.category.value,
+          author,
+          category_id: updatedCategory.value,
         });
         Toastr.success("Article is created successfully");
       }
@@ -96,6 +130,16 @@ const Form = ({ isEdit, article, history }) => {
               name="category"
               options={categories}
               placeholder="Select Category"
+              value={
+                (updatedCategory.value && updatedCategory) ||
+                categories[categoryId]
+              }
+              onChange={e =>
+                setUpdatedCategory({
+                  value: e.value,
+                  label: e.label,
+                })
+              }
             />
           </div>
           <Textarea
