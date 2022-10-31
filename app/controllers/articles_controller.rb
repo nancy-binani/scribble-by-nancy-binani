@@ -36,6 +36,18 @@ class ArticlesController < ApplicationController
     respond_with_json({ articles: articles })
   end
 
+  def count
+    count_by_status = Article.group(:status).distinct.count
+    count_by_category = Article.group(:category_id).distinct.count
+    respond_with_json(
+      {
+        count: {
+          count_by_status: { **count_by_status, "All": (Article.count) },
+          count_by_category: count_by_category
+        }
+      })
+  end
+
   private
 
     def load_article!
