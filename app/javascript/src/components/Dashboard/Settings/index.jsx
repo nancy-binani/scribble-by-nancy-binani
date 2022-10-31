@@ -17,7 +17,7 @@ const Settings = ({ history }) => {
       search: `?tab=General`,
     });
   }
-  const renderComponents = selectedComponent => {
+  const showSelectedSettingsMenu = selectedComponent => {
     switch (selectedComponent) {
       case "Manage%20Categories":
         return <ManageCategories />;
@@ -31,7 +31,7 @@ const Settings = ({ history }) => {
   return (
     <div className="flex h-screen w-full">
       <SideMenu history={history} menu={menu} />
-      {renderComponents(selectedSideMenu)}
+      {showSelectedSettingsMenu(selectedSideMenu)}
     </div>
   );
 };
