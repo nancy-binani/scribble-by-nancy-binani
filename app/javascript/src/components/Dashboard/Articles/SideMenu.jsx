@@ -82,7 +82,8 @@ const SideMenu = ({
     setFiltering(true);
     let updatedCategoryList = [...categories];
     updatedCategoryList = categories.filter(
-      category => category.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      category =>
+        category.category.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
 
     searchTerm === ""
@@ -165,13 +166,12 @@ const SideMenu = ({
       {filtering && !isSearchCollapsed
         ? searchCategories.map((category, idx) => (
             <MenuBar.Block
-              count={count["count_by_category"][category.id]}
               key={idx}
-              label={category}
+              label={category.category}
               className={`${
-                selectedCategories.includes(category) && "bg-white"
+                selectedCategories.includes(category.category) && "bg-white"
               }`}
-              onClick={() => handleFilterByCategories(category)}
+              onClick={() => handleFilterByCategories(category.category)}
             />
           ))
         : categories.map((category, idx) => (
@@ -180,9 +180,9 @@ const SideMenu = ({
               key={idx}
               label={category.category}
               className={`${
-                selectedCategories.includes(category) && "bg-white"
+                selectedCategories.includes(category.category) && "bg-white"
               }`}
-              onClick={() => handleFilterByCategories(category)}
+              onClick={() => handleFilterByCategories(category.category)}
             />
           ))}
     </MenuBar>
