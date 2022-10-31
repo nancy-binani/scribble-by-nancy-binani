@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :articles, except: %i[new edit show] do
     get "filter_by_category", on: :collection
     get "filter_status", on: :collection
+    get "count", on: :collection
   end
   resource :site, except: %i[new edit index destroy]
   resources :users, only: [:index]

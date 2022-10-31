@@ -16,6 +16,8 @@ const filterStatus = params => axios.get("/articles/filter_status", { params });
 
 const destroy = id => axios.delete(`/articles/${id}`);
 
+const count = () => axios.get("/articles/count");
+
 const articlesApi = {
   fetch,
   create,
@@ -23,6 +25,7 @@ const articlesApi = {
   destroy,
   filterByCategory,
   filterStatus,
+  count,
 };
 
 export default articlesApi;

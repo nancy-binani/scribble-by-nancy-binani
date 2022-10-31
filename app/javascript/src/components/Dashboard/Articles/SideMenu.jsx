@@ -23,6 +23,7 @@ const SideMenu = ({
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [active, setActive] = useState(null);
   const [searchCategories, setSearchCategories] = useState([]);
+  const [count, setCount] = useState({});
   const [loading, setLoading] = useState(true);
 
   const handleFilterByStatus = async menu => {
@@ -65,16 +66,11 @@ const SideMenu = ({
   };
 
   const fetchCategories = async () => {
-    const categoriesArray = [];
     try {
       const {
         data: { categories },
       } = await categoriesApi.fetch();
       setCategories(categories);
-      categories.forEach(element => {
-        categoriesArray.push(element["category"]);
-      });
-      setCategories(categoriesArray);
     } catch (error) {
       logger.error(error);
     }
@@ -94,8 +90,20 @@ const SideMenu = ({
       : setSearchCategories(updatedCategoryList);
   };
 
+  const fetchCount = async () => {
+    try {
+      const {
+        data: { count },
+      } = await articleApi.count();
+      setCount(count);
+    } catch (error) {
+      logger.error(error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    fetchCategories();
+    Promise.all([fetchCategories(), fetchCount()]);
   }, []);
 
   if (loading) {
@@ -107,6 +115,7 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
+          count={count["count_by_status"][menu]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}
@@ -156,6 +165,7 @@ const SideMenu = ({
       {filtering && !isSearchCollapsed
         ? searchCategories.map((category, idx) => (
             <MenuBar.Block
+              count={count["count_by_category"][category.id]}
               key={idx}
               label={category}
               className={`${
@@ -166,8 +176,9 @@ const SideMenu = ({
           ))
         : categories.map((category, idx) => (
             <MenuBar.Block
+              count={count["count_by_category"][category.id]}
               key={idx}
-              label={category}
+              label={category.category}
               className={`${
                 selectedCategories.includes(category) && "bg-white"
               }`}
