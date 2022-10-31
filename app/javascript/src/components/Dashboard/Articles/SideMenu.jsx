@@ -15,6 +15,7 @@ const SideMenu = ({
   filtering,
   setFiltering,
   setFilteredList,
+  length,
 }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
@@ -105,7 +106,7 @@ const SideMenu = ({
 
   useEffect(() => {
     Promise.all([fetchCategories(), fetchCount()]);
-  }, []);
+  }, [createNewCategory]);
 
   if (loading) {
     return <PageLoader />;
@@ -116,7 +117,7 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
-          count={count["count_by_status"][menu]}
+          count={menu === "All" ? length : count["count_by_status"][menu]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}

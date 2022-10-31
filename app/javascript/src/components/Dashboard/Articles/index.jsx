@@ -79,6 +79,7 @@ const Articles = ({ history }) => {
         fetchArticles={fetchArticles}
         filteredList={filteredList}
         filtering={filtering}
+        length={articles.length}
         setFilteredList={setFilteredList}
         setFiltering={setFiltering}
       />
