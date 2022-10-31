@@ -1,6 +1,14 @@
 version: 2.1
 jobs:
   build:
+    #No. of servers/machines
+    parallelism: 1
+    docker:
+      - image: cimg/ruby:3.0.2-node
+      - image: cimg/postgres:9.6
+        environment:
+          POSTGRES_HOST_AUTH_METHOD: trust
+
     #application directory change it with your application directory name
     working_directory: ~/scribble
     environment:
@@ -12,7 +20,7 @@ jobs:
       - checkout
       - run: gem install bundler:2.3.22
       #install sqlite dependency
-      - run: sudo apt update && sudo apt-get install postgresql-client
+      - run: sudo apt update && sudo apt install postgresql-client
       # Bundle install
       - run:
           bundle check --path=vendor/bundle || bundle install
