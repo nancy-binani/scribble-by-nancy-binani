@@ -104,7 +104,7 @@ const SideMenu = ({
     setLoading(false);
   };
 
-  useEffect(() => {
+   useEffect(() => {
     Promise.all([fetchCategories(), fetchCount()]);
   }, [createNewCategory]);
 
@@ -167,6 +167,7 @@ const SideMenu = ({
       {filtering && !isSearchCollapsed
         ? searchCategories.map((category, idx) => (
             <MenuBar.Block
+              count={count["count_by_category"][category.id]}
               key={idx}
               label={category.category}
               className={`${
