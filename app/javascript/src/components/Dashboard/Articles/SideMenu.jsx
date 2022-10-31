@@ -104,7 +104,7 @@ const SideMenu = ({
     setLoading(false);
   };
 
-   useEffect(() => {
+  useEffect(() => {
     Promise.all([fetchCategories(), fetchCount()]);
   }, [createNewCategory]);
 
