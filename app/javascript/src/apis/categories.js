@@ -1,23 +1,23 @@
 import axios from "axios";
 
-const fetch = () => axios.get("/categories");
+const fetch = () => axios.get("/api/categories");
 
-const create = payload => axios.post("/categories", { category: payload });
+const create = payload => axios.post("/api/categories", { category: payload });
 const update = (payload, id) => {
-  axios.put(`/categories/${id}`, {
+  axios.put(`/api/categories/${id}`, {
     category: payload,
   });
 };
 const updateWithPosition = async (position, id) => {
-  await axios.put(`/categories/${id}/update_with_position`, {
+  await axios.put(`/api/categories/${id}/update_with_position`, {
     position,
     id,
   });
   await fetch();
 };
-const destroy = id => axios.delete(`/categories/${id}`);
+const destroy = id => axios.delete(`/api/categories/${id}`);
 
-const fetchCategory = id => axios.get(`/categories/${id}`);
+const fetchCategory = id => axios.get(`/api/categories/${id}`);
 
 const categoriesApi = {
   fetch,

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetch = () => axios.get("/site");
+const fetch = () => axios.get("/api/site");
 
 const update = payload => {
   axios.put(`/site`, {
@@ -8,10 +8,10 @@ const update = payload => {
   });
 };
 
-const fetchUser = () => axios.get("/users");
+const fetchUser = () => axios.get("/api/users");
 
 const login = (password, sitename) =>
-  axios.post("/session", {
+  axios.post("/api/session", {
     login: { sitename, password },
   });
 

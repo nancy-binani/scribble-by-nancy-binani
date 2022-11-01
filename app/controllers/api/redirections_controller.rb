@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RedirectionsController < ApplicationController
+class Api::RedirectionsController < ApplicationController
   before_action :load_redirection!, only: %i[ show update destroy ]
   before_action :set_current_site
 

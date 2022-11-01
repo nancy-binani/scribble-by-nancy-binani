@@ -15,7 +15,6 @@ const SideMenu = ({
   filtering,
   setFiltering,
   setFilteredList,
-  length,
 }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
@@ -24,7 +23,6 @@ const SideMenu = ({
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [active, setActive] = useState(null);
   const [searchCategories, setSearchCategories] = useState([]);
-  const [count, setCount] = useState({});
   const [loading, setLoading] = useState(true);
 
   const handleFilterByStatus = async menu => {
@@ -92,20 +90,8 @@ const SideMenu = ({
       : setSearchCategories(updatedCategoryList);
   };
 
-  const fetchCount = async () => {
-    try {
-      const {
-        data: { count },
-      } = await articleApi.count();
-      setCount(count);
-    } catch (error) {
-      logger.error(error);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
-    Promise.all([fetchCategories(), fetchCount()]);
+    fetchCategories();
   }, [createNewCategory]);
 
   if (loading) {
@@ -117,7 +103,6 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
-          count={menu === "All" ? length : count["count_by_status"][menu]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}
@@ -167,7 +152,6 @@ const SideMenu = ({
       {filtering && !isSearchCollapsed
         ? searchCategories.map((category, idx) => (
             <MenuBar.Block
-              count={count["count_by_category"][category.id]}
               key={idx}
               label={category.category}
               className={`${
@@ -178,7 +162,6 @@ const SideMenu = ({
           ))
         : categories.map((category, idx) => (
             <MenuBar.Block
-              count={count["count_by_category"][category.id]}
               key={idx}
               label={category.category}
               className={`${

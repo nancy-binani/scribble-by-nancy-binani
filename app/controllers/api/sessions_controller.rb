@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SessionsController < ApplicationController
+class Api::SessionsController < ApplicationController
   def create
     @site = Site.find_by!(sitename: login_params[:sitename])
     unless @site.authenticate(login_params[:password])

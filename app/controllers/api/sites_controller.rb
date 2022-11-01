@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SitesController < ApplicationController
+class Api::SitesController < ApplicationController
   def show
     sites = Site.all.as_json(
       include: {

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ArticlesController < ApplicationController
+class Api::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[update destroy]
   before_action :set_current_site
 
