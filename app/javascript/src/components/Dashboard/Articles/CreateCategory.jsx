@@ -18,10 +18,10 @@ const CreateCategory = ({
     categories.push(values.category);
     try {
       if (isEdit) {
-        await categoriesApi.update(values.category, category.id);
+        await categoriesApi.update({ category: values.category }, category.id);
         Toastr.success("Category is updated successfully.");
       } else {
-        await categoriesApi.create(values.category);
+        await categoriesApi.create({ category: values.category });
         Toastr.success("Category is created successfully.");
       }
     } catch (error) {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetch = () => axios.get("/api/categories");
+const fetch = params => axios.get("/api/categories", { params });
 
 const create = payload => axios.post("/api/categories", { category: payload });
 const update = (payload, id) => {
@@ -9,15 +9,13 @@ const update = (payload, id) => {
   });
 };
 const updateWithPosition = async (position, id) => {
-  await axios.put(`/api/categories/${id}/update_with_position`, {
+  await axios.put(`/api/categories/update_with_position`, {
     position,
     id,
   });
-  await fetch();
 };
-const destroy = id => axios.delete(`/api/categories/${id}`);
-
-const fetchCategory = id => axios.get(`/api/categories/${id}`);
+const destroy = (id, params) =>
+  axios.delete(`/api/categories/${id}`, { params });
 
 const categoriesApi = {
   fetch,
@@ -25,7 +23,6 @@ const categoriesApi = {
   update,
   updateWithPosition,
   destroy,
-  fetchCategory,
 };
 
 export default categoriesApi;

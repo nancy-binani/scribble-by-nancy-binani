@@ -12,7 +12,10 @@ import Vector from "../../../../assets/images/Vector.png";
 const Login = ({ history, sitename }) => {
   const handleSubmit = async values => {
     try {
-      const response = await authApi.login(values.password, sitename);
+      const response = await authApi.login({
+        password: values.password,
+        sitename,
+      });
       setToLocalStorage({
         authToken: response.data.authentication_token,
       });

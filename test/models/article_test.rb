@@ -7,14 +7,15 @@ class ArticleTest < ActiveSupport::TestCase
 
   def setup
     @site = create(:site)
-    @category = create(:category, assigned_site_id: @site.id)
-    @article = create(:article, category_id: @category.id, assigned_site_id: @site.id)
+    @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
+    @category = create(:category, user: @user)
+    @article = create(:article, category: @category, user: @user)
   end
 
   def test_article_should_not_be_valid_without_category
-    @article.assigned_category = nil
+    @article.category = nil
     assert_not @article.save
-    assert_includes @article.errors.full_messages, "Assigned category must exist"
+    assert_includes @article.errors.full_messages, t("missing_category")
   end
 
   def test_article_title_should_not_exceed_maximum_length
@@ -23,20 +24,19 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   def test_unique_slug_with_same_title
-    article1 = create(:article, category_id: @category.id, assigned_site_id: @site.id)
-    article2 = create(:article, category_id: @category.id, assigned_site_id: @site.id)
-    assert_not_equal(article1.slug, article2.slug)
+    new_article_1 = create(:article, category: @category, user: @user)
+    new_article_2 = create(:article, category: @category, user: @user)
+    assert_not_equal(new_article_1.slug, new_article_2.slug)
   end
 
   def test_slug_not_generated_on_status_draft
     article = Article.create(
-      title: "test1", body: "abc", status: "Draft", category_id: @category.id,
-      assigned_site_id: @site.id)
+      title: "test1", body: "abc", status: "draft", category: @category, user: @user)
     assert_nil(article.slug, "nil")
   end
 
   def test_creates_multiple_articles_with_unique_slug
-    articles = create_list(:article, 10, category_id: @category.id, assigned_site_id: @site.id)
+    articles = create_list(:article, 5, category: @category, user: @user)
     slugs = articles.pluck(:slug)
     assert_equal slugs.uniq, slugs
   end

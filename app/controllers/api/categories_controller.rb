@@ -1,27 +1,17 @@
 # frozen_string_literal: true
 
 class Api::CategoriesController < ApplicationController
-  before_action :load_category!, only: %i[ show update destroy]
-  before_action :set_current_site
+  before_action :load_category!, only: %i[ update destroy update_with_position]
+  before_action :current_user
 
   def index
-    categories = Category.all.order(:position).as_json(
-      include: {
-        assigned_articles: {
-          only: %i[title body created_at
-          slug]
-        }
-      })
-    respond_with_json({ categories: categories })
+    @categories = current_user.categories.order(:position)
+    @categories = FilterCategoryService.new(@categories, params).process
   end
 
   def create
-    category = Category.create!(category_params.merge(assigned_site_id: @current_site.id))
+    category = current_user.categories.create!(category_params)
     respond_with_success(t("successfully_created", entity: "Category"))
-  end
-
-  def show
-    respond_with_json({ category: @category, assigned_articles: @category.assigned_articles })
   end
 
   def update
@@ -30,25 +20,22 @@ class Api::CategoriesController < ApplicationController
   end
 
   def update_with_position
-    params.require(:category).permit!
-    params[:category][:position].each_with_index do |category, index|
-      required_category = Category.find_by!(id: category).update!(position: index + 1)
-    end
+    @category.insert_at(params[:category][:position].to_i)
     respond_with_success(t("successfully_updated", entity: "Category"))
   end
 
   def destroy
-    @category.destroy!
+    DeleteCategoryService.new(params[:category], @category, current_user).process
     respond_with_success(t("successfully_deleted", entity: "Category"))
   end
 
   private
 
     def load_category!
-      @category = Category.find_by(id: params[:id])
+      @category = current_user.categories.find(params[:id])
     end
 
     def category_params
-      params.permit(:category, :position)
+      params.require(:category).permit(:category, :position)
     end
 end

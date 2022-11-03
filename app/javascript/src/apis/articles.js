@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const fetch = () => axios.get("/api/articles");
+const fetch = params => axios.get("/api/articles", { params });
 const create = payload => axios.post("/api/articles", { article: payload });
 
 const update = (payload, id) => {
@@ -9,12 +9,6 @@ const update = (payload, id) => {
   });
 };
 
-const filterByCategory = params =>
-  axios.get("/api/articles/filter_by_category", { params });
-
-const filterStatus = params =>
-  axios.get("/api/articles/filter_status", { params });
-
 const destroy = id => axios.delete(`/api/articles/${id}`);
 
 const articlesApi = {
@@ -22,8 +16,6 @@ const articlesApi = {
   create,
   update,
   destroy,
-  filterByCategory,
-  filterStatus,
 };
 
 export default articlesApi;

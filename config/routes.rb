@@ -2,21 +2,16 @@
 
 Rails.application.routes.draw do
   namespace :api do
-    resources :categories do
-      member do
-        put :update_with_position
+    defaults format: :json do
+      resources :redirections, except: %i[new edit]
+      resource :site, except: %i[new edit index destroy]
+      resources :users, only: :index
+      resource :session, only: :create
+      resources :articles, except: %i[new edit show]
+      resources :categories do
+        put :update_with_position, on: :collection
       end
     end
-    resources :redirections, except: %i[new edit]
-
-    resources :articles, except: %i[new edit show] do
-      get "filter_by_category", on: :collection
-      get "filter_status", on: :collection
-    end
-    resource :site, except: %i[new edit index destroy]
-    resources :users, only: [:index]
-
-    resource :session, only: :create
   end
   root "home#index"
   get "*path", to: "home#index", via: :all

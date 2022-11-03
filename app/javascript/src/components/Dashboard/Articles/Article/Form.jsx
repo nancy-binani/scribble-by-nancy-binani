@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
 
 import { Formik, Form as FormikForm } from "formik";
-import { ActionDropdown, Button, PageLoader, Toastr } from "neetoui";
+import { Dropdown, Button, PageLoader, Toastr } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
 
 import articlesApi from "apis/articles";
-import authApi from "apis/auth";
 import categoriesApi from "apis/categories";
 
 import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
 
-const { Menu, MenuItem } = ActionDropdown;
+const { Menu, MenuItem } = Dropdown;
 
 const Form = ({ isEdit, article, history }) => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState("");
   const [updatedCategory, setUpdatedCategory] = useState({
     value: "",
     label: "",
   });
   const [categoryId, setCategoryId] = useState("");
+  const [status, setStatus] = useState("draft");
 
   const fetchCategories = async () => {
     try {
@@ -30,60 +29,45 @@ const Form = ({ isEdit, article, history }) => {
       } = await categoriesApi.fetch();
       setCategories(categories);
       setLoading(false);
-      const categoriesArray = categories.map(element => ({
-        value: element.id,
-        label: element.category,
+      const categoryList = categories.map(category => ({
+        value: category.id,
+        label: category.category,
       }));
       handleInitialValueOnEdit(categories);
-      setCategories(categoriesArray);
+      setCategories(categoryList);
     } catch (error) {
       logger.error(error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
-    Promise.all([fetchCategories(), fetchUser()]);
+    fetchCategories();
   }, []);
-
-  const fetchUser = async () => {
-    try {
-      const {
-        data: { users },
-      } = await authApi.fetchUser();
-      setUser(users);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-
-  const handleStatus = (values, item) => {
-    values.status = item;
-    setSubmitted(true);
-    handleSubmit(values);
-  };
 
   const handleInitialValueOnEdit = categories => {
     if (isEdit) {
+      setStatus(article.status);
       const editedCategory = categories.map(
         ({ id }) => id === article.category_id
       );
-      const editedId = editedCategory.indexOf(true);
+      const editedArticleCategoryId = editedCategory.indexOf(true);
       setUpdatedCategory({
-        value: categories[editedId].id,
-        label: categories[editedId].category,
+        value: categories[editedArticleCategoryId].id,
+        label: categories[editedArticleCategoryId].category,
       });
-      setCategoryId(editedId);
+      setCategoryId(editedArticleCategoryId);
     }
   };
 
   const handleSubmit = async values => {
-    const author = user[0].username;
+    if (values.status === "") values.status = status;
+
     try {
       if (isEdit) {
         await articlesApi.update(
           {
             ...values,
-            author,
             category_id: updatedCategory.value,
           },
           values.id
@@ -92,7 +76,6 @@ const Form = ({ isEdit, article, history }) => {
       } else {
         await articlesApi.create({
           ...values,
-          author,
           category_id: updatedCategory.value,
         });
         Toastr.success("Article is created successfully");
@@ -114,7 +97,7 @@ const Form = ({ isEdit, article, history }) => {
       validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA(categories)}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting, values }) => (
+      {({ isSubmitting, setFieldValue }) => (
         <FormikForm className=" mx-auto mt-12 max-w-lg space-y-6">
           <div className="mt-1 flex w-full flex-row space-x-3 ">
             <Input
@@ -151,29 +134,47 @@ const Form = ({ isEdit, article, history }) => {
             placeholder="Enter article description"
             rows={17}
           />
-          <ActionDropdown label={isEdit ? "Update" : "Save Draft"}>
-            <Menu>
-              {STATUS.map((item, idx) => (
-                <MenuItem.Button
-                  disabled={isSubmitting}
-                  key={idx}
-                  type="submit"
-                  value={item}
-                  onClick={() => handleStatus(values, item)}
-                >
-                  {item}
-                </MenuItem.Button>
-              ))}
-            </Menu>
-          </ActionDropdown>
-          <Button
-            disabled={isSubmitting}
-            label="Cancel"
-            size="large"
-            style="text"
-            type="reset"
-            onClick={() => history.push("/")}
-          />
+          <div className="mt-4 flex gap-2">
+            <div className="flex">
+              <Button
+                className="mr-px"
+                label={status === "draft" ? "Save Draft" : "Published"}
+                name="status"
+                size="medium"
+                style="primary"
+                type="submit"
+                onClick={() => setSubmitted(true)}
+              />
+              <Dropdown>
+                <Menu>
+                  {STATUS.map((status, idx) => (
+                    <MenuItem.Button
+                      disabled={isSubmitting}
+                      key={idx}
+                      value={status}
+                      onClick={() => {
+                        setFieldValue(
+                          "status",
+                          status !== "draft" ? "published" : "draft"
+                        );
+                        setStatus(status);
+                      }}
+                    >
+                      {status}
+                    </MenuItem.Button>
+                  ))}
+                </Menu>
+              </Dropdown>
+            </div>
+            <Button
+              disabled={isSubmitting}
+              label="Cancel"
+              size="large"
+              style="text"
+              type="reset"
+              onClick={() => history.push("/")}
+            />
+          </div>
         </FormikForm>
       )}
     </Formik>

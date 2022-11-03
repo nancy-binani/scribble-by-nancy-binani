@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class Api::SessionsController < ApplicationController
+  before_action :current_site
+
   def create
-    @site = Site.find_by!(sitename: login_params[:sitename])
-    unless @site.authenticate(login_params[:password])
-      respond_with_error("Incorrect credentials, try again.", :unauthorized)
+    unless @current_site.authenticate(login_params[:password])
+      respond_with_error(t("session.incorrect_credentials"), :unauthorized)
     end
   end
 

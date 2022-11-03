@@ -43,7 +43,7 @@ def create_sample_category_data!
   puts "Seeding with sample category..."
   Category.create!(
     category: "General",
-    assigned_site_id: 1
+    site_id: 1
   )
   puts "Done! category is created successfully"
   end
@@ -55,7 +55,7 @@ def create_sample_category_data!
     body: "Hello world",
     status: "Published",
     author: "Oliver Smith",
-    assigned_site_id: 1,
+    site_id: 1,
     category_id: 1
   )
   puts "Done! article is created successfully."
@@ -64,9 +64,9 @@ def create_sample_category_data!
   def create_sample_redirection_data!
    puts "Seeding with sample user..."
    Redirection.create!(
-     oldurl: 'https://localhost:3000/1',
-     newurl: 'https://localhost:3000/2',
-     assigned_site_id: 1
+     from: 'https://localhost:3000/1',
+     to: 'https://localhost:3000/2',
+     site_id: 1
    )
    puts "Done! redirection is created successfully."
   end

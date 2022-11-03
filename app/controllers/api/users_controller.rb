@@ -2,7 +2,6 @@
 
 class Api::UsersController < ApplicationController
   def index
-    users = User.all
-    respond_with_json({ users: users })
+    user = User.first
   end
 end

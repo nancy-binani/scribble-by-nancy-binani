@@ -12,11 +12,9 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       key: "Title",
       width: "20%",
       className: "text-indigo-500",
-      render: (title, { assigned_category, slug }) => (
+      render: (title, { category, slug }) => (
         <span
-          onClick={() =>
-            history.push(`/public/${assigned_category.category}/${slug}`)
-          }
+          onClick={() => history.push(`/public/${category.category}/${slug}`)}
         >
           {title}
         </span>
@@ -29,7 +27,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       width: "15%",
       render: (created_at, { status }) => (
         <div>
-          {status === "Draft" ? (
+          {status === "draft" ? (
             <span>-----</span>
           ) : (
             <span>{formatDateAndTime(created_at)}</span>
@@ -43,14 +41,15 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       key: "Author",
       width: "15%",
       className: "text-gray-600",
+      render: author => author.username,
     },
     {
       title: "CATEGORY",
-      dataIndex: "assigned_category",
+      dataIndex: "category",
       key: "category",
       width: "15%",
       className: "text-gray-600",
-      render: assigned_category => assigned_category["category"],
+      render: category => category["category"],
     },
     {
       title: "STATUS",

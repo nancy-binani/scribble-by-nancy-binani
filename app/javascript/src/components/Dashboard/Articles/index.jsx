@@ -49,17 +49,17 @@ const Articles = ({ history }) => {
     }
   };
 
-  const handleSearch = e => {
-    if (e.key === "Enter") {
-      setFiltering(true);
-      const query = searchTerm;
-      let updatedList = [...articles];
-      updatedList = articles.filter(
-        ({ title }) => title.toLowerCase().indexOf(query.toLowerCase()) !== -1
-      );
-      searchTerm === ""
-        ? setFilteredList(articles)
-        : setFilteredList(updatedList);
+  const handleSearch = async (e, searchTerm) => {
+    try {
+      if (e.key === "Enter") {
+        setFiltering(true);
+        const {
+          data: { articles },
+        } = await articleApi.fetch({ title: searchTerm });
+        setFilteredList(articles);
+      }
+    } catch (error) {
+      logger.error(error);
     }
   };
 

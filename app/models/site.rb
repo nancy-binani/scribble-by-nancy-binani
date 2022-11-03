@@ -3,9 +3,8 @@
 class Site < ApplicationRecord
   has_secure_password
   has_secure_token :authentication_token
-  has_many :assigned_categories, foreign_key: :assigned_site_id, class_name: "Category"
-  has_many :assigned_redirections, foreign_key: :assigned_site_id, class_name: "Redirection"
-  has_many :assigned_articles, foreign_key: :assigned_site_id, class_name: "Article"
+  has_many :users
+  has_many :redirections
   validates :password, length: { minimum: 6 }, if: -> { password.present? }
   validates :sitename, presence: true
 end

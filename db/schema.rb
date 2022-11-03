@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_29_190127) do
+ActiveRecord::Schema.define(version: 2022_11_03_111633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2022_10_29_190127) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug"
     t.integer "category_id"
-    t.integer "assigned_site_id"
+    t.integer "user_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -34,22 +34,15 @@ ActiveRecord::Schema.define(version: 2022_10_29_190127) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "position"
-    t.integer "assigned_site_id"
+    t.integer "user_id"
   end
 
   create_table "redirections", force: :cascade do |t|
-    t.string "oldurl"
-    t.string "newurl"
+    t.string "from"
+    t.string "to"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "assigned_site_id"
-  end
-
-  create_table "site_details", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "password_digest", null: false
+    t.integer "site_id"
   end
 
   create_table "sites", force: :cascade do |t|
@@ -66,10 +59,12 @@ ActiveRecord::Schema.define(version: 2022_10_29_190127) do
     t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "site_id"
   end
 
-  add_foreign_key "articles", "categories"
-  add_foreign_key "articles", "sites", column: "assigned_site_id"
-  add_foreign_key "categories", "sites", column: "assigned_site_id"
-  add_foreign_key "redirections", "sites", column: "assigned_site_id"
+  add_foreign_key "articles", "categories", on_delete: :cascade
+  add_foreign_key "articles", "users", on_delete: :cascade
+  add_foreign_key "categories", "users", on_delete: :cascade
+  add_foreign_key "redirections", "sites", on_delete: :cascade
+  add_foreign_key "users", "sites", on_delete: :cascade
 end

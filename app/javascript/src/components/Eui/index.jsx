@@ -17,7 +17,7 @@ const Eui = ({ history }) => {
   const fetchSiteDetails = async () => {
     try {
       const { data } = await authApi.fetch();
-      setSitename(data.sites[0].sitename);
+      setSitename(data.site.sitename);
     } catch (error) {
       logger.error(error);
     }
