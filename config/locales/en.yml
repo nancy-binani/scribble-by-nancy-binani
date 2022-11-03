@@ -6,8 +6,14 @@ en:
   successfully_updated: "%{entity} was successfully updated!"
   successfully_deleted: "%{entity} was successfully deleted!"
   redirection:
-    redirection_loop: "Creating redirection cycle"
+    check_redirection_loop: "Redirection loop"
     to_from_check: "To and from cannot be equal"
+  missing_site: "Site must exist"
+  missing_user: "User must exist"
+  missing_category: "Category must exist"
+  unique: "%{entity} has already been taken"
   article:
+    title_missing_error: "Title can't be blank"
+    description_missing_error: "Body can't be blank"
     slug:
       immutable: "is immutable!"

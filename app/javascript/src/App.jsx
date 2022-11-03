@@ -58,9 +58,9 @@ const App = () => {
       <ToastContainer />
       <Route exact component={NavBar} path={["/", "/articles/", "/settings"]} />
       <Switch history={history}>
-        {redirections.map(({ oldurl, newurl, id }) => (
-          <Route exact from={oldurl} key={id}>
-            <Redirect to={{ pathname: newurl, state: { status: 301 } }} />
+        {redirections.map(({ from, to, id }) => (
+          <Route exact from={from} key={id}>
+            <Redirect to={{ pathname: to, state: { status: 301 } }} />
           </Route>
         ))}
         <Route component={Edit} path="/articles/:id/edit" />

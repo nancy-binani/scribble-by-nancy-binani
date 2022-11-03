@@ -1,21 +1,18 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :categories do
-    member do
-      put :update_with_position
+  namespace :api do
+    defaults format: :json do
+      resources :redirections, except: %i[new edit]
+      resource :site, except: %i[new edit index destroy]
+      resources :users, only: :index
+      resource :session, only: :create
+      resources :articles, except: %i[new edit show]
+      resources :categories do
+        put :update_with_position, on: :collection
+      end
     end
   end
-  resources :redirections, except: %i[new edit]
-
-  resources :articles, except: %i[new edit show] do
-    get "filter_by_category", on: :collection
-    get "filter_status", on: :collection
-    get "count", on: :collection
-  end
-  resource :site, except: %i[new edit index destroy]
-  resources :users, only: [:index]
-  resource :session, only: :create
   root "home#index"
   get "*path", to: "home#index", via: :all
 end

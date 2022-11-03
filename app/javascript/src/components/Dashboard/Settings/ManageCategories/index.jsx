@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from "react";
 
 import { Delete, Edit, Reorder, Plus } from "neetoicons";
-import { PageLoader, Toastr, Typography } from "neetoui";
+import { PageLoader, Typography } from "neetoui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import categoriesApi from "apis/categories";
 
-import { CATEGORY_INITIAL_VALUE } from "../Articles/constants";
-import CreateCategory from "../Articles/CreateCategory";
+import DeleteAlert from "./DeleteAlert";
+
+import { CATEGORY_INITIAL_VALUE } from "../../Articles/constants";
+import CreateCategory from "../../Articles/CreateCategory";
 
 const ManageCategories = () => {
   const [createNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState([]);
   const [categoryValue, setCategoryValue] = useState(CATEGORY_INITIAL_VALUE);
   const [isEdit, setIsEdit] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [deletedCategory, setDeletedCategory] = useState([]);
+  const [categoriesUpdated, setCategoriesUpdated] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -27,6 +32,7 @@ const ManageCategories = () => {
       logger.error(error);
       setLoading(false);
     }
+    setCategoriesUpdated(false);
   };
 
   const handleCreateCategory = () => {
@@ -35,22 +41,19 @@ const ManageCategories = () => {
     setCreateNewCategory(!createNewCategory);
   };
   const handleEditCategory = (category, id) => {
+    setCategoriesUpdated(true);
     setIsEdit(true);
     setCategoryValue({ category, id });
     setCreateNewCategory(!createNewCategory);
   };
-  const handleDeleteCategory = async id => {
-    try {
-      await categoriesApi.destroy(id);
-      await fetchCategories();
-      Toastr.success("Category is deleted successfully.");
-    } catch (error) {
-      logger.error(error);
-    }
+  const handleDeleteCategory = category => {
+    setShowDeleteAlert(true);
+    setDeletedCategory(category);
   };
-  const handleUpdateWithPosition = async (positions, reorderedItem) => {
+  const handleUpdateWithPosition = async (position, id) => {
     try {
-      await categoriesApi.updateWithPosition(positions, reorderedItem.id);
+      await categoriesApi.updateWithPosition(position, id);
+      setCategoriesUpdated(true);
     } catch (error) {
       logger.error(error);
     }
@@ -59,14 +62,13 @@ const ManageCategories = () => {
     const items = Array.from(categories);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    const positions = items.map(({ id }) => id);
     setCategories(items);
-    handleUpdateWithPosition(positions, reorderedItem);
+    handleUpdateWithPosition(result.destination.index + 1, reorderedItem.id);
   };
 
   useEffect(() => {
     fetchCategories();
-  }, [createNewCategory]);
+  }, [categoriesUpdated, createNewCategory]);
 
   if (loading) {
     return <PageLoader />;
@@ -132,9 +134,7 @@ const ManageCategories = () => {
                         <Delete
                           color="gray"
                           size={20}
-                          onClick={() =>
-                            handleDeleteCategory(category["id"], index)
-                          }
+                          onClick={() => handleDeleteCategory(category)}
                         />
                       </div>
                     </div>
@@ -146,6 +146,14 @@ const ManageCategories = () => {
           )}
         </Droppable>
       </DragDropContext>
+      {showDeleteAlert && (
+        <DeleteAlert
+          categories={categories}
+          deletedCategory={deletedCategory}
+          setCategoriesUpdated={setCategoriesUpdated}
+          onClose={() => setShowDeleteAlert(false)}
+        />
+      )}
     </div>
   );
 };

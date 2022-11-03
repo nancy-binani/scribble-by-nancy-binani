@@ -15,7 +15,6 @@ const SideMenu = ({
   filtering,
   setFiltering,
   setFilteredList,
-  length,
 }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
@@ -24,7 +23,6 @@ const SideMenu = ({
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [active, setActive] = useState(null);
   const [searchCategories, setSearchCategories] = useState([]);
-  const [count, setCount] = useState({});
   const [loading, setLoading] = useState(true);
 
   const handleFilterByStatus = async menu => {
@@ -37,7 +35,7 @@ const SideMenu = ({
       } else {
         const {
           data: { articles },
-        } = await articleApi.filterStatus({ status: menu });
+        } = await articleApi.fetch({ status: menu });
         setFilteredList(articles);
       }
     } catch (error) {
@@ -46,17 +44,15 @@ const SideMenu = ({
     }
   };
 
-  const handleFilterByCategories = async category => {
+  const handleFilterByCategories = async (category, id) => {
     setActive(category);
     setFiltering(true);
     try {
-      const newSelectedCategories = [
-        ...new Set([...selectedCategories, category]),
-      ];
+      const newSelectedCategories = [...new Set([...selectedCategories, id])];
       setSelectedCategories(Array.from(newSelectedCategories));
       const {
         data: { articles },
-      } = await articleApi.filterByCategory({
+      } = await articleApi.fetch({
         category: newSelectedCategories,
       });
       setFilteredList(articles);
@@ -78,34 +74,25 @@ const SideMenu = ({
     setLoading(false);
   };
 
-  const handleSearch = () => {
-    const query = searchTerm;
-    setFiltering(true);
-    let updatedCategoryList = [...categories];
-    updatedCategoryList = categories.filter(
-      category =>
-        category.category.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
-
-    searchTerm === ""
-      ? setSearchCategories(categories)
-      : setSearchCategories(updatedCategoryList);
-  };
-
-  const fetchCount = async () => {
-    try {
-      const {
-        data: { count },
-      } = await articleApi.count();
-      setCount(count);
-    } catch (error) {
-      logger.error(error);
+  const handleSearch = async e => {
+    if (e.key === "Enter") {
+      setFiltering(true);
+      try {
+        {
+          const {
+            data: { categories },
+          } = await categoriesApi.fetch({ category: searchTerm });
+          setSearchCategories(categories);
+        }
+      } catch (error) {
+        logger.error(error);
+        setLoading(false);
+      }
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    Promise.all([fetchCategories(), fetchCount()]);
+    fetchCategories();
   }, [createNewCategory]);
 
   if (loading) {
@@ -117,7 +104,6 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
-          count={menu === "All" ? length : count["count_by_status"][menu]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}
@@ -153,7 +139,7 @@ const SideMenu = ({
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
-        onKeyDown={handleSearch}
+        onKeyDown={e => handleSearch(e)}
       />
       {createNewCategory && (
         <CreateCategory
@@ -167,24 +153,22 @@ const SideMenu = ({
       {filtering && !isSearchCollapsed
         ? searchCategories.map((category, idx) => (
             <MenuBar.Block
-              count={count["count_by_category"][category.id]}
               key={idx}
               label={category.category}
               className={`${
-                selectedCategories.includes(category.category) && "bg-white"
+                selectedCategories.includes(category.id) && "bg-white"
               }`}
-              onClick={() => handleFilterByCategories(category.category)}
+              onClick={() => handleFilterByCategories(category, category.id)}
             />
           ))
         : categories.map((category, idx) => (
             <MenuBar.Block
-              count={count["count_by_category"][category.id]}
               key={idx}
               label={category.category}
               className={`${
-                selectedCategories.includes(category.category) && "bg-white"
+                selectedCategories.includes(category.id) && "bg-white"
               }`}
-              onClick={() => handleFilterByCategories(category.category)}
+              onClick={() => handleFilterByCategories(category, category.id)}
             />
           ))}
     </MenuBar>

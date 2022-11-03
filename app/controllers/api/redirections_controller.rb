@@ -1,21 +1,17 @@
 # frozen_string_literal: true
 
-class RedirectionsController < ApplicationController
+class Api::RedirectionsController < ApplicationController
   before_action :load_redirection!, only: %i[ show update destroy ]
-  before_action :set_current_site
+  before_action :current_site
 
   def index
-    redirections = Redirection.all
-    respond_with_json({ redirections: redirections })
+    redirections = current_site.redirections.all
+    respond_with_json(redirections: redirections)
   end
 
   def create
-    redirection = Redirection.create!(redirection_params.merge(assigned_site_id: @current_site.id))
+    redirection = current_site.redirections.create!(redirection_params)
     respond_with_success(t("successfully_created", entity: "Redirection"))
-  end
-
-  def show
-    respond_with_json({ redirection: @redirection })
   end
 
   def update
@@ -31,10 +27,10 @@ class RedirectionsController < ApplicationController
   private
 
     def load_redirection!
-      @redirection = Redirection.find_by(id: params[:id])
+      @redirection = current_site.redirections.find(params[:id])
     end
 
     def redirection_params
-      params.require(:redirection).permit(:oldurl, :newurl)
+      params.require(:redirection).permit(:from, :to)
     end
 end

@@ -1,31 +1,33 @@
 # frozen_string_literal: true
 
 class Redirection < ApplicationRecord
-  belongs_to :assigned_site, foreign_key: "assigned_site_id", class_name: "Site"
-
-  validate :check_redirection_loop, on: [:create, :update]
-  validate :to_and_from_url_not_equal, on: [:create, :update]
-  validates :oldurl, uniqueness: true, presence: true
+  belongs_to :site
+  validate :check_if_redirection_cycle_present, on: [:create, :update]
+  validates :to, uniqueness: { scope: :from }
 
   private
 
     def check_redirection_loop
-      if newurl_exist_in_oldurl? && oldurl_exist_in_newurl?
-        errors.add(:base, t("redirection.redirection_loop"))
+      is_cycle_present = true
+      current_to = self.to
+
+      while self.from != current_to
+        if Redirection.where(from: current_to).present?
+          current_to = Redirection.find_by!(from: current_to).to
+        else
+          is_cycle_present = false
+          break
+        end
       end
-   end
-
-    def newurl_exist_in_oldurl?
-      Redirection.where(newurl: self.oldurl).present?
+      if is_cycle_present
+        errors.add(:base, t("redirection.check_redirection_loop"))
+      end
     end
 
-    def oldurl_exist_in_newurl?
-      Redirection.where(oldurl: self.newurl).present?
-    end
-
-    def to_and_from_url_not_equal
-      if self.oldurl == self.newurl
-        errors.add(:base, t("redirection.to_from_check"))
+    def check_if_redirection_cycle_present
+      if self.from == self.to
+        errors.add(:redirection, t("redirection.to_from_check"))
+      elsif check_redirection_loop
       end
     end
 end

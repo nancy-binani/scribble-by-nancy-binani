@@ -10,8 +10,8 @@ const Redirections = () => {
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [createNewRedirection, setCreateNewRedirection] = useState(false);
-  const [oldurl, setOldurl] = useState("https://localhost:3000/");
-  const [newurl, setNewurl] = useState("https://localhost:3000/");
+  const [from, setFrom] = useState("https://localhost:3000/");
+  const [to, setTo] = useState("https://localhost:3000/");
   const [id, setId] = useState("");
 
   const fetchRedirections = async () => {
@@ -57,8 +57,8 @@ const Redirections = () => {
       if (isEdit) {
         await redirectionsApi.update(
           {
-            oldurl,
-            newurl,
+            from,
+            to,
           },
           id
         );
@@ -66,8 +66,8 @@ const Redirections = () => {
         Toastr.success("Redirection is updated successfully.");
       } else {
         await redirectionsApi.create({
-          oldurl,
-          newurl,
+          from,
+          to,
         });
         Toastr.success("Redirection is created successfully.");
       }
@@ -96,14 +96,14 @@ const Redirections = () => {
           <span className="text-gray-500">To Path</span>
           <span className="text-gray-500">Actions</span>
         </div>
-        {redirections.map(({ oldurl, newurl, id }) => (
+        {redirections.map(({ from, to, id }) => (
           <>
             <div
               className="mx-3 flex justify-between bg-white px-8 py-4 tracking-tight"
               key={id}
             >
-              <span>{`${oldurl}`}</span>
-              <span>{`${newurl}`}</span>
+              <span>{`${from}`}</span>
+              <span>{`${to}`}</span>
               <span className="flex">
                 <Edit
                   className="mr-2"
@@ -125,17 +125,17 @@ const Redirections = () => {
           <div className="flex p-4 tracking-tight">
             <Input
               className="mr-10"
-              name="oldurl"
+              name="from"
               placeholder="https://scribble.com"
-              value={oldurl}
-              onChange={e => setOldurl(e.target.value)}
+              value={from}
+              onChange={e => setFrom(e.target.value)}
             />
             <Input
               className="mr-8"
-              name="newurl"
+              name="to"
               placeholder="https://scribble.com"
-              value={newurl}
-              onChange={e => setNewurl(e.target.value)}
+              value={to}
+              onChange={e => setTo(e.target.value)}
             />
             <Check onClick={handleSubmit} />
           </div>

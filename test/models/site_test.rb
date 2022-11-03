@@ -6,8 +6,9 @@ class SiteTest < ActiveSupport::TestCase
   MIN_PASSWORD_LENGTH = 6
   def setup
     @site = create(:site)
-    @category = create(:category, assigned_site_id: @site.id)
-    @article = create(:article, category_id: @category.id, assigned_site_id: @site.id)
+    @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
+    @category = create(:category, user: @user)
+    @article = create(:article, category: @category, user: @user)
   end
 
   def test_site_name_cannot_be_null

@@ -82,11 +82,11 @@ const General = () => {
   const fetchSiteDetails = async () => {
     try {
       const {
-        data: { sites },
+        data: { site },
       } = await authApi.fetch();
-      setSiteDetails(sites);
+      setSiteDetails(site);
 
-      setStatus(sites[0]["status"] === "checked");
+      setStatus(site["status"] === "checked");
     } catch (error) {
       logger.error(error);
     }
@@ -119,7 +119,7 @@ const General = () => {
       <Formik
         initialValues={{
           password: "******",
-          sitename: siteDetails[0]["sitename"],
+          sitename: siteDetails["sitename"],
         }}
         onSubmit={handleSubmit}
       >

@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
-  belongs_to :assigned_category, foreign_key: :category_id, class_name: "Category"
-  belongs_to :assigned_site, foreign_key: :assigned_site_id, class_name: "Site"
+  belongs_to :category
+  belongs_to :user
 
   validates :title, presence: true, length: { maximum: 50 }, format: { with: /\A[a-zA-Z0-9]+\z/ }
   validate :slug_not_changed
-
-  validates :body, presence: true, length: { maximum: 10000 }
+  validates :body, presence: true
   validates :status, presence: true
+  enum status: { draft: "draft", published: "published" }, _default: :draft
 
-  before_create :check_status
-  before_update :check_status
+  before_create :check_status_of_article_on_submit
+  before_update :check_status_of_article_on_submit
 
   private
 
-    def check_status
-      if status === "Published"
+    def check_status_of_article_on_submit
+      if status === "published"
         set_slug
       end
     end
@@ -33,8 +33,8 @@ class Article < ApplicationRecord
     end
 
     def slug_not_changed
-      if slug_changed? && self.persisted?
-        errors.add(:slug, t("task.slug.immutable"))
+      if slug && slug_changed? && self.persisted?
+        errors.add(:slug, t("article.slug.immutable"))
       end
     end
 end

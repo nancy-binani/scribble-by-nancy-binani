@@ -36,25 +36,36 @@ const SideMenu = ({ history, sitename }) => {
       const {
         data: { categories },
       } = await categoriesApi.fetch();
-      if (params[0] === "") {
-        history.push(
-          `/public/${categories[0].category}/${categories[0]["assigned_articles"][0]["slug"]}`
-        );
-      }
       setCategories(categories);
+      detailsOfFirstArticle(categories);
     } catch (error) {
       logger.error(error);
     }
     setLoading(false);
   };
 
+  const findFirstNonNullArgument = (...args) =>
+    args
+      .filter(({ articles }) => articles.length > 0)
+      .filter(({ slug }) => slug !== null)[0];
+
+  const detailsOfFirstArticle = categories => {
+    if (params[0] === "") {
+      const category = findFirstNonNullArgument(...categories);
+      history.push(
+        `/public/${category.category}/${category["articles"][0]["slug"]}`
+      );
+    }
+  };
+
   useEffect(() => {
     if (categories.length > 0 && !loading) {
+      detailsOfFirstArticle(categories);
       const filteredCategories = categories.filter(
         category => category["category"] === paramCategory
       );
       const articleOfCorrespondingCategory =
-        filteredCategories[0].assigned_articles.filter(
+        filteredCategories[0].articles.filter(
           ({ slug }) => slug === paramsSlug
         )[0];
 
@@ -90,7 +101,7 @@ const SideMenu = ({ history, sitename }) => {
                 key={idx}
                 label={category["category"]}
               >
-                {category["assigned_articles"].map(
+                {category["articles"].map(
                   ({ title, body, created_at, slug }, idx) =>
                     slug && (
                       <MenuItem
