@@ -41,17 +41,6 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @category.category, new_category
   end
 
-  # def test_can_update_position_on_sort
-  #   new_category = Category.create( category: "Apps", position: 2, user: @user )
-  #   puts new_category.id
-  #   puts @category.id
-  #   category_params = { category: [ position: 1, id: new_category.id ] }
-  #   put update_with_position_api_categories_path(params: category_params)
-  #   assert_response :success
-  #   @category.reload
-  #   assert_equal @category.position, 2
-  # end
-
   def test_should_destroy_category
     new_category = create(:category, user: @user)
     @article = create(:article, category: new_category, user: @user)
