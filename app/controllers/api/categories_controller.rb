@@ -20,8 +20,6 @@ class Api::CategoriesController < ApplicationController
   end
 
   def update_with_position
-    puts "hello"
-    puts params
     @category.insert_at(params[:category][:position].to_i)
     respond_with_success(t("successfully_updated", entity: "Category"))
   end
