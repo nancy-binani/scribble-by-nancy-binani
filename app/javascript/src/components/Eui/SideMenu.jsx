@@ -44,14 +44,14 @@ const SideMenu = ({ history, sitename }) => {
     setLoading(false);
   };
 
-  const findFirstNonNullArgument = (...args) =>
+  const findFirstNotNullArticleValues = (...args) =>
     args
       .filter(({ articles }) => articles.length > 0)
       .filter(({ slug }) => slug !== null)[0];
 
   const detailsOfFirstArticle = categories => {
     if (params[0] === "") {
-      const category = findFirstNonNullArgument(...categories);
+      const category = findFirstNotNullArticleValues(...categories);
       history.push(
         `/public/${category.category}/${category["articles"][0]["slug"]}`
       );
@@ -142,7 +142,7 @@ const SideMenu = ({ history, sitename }) => {
           />
         </Switch>
         <div className="h-32 w-32">
-          <div className="right-1 sticky bottom-0 mr-12 h-16 w-16">
+          <div className="right-1 sticky mr-12 h-16 w-16">
             <Button
               icon={ExternalLink}
               label="Home"

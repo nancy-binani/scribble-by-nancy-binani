@@ -98,7 +98,7 @@ const General = () => {
     setValidationBoxOpen(false);
     status
       ? setToLocalStorage({
-          authToken: siteDetails[0]["authentication_token"],
+          authToken: siteDetails["authentication_token"],
         })
       : deleteFromLocalStorage();
   };

@@ -24,14 +24,6 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     assert_equal response_json["notice"], t("successfully_created", entity: "Category")
   end
 
-  def test_search_by_category
-    new_category = Category.create({ category: "Generalalization", position: 1, user: @user })
-    get api_categories_path, params: { category: "General" }
-    assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["categories"].length, 2
-  end
-
   def test_can_update_category
     new_category = "Apps & Integration"
     category_params = { category: { category: new_category } }
@@ -49,5 +41,13 @@ class Api::CategoriesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :ok
     assert_equal @category.articles.length, 1
+  end
+
+  def test_search_by_category
+    new_category = Category.create({ category: "Generalalization", position: 1, user: @user })
+    get api_categories_path, params: { category: "General" }
+    assert_response :success
+    response_json = response.parsed_body
+    assert_equal response_json["categories"].length, 2
   end
 end

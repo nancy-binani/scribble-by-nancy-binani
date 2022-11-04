@@ -7,7 +7,8 @@ class Api::SitesControllerTest < ActionDispatch::IntegrationTest
     @site = create(:site)
     @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
     @category = create(:category, user: @user)
-    @article = create(:article, category: @category, user: @user) end
+    @article = create(:article, category: @category, user: @user)
+  end
 
   def test_can_update_site
     sitename = "Spinkart"

@@ -26,6 +26,7 @@ const CreateCategory = ({
       }
     } catch (error) {
       logger.error(error);
+      Toastr.error(error);
     }
     setCreateNewCategory(!createNewCategory);
     fetchCategories();

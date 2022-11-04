@@ -17,7 +17,7 @@ class Api::RedirectionsControllerTest < ActionDispatch::IntegrationTest
 
   def test_should_create_valid_redirection
     post api_redirections_path,
-      params: { redirection: { to: "settings", from: "mysettings" } }
+      params: { redirection: { to: "abc", from: "myabc" } }
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["notice"], t("successfully_created", entity: "Redirection")
