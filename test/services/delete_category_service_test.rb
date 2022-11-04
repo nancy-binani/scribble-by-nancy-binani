@@ -26,12 +26,4 @@ class DeleteCategoryServiceTest < ActionDispatch::IntegrationTest
     assert_equal Category.first.category, "Getting Started"
     assert_equal Category.first.articles.length, 1
   end
-
-  #  def test_more_than_one_category_present_deletion
-  #    new_category = create(:category, user: @user)
-  #    assert_difference "Category.count", -1 do
-  #      delete api_category_path(@category.id), params: { category: new_category.id }
-  #    end
-  #    assert_equal new_category.articles.length, 1
-  #  end
 end
