@@ -69,7 +69,7 @@ def create_sample_redirection_data!
   puts "Seeding with sample user..."
   Redirection.create!(
     from: 'https://localhost:3000/1',
-     to: 'https://localhost:3000/2',
+    to: 'https://localhost:3000/2',
     site_id: 1
   )
   puts "Done! redirection is created successfully."
