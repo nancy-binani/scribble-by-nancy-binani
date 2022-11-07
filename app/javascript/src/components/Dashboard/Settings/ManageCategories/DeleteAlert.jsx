@@ -22,12 +22,18 @@ const DeleteAlert = ({
         category: [deletedCategory.id, moveToCategory.value],
       });
       Toastr.success("Category is deleted successfully.");
+      setCategoriesUpdated(true);
+      onClose();
     } catch (error) {
       logger.error(error);
       Toastr.error("Category is not deleted successfully");
     }
-    onClose();
-    setCategoriesUpdated(true);
+  };
+
+  const handleBeforeDelete = () => {
+    moveToCategory.value !== null || categories.length === 1
+      ? handleDelete()
+      : Toastr.error("Please select a category");
   };
 
   const handleOpen = () => {
@@ -77,7 +83,7 @@ const DeleteAlert = ({
           label="Proceed"
           style="danger"
           type="submit"
-          onClick={handleDelete}
+          onClick={handleBeforeDelete}
         />
         <Button label="Cancel" style="text" type="cancel" onClick={onClose} />
       </Modal.Footer>

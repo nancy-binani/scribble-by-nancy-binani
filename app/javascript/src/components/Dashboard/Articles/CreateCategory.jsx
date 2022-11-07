@@ -6,6 +6,8 @@ import { Input } from "neetoui/formik";
 
 import categoriesApi from "apis/categories";
 
+import { CATEGORY_VALIDATION_SCHEMA } from "./constants";
+
 const CreateCategory = ({
   category,
   isEdit,
@@ -26,14 +28,18 @@ const CreateCategory = ({
       }
     } catch (error) {
       logger.error(error);
-      Toastr.error(error);
+      Toastr.error("Category is not deleted.");
     }
     setCreateNewCategory(!createNewCategory);
     fetchCategories();
   };
 
   return (
-    <Formik initialValues={category} onSubmit={handleSubmit}>
+    <Formik
+      initialValues={category}
+      validationSchema={CATEGORY_VALIDATION_SCHEMA}
+      onSubmit={handleSubmit}
+    >
       <Form>
         <Input name="category" placeholder="Enter category" />
       </Form>

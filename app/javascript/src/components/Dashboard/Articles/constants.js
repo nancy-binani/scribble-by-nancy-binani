@@ -15,6 +15,16 @@ export const CATEGORY_INITIAL_VALUE = {
 };
 export const MENU_OPTIONS = ["All", "Draft", "Published"];
 
+export const CATEGORY_VALIDATION_SCHEMA = yup.object().shape({
+  category: yup
+    .string()
+    .required("Category is required")
+    .matches(
+      /^[a-zA-Z_ ]*$/,
+      "Category must not contain special characters or digits."
+    ),
+});
+
 export const ARTICLES_FORM_VALIDATION_SCHEMA = CATEGORIES =>
   yup.object().shape({
     title: yup
