@@ -7,11 +7,11 @@ class ApplicationController < ActionController::Base
   private
 
     def current_site
-      @current_site = Site.first
+      @_current_site = Site.first
     end
 
     def current_user
       current_site
-      @_current_user ||= @current_site.users.first
+      @_current_user ||= @_current_site.users.first
     end
 end
