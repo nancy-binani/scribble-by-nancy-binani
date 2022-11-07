@@ -6,6 +6,5 @@ json.site do
    json.password_digest @current_site.password_digest
    json.status @current_site.status
    json.authentication_token @current_site.authentication_token
-
    json.users @current_site.users, :username, :id
  end
