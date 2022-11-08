@@ -7,7 +7,9 @@ Rails.application.routes.draw do
       resource :site, except: %i[new edit index destroy]
       resources :users, only: :index
       resource :session, only: :create
-      resources :articles, except: %i[new edit show]
+      resources :articles, except: %i[new edit show] do
+        get "count", on: :collection
+      end
       resources :categories do
         put :update_with_position, on: :collection
       end

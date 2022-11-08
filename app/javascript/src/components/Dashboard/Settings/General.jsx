@@ -39,6 +39,7 @@ const General = () => {
     try {
       if (updatedSiteSettings.validateUserInputValues || checkPassword) {
         await authApi.update(updatedSiteSettings.updatedSiteSettings);
+        //TODO: Remove all toastrs
         Toastr.success("Settings updated successfully");
       } else {
         Toastr.error("Please update with valid settings data.");
@@ -53,6 +54,7 @@ const General = () => {
     const password = values.password;
     const sitename = values.sitename;
     let updatedSiteSettings = {};
+    //TODO: Use if
     password === "******"
       ? (updatedSiteSettings = { status: toggledStatus, sitename })
       : (updatedSiteSettings = {

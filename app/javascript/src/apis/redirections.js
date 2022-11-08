@@ -5,11 +5,10 @@ const fetch = () => axios.get("/api/redirections");
 const create = payload =>
   axios.post("/api/redirections", { redirection: payload });
 
-const update = async (payload, id) => {
+const update = (payload, id) => {
   axios.put(`/api/redirections/${id}`, {
     redirection: payload,
   });
-  await fetch();
 };
 const destroy = id => axios.delete(`/api/redirections/${id}`);
 

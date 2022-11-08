@@ -10,7 +10,7 @@ import {
 import { ToastContainer } from "react-toastify";
 
 import { setAuthHeaders } from "apis/axios";
-import redirectionsApi from "apis/redirection";
+import redirectionsApi from "apis/redirections";
 import { initializeLogger } from "common/logger";
 import PageLoader from "components/PageLoader";
 
@@ -22,9 +22,10 @@ import Settings from "./components/Dashboard/Settings";
 import Eui from "./components/Eui";
 
 const App = () => {
-  const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [redirections, setRedirections] = useState([]);
+
+  const history = useHistory();
 
   useEffect(() => {
     initializeLogger();

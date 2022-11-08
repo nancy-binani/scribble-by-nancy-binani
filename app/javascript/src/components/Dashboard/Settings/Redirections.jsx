@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Check, Delete, Edit, Plus } from "neetoicons";
 import { PageLoader, Typography, Input, Toastr } from "neetoui";
 
-import redirectionsApi from "apis/redirection";
+import redirectionsApi from "apis/redirections";
 
 const Redirections = () => {
   const [redirections, setRedirections] = useState([]);
