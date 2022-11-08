@@ -21,12 +21,10 @@ const DeleteAlert = ({
       await categoriesApi.destroy(deletedCategory.id, {
         category: [deletedCategory.id, moveToCategory.value],
       });
-      Toastr.success("Category is deleted successfully.");
       setCategoriesUpdated(true);
       onClose();
     } catch (error) {
       logger.error(error);
-      Toastr.error("Category is not deleted successfully");
     }
   };
 

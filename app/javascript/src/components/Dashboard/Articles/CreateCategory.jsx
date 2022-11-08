@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Formik, Form } from "formik";
-import { Toastr } from "neetoui";
 import { Input } from "neetoui/formik";
 
 import categoriesApi from "apis/categories";
@@ -21,14 +20,11 @@ const CreateCategory = ({
     try {
       if (isEdit) {
         await categoriesApi.update({ category: values.category }, category.id);
-        Toastr.success("Category is updated successfully.");
       } else {
         await categoriesApi.create({ category: values.category });
-        Toastr.success("Category is created successfully.");
       }
     } catch (error) {
       logger.error(error);
-      Toastr.error("Category is not deleted.");
     }
     setCreateNewCategory(!createNewCategory);
     fetchCategories();

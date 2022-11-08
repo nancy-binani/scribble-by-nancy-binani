@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Formik, Form } from "formik";
 import { Check, Close } from "neetoicons";
-import { Typography, Checkbox, Button, Toastr, PageLoader } from "neetoui";
+import { Typography, Checkbox, Button, PageLoader } from "neetoui";
 import { Input } from "neetoui/formik";
 
 import authApi from "apis/auth";
@@ -39,10 +39,6 @@ const General = () => {
     try {
       if (updatedSiteSettings.validateUserInputValues || checkPassword) {
         await authApi.update(updatedSiteSettings.updatedSiteSettings);
-        //TODO: Remove all toastrs
-        Toastr.success("Settings updated successfully");
-      } else {
-        Toastr.error("Please update with valid settings data.");
       }
     } catch (error) {
       logger.error(error);

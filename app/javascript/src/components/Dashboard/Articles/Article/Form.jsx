@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Formik, Form as FormikForm } from "formik";
-import { Dropdown, Button, PageLoader, Toastr } from "neetoui";
+import { Dropdown, Button, PageLoader } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
 
 import articlesApi from "apis/articles";
@@ -72,13 +72,11 @@ const Form = ({ isEdit, article, history }) => {
           },
           values.id
         );
-        Toastr.success("Article is updated successfully");
       } else {
         await articlesApi.create({
           ...values,
           category_id: updatedCategory.value,
         });
-        Toastr.success("Article is created successfully");
       }
       await articlesApi.fetch();
       history.push("/");

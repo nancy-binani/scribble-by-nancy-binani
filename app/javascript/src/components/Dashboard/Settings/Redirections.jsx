@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Check, Delete, Edit, Plus } from "neetoicons";
-import { PageLoader, Typography, Input, Toastr } from "neetoui";
+import { PageLoader, Typography, Input } from "neetoui";
 
 import redirectionsApi from "apis/redirections";
 
@@ -46,7 +46,6 @@ const Redirections = () => {
     try {
       await redirectionsApi.destroy(id);
       await fetchRedirections();
-      Toastr.success("Redirection is deleted successfully.");
     } catch (error) {
       logger.error(error);
     }
@@ -62,18 +61,14 @@ const Redirections = () => {
           },
           id
         );
-
-        Toastr.success("Redirection is updated successfully.");
       } else {
         await redirectionsApi.create({
           from,
           to,
         });
-        Toastr.success("Redirection is created successfully.");
       }
     } catch (error) {
       logger.error(error);
-      Toastr.error("Cyclic redirection is not possible.");
     }
     setCreateNewRedirection(!createNewRedirection);
   };
