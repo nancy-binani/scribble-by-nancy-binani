@@ -3,7 +3,10 @@ import * as yup from "yup";
 export const ARTICLES_FORM_INITIAL_VALUES = {
   title: "",
   body: "",
-  category: null,
+  category: {
+    value: "",
+    label: "",
+  },
   status: "",
 };
 export const CATEGORY_INITIAL_VALUE = {

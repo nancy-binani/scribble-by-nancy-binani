@@ -122,79 +122,82 @@ const General = () => {
         }}
         onSubmit={handleSubmit}
       >
-        <Form>
-          <Typography style="h2">General Settings</Typography>
-          <Typography className="text-gray-600" style="body2">
-            Configure general attributes Of scribble
-          </Typography>
-          <div className="my-6">
-            <Input label="Site Name" name="sitename" type="text" />
-            <Typography className="text-gray-600" style="body3">
-              Customize the site name which is used to show the site name in
+        {({ dirty }) => (
+          <Form>
+            <Typography style="h2">General Settings</Typography>
+            <Typography className="text-gray-600" style="body2">
+              Configure general attributes Of scribble
             </Typography>
-            <Typography className="font-semibold text-gray-700" style="body3">
-              Open Graph Tags.{" "}
-            </Typography>
-          </div>
-          <Checkbox
-            checked={status}
-            className="my-6"
-            id="checkbox_name"
-            label="Password Protect Knowledge Base"
-            name="checked"
-            onChange={() => {}}
-            onClick={() => handleStatus(status)}
-          />
-          {status && (
-            <span className="my-3 flex">
-              <Input
-                disabled={disabled}
-                label="Password"
-                name="password"
-                type="password"
-              />
-              <Button
-                className={`mx-1 my-5 ${visible}`}
-                label="Change Password"
-                size="medium"
-                style="primary"
-                onClick={handleVisiblity}
-              />
-            </span>
-          )}
-          {validationBoxOpen && (
-            <>
-              <span className="flex">
-                {passwordLengthChecked ? (
-                  <Check color="green" size={24} />
-                ) : (
-                  <Close color="red" size={24} />
-                )}
-                <Typography className=" ml-2" style="body2">
-                  Have at least 6 characters
-                </Typography>
+            <div className="my-6">
+              <Input label="Site Name" name="sitename" type="text" />
+              <Typography className="text-gray-600" style="body3">
+                Customize the site name which is used to show the site name in
+              </Typography>
+              <Typography className="font-semibold text-gray-700" style="body3">
+                Open Graph Tags.{" "}
+              </Typography>
+            </div>
+            <Checkbox
+              checked={status}
+              className="my-6"
+              id="checkbox_name"
+              label="Password Protect Knowledge Base"
+              name="checked"
+              onChange={() => {}}
+              onClick={() => handleStatus(status)}
+            />
+            {status && (
+              <span className="my-3 flex">
+                <Input
+                  disabled={disabled}
+                  label="Password"
+                  name="password"
+                  type="password"
+                />
+                <Button
+                  className={`mx-1 my-5 ${visible}`}
+                  label="Change Password"
+                  size="medium"
+                  style="primary"
+                  onClick={handleVisiblity}
+                />
               </span>
-              <span className="flex">
-                {passwordRegexChecked ? (
-                  <Check color="green" size={24} />
-                ) : (
-                  <Close color="red" size={24} />
-                )}
-                <Typography className=" ml-2" style="body2">
-                  Have at least 1 letter and 1 number
-                </Typography>
-              </span>
-            </>
-          )}
-          <Button
-            className="mr-3"
-            label="Save Changes"
-            size="large"
-            style="primary"
-            type="submit"
-          />
-          <Button label="Cancel" size="large" style="text" type="reset" />
-        </Form>
+            )}
+            {validationBoxOpen && (
+              <>
+                <span className="flex">
+                  {passwordLengthChecked ? (
+                    <Check color="green" size={24} />
+                  ) : (
+                    <Close color="red" size={24} />
+                  )}
+                  <Typography className=" ml-2" style="body2">
+                    Have at least 6 characters
+                  </Typography>
+                </span>
+                <span className="flex">
+                  {passwordRegexChecked ? (
+                    <Check color="green" size={24} />
+                  ) : (
+                    <Close color="red" size={24} />
+                  )}
+                  <Typography className=" ml-2" style="body2">
+                    Have at least 1 letter and 1 number
+                  </Typography>
+                </span>
+              </>
+            )}
+            <Button
+              className="mr-3"
+              disabled={!dirty}
+              label="Save Changes"
+              size="large"
+              style="primary"
+              type="submit"
+            />
+            <Button label="Cancel" size="large" style="text" type="reset" />
+          </Form>
+        )}
       </Formik>
     </div>
   );

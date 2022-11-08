@@ -95,7 +95,7 @@ const Form = ({ isEdit, article, history }) => {
       validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA(categories)}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting, setFieldValue }) => (
+      {({ isSubmitting, setFieldValue, dirty }) => (
         <FormikForm className=" mx-auto mt-12 max-w-lg space-y-6">
           <div className="mt-1 flex w-full flex-row space-x-3 ">
             <Input
@@ -136,6 +136,7 @@ const Form = ({ isEdit, article, history }) => {
             <div className="flex">
               <Button
                 className="mr-px"
+                disabled={!dirty}
                 label={status === "draft" ? "Save Draft" : "Published"}
                 name="status"
                 size="medium"

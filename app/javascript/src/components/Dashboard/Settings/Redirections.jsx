@@ -10,8 +10,8 @@ const Redirections = () => {
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [createNewRedirection, setCreateNewRedirection] = useState(false);
-  const [from, setFrom] = useState("https://localhost:3000/");
-  const [to, setTo] = useState("https://localhost:3000/");
+  const [from, setFrom] = useState("http://localhost:3000/");
+  const [to, setTo] = useState("http://localhost:3000/");
   const [id, setId] = useState("");
 
   const fetchRedirections = async () => {
