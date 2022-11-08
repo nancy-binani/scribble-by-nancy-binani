@@ -5,6 +5,6 @@ FactoryBot.define do
     title { "hello" }
     body { Faker::Lorem.paragraph }
     category { Faker::Name.name }
-    status { "published" }
+    status { "Published" }
   end
 end

@@ -27,7 +27,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       width: "15%",
       render: (created_at, { status }) => (
         <div>
-          {status === "draft" ? (
+          {status === "Draft" ? (
             <span>-----</span>
           ) : (
             <span>{formatDateAndTime(created_at)}</span>

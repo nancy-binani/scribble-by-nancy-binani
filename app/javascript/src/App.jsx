@@ -5,12 +5,10 @@ import {
   Switch,
   Route,
   useHistory,
-  Redirect,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { registerIntercepts, setAuthHeaders } from "apis/axios";
-import redirectionsApi from "apis/redirections";
 import { initializeLogger } from "common/logger";
 import PageLoader from "components/PageLoader";
 
@@ -23,7 +21,6 @@ import Eui from "./components/Eui";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
-  const [redirections, setRedirections] = useState([]);
 
   const history = useHistory();
 
@@ -31,21 +28,7 @@ const App = () => {
     initializeLogger();
     registerIntercepts();
     setAuthHeaders(setLoading);
-    fetchRedirections();
   }, []);
-
-  const fetchRedirections = async () => {
-    try {
-      const {
-        data: { redirections },
-      } = await redirectionsApi.fetch();
-      setRedirections(redirections);
-      setLoading(false);
-    } catch (error) {
-      logger.error(error);
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -60,11 +43,6 @@ const App = () => {
       <ToastContainer />
       <Route exact component={NavBar} path={["/", "/articles/", "/settings"]} />
       <Switch history={history}>
-        {redirections.map(({ from, to, id }) => (
-          <Route exact from={from} key={id}>
-            <Redirect to={{ pathname: to, state: { status: 301 } }} />
-          </Route>
-        ))}
         <Route component={Edit} path="/articles/:id/edit" />
         <Route component={Create} path="/articles/new_article" />
         <Route path="/settings" render={props => <Settings {...props} />} />

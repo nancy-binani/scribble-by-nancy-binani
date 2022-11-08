@@ -2,12 +2,11 @@ import React from "react";
 
 import { ExternalLink } from "neetoicons";
 import { Button } from "neetoui";
-import { useHistory } from "react-router-dom";
-
-import NavItem from "./NavItem";
+import { useHistory, NavLink } from "react-router-dom";
 
 const NavBar = () => {
   const history = useHistory();
+  //const location = useLocation();
   const handleClick = () => {
     history.push("/public/");
   };
@@ -25,8 +24,22 @@ const NavBar = () => {
             >
               Scribble
             </span>
-            <NavItem name="Articles" path="/" />
-            <NavItem name="Settings" path="/settings" />
+            <NavLink
+              exact
+              className="mr-3 inline-flex items-center px-1 pt-1 text-sm font-semibold leading-5 text-gray-600 focus:text-indigo-500"
+              to="/"
+            >
+              Articles
+            </NavLink>
+            <NavLink
+              exact
+              to="/settings"
+              className="mr-3 inline-flex items-center px-1 pt-1
+      text-sm font-semibold leading-5
+      text-gray-600 focus:text-indigo-500"
+            >
+              Settings
+            </NavLink>
           </div>
           <div className="flex items-center justify-end">
             <Button

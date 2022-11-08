@@ -21,7 +21,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     post api_articles_path,
       params: {
         article: {
-          title: "Scribble", body: "Lorem", status: "published", category_id: @category.id,
+          title: "Scribble", body: "Lorem", status: "Published", category_id: @category.id,
           user: @user.id
         }
       }
@@ -32,9 +32,9 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
   def test_filter_article_by_status
     new_article = create(:article, category: @category, user: @user)
-    new_article.status = "draft"
+    new_article.status = "Draft"
     new_article.save!
-    get api_articles_path, params: { status: "draft" }
+    get api_articles_path, params: { status: "Draft" }
     assert_response :success
 
     response_json = response.parsed_body

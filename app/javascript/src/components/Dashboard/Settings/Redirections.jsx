@@ -121,14 +121,12 @@ const Redirections = () => {
             <Input
               className="mr-10"
               name="from"
-              placeholder="https://scribble.com"
               value={from}
               onChange={e => setFrom(e.target.value)}
             />
             <Input
               className="mr-8"
               name="to"
-              placeholder="https://scribble.com"
               value={to}
               onChange={e => setTo(e.target.value)}
             />

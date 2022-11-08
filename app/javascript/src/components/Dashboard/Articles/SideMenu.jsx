@@ -85,21 +85,17 @@ const SideMenu = ({
     }
   };
 
-  const handleSearch = async e => {
-    if (e.key === "Enter") {
+  const handleSearch = async searchTerm => {
+    try {
       setFiltering(true);
-      try {
-        {
-          const {
-            data: { categories },
-          } = await categoriesApi.fetch({ category: searchTerm });
-          setSearchCategories(categories);
-        }
-      } catch (error) {
-        logger.error(error);
-        setLoading(false);
-      }
+      const {
+        data: { categories },
+      } = await categoriesApi.fetch({ category: searchTerm });
+      setSearchCategories(categories);
+    } catch (error) {
+      logger.error(error);
     }
+    setLoading(false);
   };
 
   const fetchCategoriesAndCount = async () => {
@@ -154,9 +150,11 @@ const SideMenu = ({
         collapse={isSearchCollapsed}
         placeholder="Type Category & press Enter"
         value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
-        onKeyDown={e => handleSearch(e)}
+        onChange={e => {
+          setSearchTerm(e.target.value);
+          handleSearch(e.target.value);
+        }}
       />
       {createNewCategory && (
         <CreateCategory

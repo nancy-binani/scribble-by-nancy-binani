@@ -49,15 +49,13 @@ const Articles = ({ history }) => {
     }
   };
 
-  const handleSearch = async (e, searchTerm) => {
+  const handleSearch = async searchTerm => {
     try {
-      if (e.key === "Enter") {
-        setFiltering(true);
-        const {
-          data: { articles },
-        } = await articleApi.fetch({ title: searchTerm });
-        setFilteredList(articles);
-      }
+      setFiltering(true);
+      const {
+        data: { articles },
+      } = await articleApi.fetch({ title: searchTerm });
+      setFilteredList(articles);
     } catch (error) {
       logger.error(error);
     }
