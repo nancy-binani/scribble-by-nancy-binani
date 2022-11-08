@@ -1,3 +1,5 @@
+import * as yup from "yup";
+
 export const REGEXP = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
 
 export const REDIRECTION_INITIAL_VALUE = {
@@ -5,6 +7,16 @@ export const REDIRECTION_INITIAL_VALUE = {
   from: "",
   to: "",
 };
+
+export const SITE_VALIDATION_SCHEMA = yup.object().shape({
+  password: yup
+    .string()
+    .min(6, "Password is too short - should be 6 chars minimum.")
+    .matches(
+      /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/,
+      "Password must contain one letter and one digit."
+    ),
+});
 
 export const MENU_OPTIONS = [
   {

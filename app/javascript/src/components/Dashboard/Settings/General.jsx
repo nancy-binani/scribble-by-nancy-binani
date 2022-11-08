@@ -8,7 +8,7 @@ import { Input } from "neetoui/formik";
 import authApi from "apis/auth";
 import { deleteFromLocalStorage, setToLocalStorage } from "utils/storage";
 
-import { REGEXP } from "./constants";
+import { REGEXP, SITE_VALIDATION_SCHEMA } from "./constants";
 
 const General = () => {
   const [passwordRegexChecked, setPasswordRegexChecked] = useState(false);
@@ -115,6 +115,7 @@ const General = () => {
   return (
     <div className="mx-auto flex w-1/3 flex-col space-y-6 py-6">
       <Formik
+        validationSchema={SITE_VALIDATION_SCHEMA}
         initialValues={{
           password: "******",
           sitename: siteDetails["sitename"],
