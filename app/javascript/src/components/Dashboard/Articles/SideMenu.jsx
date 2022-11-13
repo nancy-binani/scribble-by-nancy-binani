@@ -4,8 +4,8 @@ import { Search, Plus, Close } from "neetoicons";
 import { PageLoader, Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 
-import articleApi from "apis/articles";
-import categoriesApi from "apis/categories";
+import articleApi from "apis/admin/articles";
+import categoriesApi from "apis/admin/categories";
 
 import { CATEGORY_INITIAL_VALUE, MENU_OPTIONS } from "./constants";
 import CreateCategory from "./CreateCategory";
@@ -116,7 +116,7 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
-          count={count["count_by_status"][menu.toLowerCase()]}
+          count={count["count_by_status"][menu]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}

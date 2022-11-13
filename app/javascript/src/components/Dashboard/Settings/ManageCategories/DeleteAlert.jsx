@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Warning } from "neetoicons";
 import { Modal, Button, Select, Typography, Callout, Toastr } from "neetoui";
 
-import categoriesApi from "apis/categories";
+import categoriesApi from "apis/admin/categories";
 
 const DeleteAlert = ({
   categories,

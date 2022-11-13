@@ -4,8 +4,8 @@ import { Formik, Form as FormikForm } from "formik";
 import { Dropdown, Button, PageLoader } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
 
-import articlesApi from "apis/articles";
-import categoriesApi from "apis/categories";
+import articlesApi from "apis/admin/articles";
+import categoriesApi from "apis/admin/categories";
 
 import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
 

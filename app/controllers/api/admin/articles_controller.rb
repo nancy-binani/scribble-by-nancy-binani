@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::ArticlesController < ApplicationController
+class Api::Admin::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[update destroy]
   before_action :current_user
 
@@ -30,7 +30,7 @@ class Api::ArticlesController < ApplicationController
     respond_with_json(
       {
         count: {
-          count_by_status: { **count_by_status, "all": (Article.count) },
+          count_by_status: { **count_by_status, "All": (Article.count) },
           count_by_category: count_by_category
         }
       })

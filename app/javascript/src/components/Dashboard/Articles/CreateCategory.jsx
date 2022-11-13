@@ -3,7 +3,7 @@ import React from "react";
 import { Formik, Form } from "formik";
 import { Input } from "neetoui/formik";
 
-import categoriesApi from "apis/categories";
+import categoriesApi from "apis/admin/categories";
 
 import { CATEGORY_VALIDATION_SCHEMA } from "./constants";
 

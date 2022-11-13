@@ -5,7 +5,7 @@ import { Check, Close } from "neetoicons";
 import { Typography, Checkbox, Button, PageLoader } from "neetoui";
 import { Input } from "neetoui/formik";
 
-import authApi from "apis/auth";
+import authApi from "apis/admin/auth";
 import { deleteFromLocalStorage, setToLocalStorage } from "utils/storage";
 
 import { REGEXP, SITE_VALIDATION_SCHEMA } from "./constants";

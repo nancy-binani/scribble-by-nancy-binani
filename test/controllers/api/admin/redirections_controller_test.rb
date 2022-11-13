@@ -2,21 +2,21 @@
 
 require "test_helper"
 
-class Api::RedirectionsControllerTest < ActionDispatch::IntegrationTest
+class RedirectionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @redirection = create(:redirection, site: @site)
   end
 
   def test_should_list_all_redirections
-    get api_redirections_path
+    get api_admin_redirections_path
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["redirections"].length, Redirection.count
   end
 
   def test_should_create_valid_redirection
-    post api_redirections_path,
+    post api_admin_redirections_path,
       params: { redirection: { to: "abc", from: "myabc" } }
     assert_response :success
     response_json = response.parsed_body
@@ -27,7 +27,7 @@ class Api::RedirectionsControllerTest < ActionDispatch::IntegrationTest
     to = "#{@redirection.to}/1"
     from = "#{@redirection.from}/1"
     redirection_params = { redirection: { to: to, from: from } }
-    put api_redirection_path(@redirection.id), params: redirection_params
+    put api_admin_redirection_path(@redirection.id), params: redirection_params
     assert_response :success
     @redirection.reload
     assert_equal @redirection.to, to
@@ -36,7 +36,7 @@ class Api::RedirectionsControllerTest < ActionDispatch::IntegrationTest
 
   def test_should_destroy_redirection
     assert_difference "Redirection.count", -1 do
-      delete api_redirection_path(@redirection.id)
+      delete api_admin_redirection_path(@redirection.id)
     end
     assert_response :ok
   end

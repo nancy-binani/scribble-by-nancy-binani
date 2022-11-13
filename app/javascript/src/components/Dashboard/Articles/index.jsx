@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { PageLoader, Typography } from "neetoui";
 import { Container } from "neetoui/layouts";
 
-import articleApi from "apis/articles";
+import articleApi from "apis/admin/articles";
 
 import { FILTERING_OPTIONS } from "./constants";
 import DeleteAlert from "./DeleteAlert";

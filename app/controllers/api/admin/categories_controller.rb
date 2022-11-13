@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::CategoriesController < ApplicationController
+class Api::Admin::CategoriesController < ApplicationController
   before_action :load_category!, only: %i[ update destroy update_with_position]
   before_action :current_user
 

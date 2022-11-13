@@ -5,7 +5,7 @@ import { Button, PageLoader, Typography } from "neetoui";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Route, Switch, useParams } from "react-router-dom";
 
-import categoriesApi from "apis/categories";
+import categoriesApi from "apis/admin/categories";
 
 import Detail from "./Detail";
 

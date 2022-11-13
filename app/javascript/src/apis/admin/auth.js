@@ -1,17 +1,17 @@
 import axios from "axios";
 
-const fetch = () => axios.get("/api/site");
+const fetch = () => axios.get("/api/admin/site");
 
 const update = payload => {
-  axios.put(`/api/site`, {
+  axios.put(`/api/admin/site`, {
     site: payload,
   });
 };
 
-const fetchUser = () => axios.get("/api/users");
+const fetchUser = () => axios.get("/api/admin/users");
 
 const login = payload =>
-  axios.post("/api/session", {
+  axios.post("/api/admin/session", {
     login: payload,
   });
 

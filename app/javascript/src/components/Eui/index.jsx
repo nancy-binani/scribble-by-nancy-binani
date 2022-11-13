@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { either, isEmpty, isNil } from "ramda";
 import { ProSidebarProvider } from "react-pro-sidebar";
 
-import authApi from "apis/auth";
+import authApi from "apis/admin/auth";
 import { getFromLocalStorage } from "utils/storage";
 
 import Login from "./Login";

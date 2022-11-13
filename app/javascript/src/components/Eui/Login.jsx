@@ -4,7 +4,7 @@ import { Formik, Form } from "formik";
 import { Typography, Button } from "neetoui";
 import { Input } from "neetoui/formik";
 
-import authApi from "apis/auth";
+import authApi from "apis/admin/auth";
 import { setToLocalStorage } from "utils/storage";
 
 import Vector from "../../../../assets/images/Vector.png";

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class Api::SitesControllerTest < ActionDispatch::IntegrationTest
+class SitesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
@@ -12,7 +12,7 @@ class Api::SitesControllerTest < ActionDispatch::IntegrationTest
 
   def test_can_update_site
     sitename = "Spinkart"
-    put api_site_path, params: { site: { sitename: "Spinkart" } }
+    put api_admin_site_path, params: { site: { sitename: "Spinkart" } }
     assert_response :success
     @site.reload
     assert_equal @site.sitename, sitename

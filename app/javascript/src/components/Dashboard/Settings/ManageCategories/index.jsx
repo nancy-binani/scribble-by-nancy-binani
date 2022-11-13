@@ -4,7 +4,7 @@ import { Delete, Edit, Reorder, Plus } from "neetoicons";
 import { PageLoader, Typography } from "neetoui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-import categoriesApi from "apis/categories";
+import categoriesApi from "apis/admin/categories";
 
 import DeleteAlert from "./DeleteAlert";
 
