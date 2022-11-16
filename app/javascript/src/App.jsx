@@ -17,7 +17,7 @@ import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
 import Settings from "./components/Dashboard/Settings";
 import Eui from "./components/Eui";
-import NavBar from "./components/NavBar";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -41,7 +41,7 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Route exact component={NavBar} path={["/", "/articles/", "/settings"]} />
+      <Route exact component={Navbar} path={["/", "/articles/", "/settings"]} />
       <Switch history={history}>
         <Route component={Edit} path="/articles/:id/edit" />
         <Route component={Create} path="/articles/new_article" />
