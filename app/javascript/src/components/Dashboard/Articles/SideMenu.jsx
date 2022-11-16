@@ -155,7 +155,7 @@ const SideMenu = ({
       </MenuBar.SubTitle>
       <MenuBar.Search
         collapse={isSearchCollapsed}
-        placeholder="Type Category & press Enter"
+        placeholder="Search for Category"
         value={searchTerm}
         onCollapse={() => setIsSearchCollapsed(true)}
         onChange={e => {

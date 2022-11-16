@@ -10,9 +10,9 @@ import { ToastContainer } from "react-toastify";
 
 import { registerIntercepts, setAuthHeaders } from "apis/axios";
 import { initializeLogger } from "common/logger";
+import NavBar from "components/NavBar";
 import PageLoader from "components/PageLoader";
 
-import NavBar from "./components/Common";
 import Dashboard from "./components/Dashboard";
 import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
