@@ -10,7 +10,6 @@ import { ToastContainer } from "react-toastify";
 
 import { registerIntercepts, setAuthHeaders } from "apis/axios";
 import { initializeLogger } from "common/logger";
-import NavBar from "components/NavBar";
 import PageLoader from "components/PageLoader";
 
 import Dashboard from "./components/Dashboard";
@@ -18,6 +17,7 @@ import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
 import Settings from "./components/Dashboard/Settings";
 import Eui from "./components/Eui";
+import NavBar from "./components/Navbar";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
