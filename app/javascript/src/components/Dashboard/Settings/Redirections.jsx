@@ -7,12 +7,13 @@ import redirectionsApi from "apis/admin/redirections";
 
 const Redirections = () => {
   const [redirections, setRedirections] = useState([]);
+  const [showInput, setShowInput] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isEdit, setIsEdit] = useState(false);
-  const [createNewRedirection, setCreateNewRedirection] = useState(false);
-  const [from, setFrom] = useState("http://localhost:3000/");
-  const [to, setTo] = useState("http://localhost:3000/");
-  const [id, setId] = useState("");
+  const [showId, setShowId] = useState(null);
+  const [toPath, setToPath] = useState("");
+  const [fromPath, setFromPath] = useState("");
+  const [createRedirection, setCreateRedirection] = useState(false);
+  const [updateRedirections, setUpdateRedirections] = useState(false);
 
   const fetchRedirections = async () => {
     try {
@@ -20,124 +21,150 @@ const Redirections = () => {
         data: { redirections },
       } = await redirectionsApi.fetch();
       setRedirections(redirections);
-      setLoading(false);
     } catch (error) {
       logger.error(error);
-      setLoading(false);
     }
+    setUpdateRedirections(false);
+    setLoading(false);
   };
 
-  useEffect(() => {
-    fetchRedirections();
-  }, [createNewRedirection]);
-
-  const handleCreateRedirection = () => {
-    setIsEdit(false);
-    setCreateNewRedirection(!createNewRedirection);
-  };
-
-  const handleEditRedirection = ({ id }) => {
-    setIsEdit(true);
-    setCreateNewRedirection(!createNewRedirection);
-    setId(id);
-  };
-
-  const handleDeleteRedirection = async id => {
+  const handleDelete = async id => {
     try {
+      setUpdateRedirections(true);
       await redirectionsApi.destroy(id);
-      await fetchRedirections();
     } catch (error) {
       logger.error(error);
     }
+    await fetchRedirections();
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
     try {
-      if (isEdit) {
-        await redirectionsApi.update(
-          {
-            from,
-            to,
-          },
-          id
-        );
-      } else {
-        await redirectionsApi.create({
-          from,
-          to,
-        });
-      }
+      setUpdateRedirections(true);
+      await redirectionsApi.create({ to: toPath, from: fromPath });
     } catch (error) {
       logger.error(error);
     }
-    setCreateNewRedirection(!createNewRedirection);
+    await fetchRedirections();
+    setLoading(false);
+    setCreateRedirection(false);
   };
 
+  const handleCreateRedirection = () => {
+    setCreateRedirection(!createRedirection);
+    setUpdateRedirections(true);
+    setToPath("/2");
+    setFromPath("/1");
+  };
+
+  const handleUpdateRedirection = async () => {
+    try {
+      setUpdateRedirections(true);
+      await redirectionsApi.update({ to: toPath, from: fromPath }, showId);
+    } catch (error) {
+      logger.error(error);
+    }
+    await fetchRedirections();
+    setShowInput(false);
+  };
+
+  const handleEdit = (id, to, from) => {
+    setShowId(id);
+    setToPath(to);
+    setFromPath(from);
+    setShowInput(!showInput);
+  };
+
+  useEffect(() => {
+    fetchRedirections();
+  }, [updateRedirections]);
+
   if (loading) {
-    <PageLoader />;
+    return (
+      <div className="h-screen w-screen">
+        <PageLoader />
+      </div>
+    );
   }
 
   return (
-    <div className="my-6 px-24">
+    <div className="mx-auto flex w-1/2 flex-col space-y-6 py-6">
       <Typography style="h2">Redirections</Typography>
-      <Typography className="my-6 text-gray-600" style="body2">
+      <Typography className="text-gray-600" style="body2">
         Create and configure redirection rules to send users from old links to
         new links. All redirections are performed with 301 status codes to be
         SEO friendly.
       </Typography>
-      <div className="bg-indigo-100">
-        <div className=" flex justify-between p-8">
-          <span className="text-gray-500">From Path</span>
-          <span className="text-gray-500">To Path</span>
-          <span className="text-gray-500">Actions</span>
-        </div>
-        {redirections.map(({ from, to, id }) => (
-          <>
-            <div
-              className="mx-3 flex justify-between bg-white px-8 py-4 tracking-tight"
-              key={id}
-            >
-              <span>{`${from}`}</span>
-              <span>{`${to}`}</span>
-              <span className="flex">
+      <div className="flex items-start bg-indigo-100 p-6">
+        <div className="w-full space-y-2 self-stretch text-left">
+          <div className="flex justify-between">
+            <span>From Path</span>
+            <span>To Path</span>
+            <span>Actions</span>
+          </div>
+          {redirections.map(({ from, to, id }) => (
+            <div className="flex justify-between bg-white p-4" key={id}>
+              {showInput && showId === id ? (
+                <>
+                  <div className="flex-col">
+                    <span>{`localhost:3000${from}`}</span>
+                    <Input
+                      className="mt-2"
+                      value={fromPath}
+                      onChange={e => setFromPath(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex-col">
+                    <span>{`localhost:3000${to}`}</span>
+                    <Input
+                      className="mt-2"
+                      value={toPath}
+                      onChange={e => setToPath(e.target.value)}
+                      onKeyDown={e => {
+                        e.key === "Enter" && handleUpdateRedirection(id);
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span>{`localhost:3000${from}`}</span>
+                  <span>{`localhost:3000${to}`}</span>
+                </>
+              )}
+              <span className="flex justify-center">
                 <Edit
-                  className="mr-2"
-                  color="gray"
                   size={20}
-                  onClick={() => handleEditRedirection({ id })}
+                  onClick={() => {
+                    handleEdit(id, to, from);
+                  }}
                 />
-                <Delete
-                  color="gray"
-                  size={20}
-                  onClick={() => handleDeleteRedirection(id)}
-                />
+                <Delete size={20} onClick={() => handleDelete(id)} />
               </span>
             </div>
-            <br />
-          </>
-        ))}
-        {createNewRedirection && (
-          <div className="flex p-4 tracking-tight">
-            <Input
-              className="mr-10"
-              name="from"
-              value={from}
-              onChange={e => setFrom(e.target.value)}
-            />
-            <Input
-              className="mr-8"
-              name="to"
-              value={to}
-              onChange={e => setTo(e.target.value)}
-            />
-            <Check onClick={handleSubmit} />
+          ))}
+          {createRedirection && (
+            <div className="flex justify-between bg-white p-4">
+              <div className="flex-col">
+                <Input
+                  value={fromPath}
+                  onChange={e => setFromPath(e.target.value)}
+                />
+              </div>
+              <div className="flex-col">
+                <Input
+                  value={toPath}
+                  onChange={e => setToPath(e.target.value)}
+                />
+              </div>
+              <Check onClick={handleSubmit} />
+            </div>
+          )}
+          <div className="my-6 flex p-4 text-indigo-500">
+            <Plus size={20} onClick={handleCreateRedirection} />
+            <Typography style="h5">Add New Redirection</Typography>
           </div>
-        )}
-        <div className="my-6 flex p-4  text-indigo-500">
-          <Plus size={20} />
-          <Typography style="h5" onClick={handleCreateRedirection}>
-            Add New Redirection
-          </Typography>
         </div>
       </div>
     </div>

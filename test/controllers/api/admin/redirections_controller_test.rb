@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class RedirectionsControllerTest < ActionDispatch::IntegrationTest
+class Api::Admin::RedirectionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @redirection = create(:redirection, site: @site)

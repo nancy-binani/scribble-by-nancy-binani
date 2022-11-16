@@ -6,8 +6,8 @@ en:
   successfully_updated: "%{entity} was successfully updated!"
   successfully_deleted: "%{entity} was successfully deleted!"
   redirection:
-    check_redirection_loop: "Redirection loop"
-    to_from_check: "To and from cannot be equal"
+    check_redirection_loop: "Cyclic redirection not possible!"
+    to_from_check: "To and from cannot be equal!"
   missing_site: "Site must exist"
   missing_user: "User must exist"
   missing_category: "Category must exist"

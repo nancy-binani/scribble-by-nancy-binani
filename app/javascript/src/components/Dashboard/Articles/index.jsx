@@ -110,7 +110,7 @@ const Articles = ({ history }) => {
             searchTerm={searchTerm}
           />
         )}
-        {showDeleteAlert && articles.length > 1 && (
+        {showDeleteAlert && (
           <DeleteAlert
             destroyArticle={destroyArticle}
             id={id}

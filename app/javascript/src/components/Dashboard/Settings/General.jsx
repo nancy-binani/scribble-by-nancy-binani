@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { Formik, Form } from "formik";
 import { Check, Close } from "neetoicons";
-import { Typography, Checkbox, Button, PageLoader } from "neetoui";
-import { Input } from "neetoui/formik";
+import { Typography, Button, PageLoader } from "neetoui";
+import { Input, Checkbox } from "neetoui/formik";
 
 import authApi from "apis/admin/auth";
 import { deleteFromLocalStorage, setToLocalStorage } from "utils/storage";
 
-import { REGEXP, SITE_VALIDATION_SCHEMA } from "./constants";
+import { REGEXP } from "./constants";
 
 const General = () => {
   const [passwordRegexChecked, setPasswordRegexChecked] = useState(false);
@@ -21,7 +21,7 @@ const General = () => {
   const [status, setStatus] = useState(false);
 
   const validatePassword = password => {
-    if (password === "******" || !status) {
+    if (password === "*****" || !status) {
       setValidationBoxOpen(false);
 
       return false;
@@ -50,14 +50,19 @@ const General = () => {
     const password = values.password;
     const sitename = values.sitename;
     let updatedSiteSettings = {};
-    //TODO: Use if
-    password === "******"
-      ? (updatedSiteSettings = { status: toggledStatus, sitename })
-      : (updatedSiteSettings = {
-          status: toggledStatus,
-          password,
-          sitename,
-        });
+    if (sitename !== siteDetails["sitename"] || password !== "*****") {
+      deleteFromLocalStorage();
+    }
+
+    if (password === "*****") {
+      updatedSiteSettings = { status: toggledStatus, sitename };
+    } else {
+      updatedSiteSettings = {
+        status: toggledStatus,
+        password,
+        sitename,
+      };
+    }
     let validateUserInputValues = null;
     if (
       sitename !== siteDetails["sitename"] ||
@@ -69,7 +74,7 @@ const General = () => {
     if (
       sitename === siteDetails["sitename"] &&
       toggledStatus === siteDetails["status"] &&
-      password === "******"
+      password === "*****"
     ) {
       validateUserInputValues = false;
     }
@@ -83,7 +88,6 @@ const General = () => {
         data: { site },
       } = await authApi.fetch();
       setSiteDetails(site);
-
       setStatus(site["status"] === "checked");
     } catch (error) {
       logger.error(error);
@@ -91,14 +95,14 @@ const General = () => {
     setLoading(false);
   };
 
-  const handleStatus = status => {
-    setStatus(status => !status);
-    setValidationBoxOpen(false);
+  const handleStatus = () => {
     status
       ? setToLocalStorage({
           authToken: siteDetails["authentication_token"],
         })
       : deleteFromLocalStorage();
+    setStatus(!status);
+    setValidationBoxOpen(false);
   };
 
   const handleVisiblity = () => {
@@ -115,9 +119,9 @@ const General = () => {
   return (
     <div className="mx-auto flex w-1/3 flex-col space-y-6 py-6">
       <Formik
-        validationSchema={SITE_VALIDATION_SCHEMA}
         initialValues={{
-          password: "******",
+          checked: { status },
+          password: "*****",
           sitename: siteDetails["sitename"],
         }}
         onSubmit={handleSubmit}
@@ -140,11 +144,10 @@ const General = () => {
             <Checkbox
               checked={status}
               className="my-6"
-              id="checkbox_name"
+              id="checkbox"
               label="Password Protect Knowledge Base"
               name="checked"
-              onChange={() => {}}
-              onClick={() => handleStatus(status)}
+              onClick={handleStatus}
             />
             {status && (
               <span className="my-3 flex">

@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class CategoriesControllerTest < ActionDispatch::IntegrationTest
+class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)

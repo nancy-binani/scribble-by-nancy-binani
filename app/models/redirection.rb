@@ -26,7 +26,7 @@ class Redirection < ApplicationRecord
 
     def check_if_redirection_cycle_present
       if self.from == self.to
-        errors.add(:redirection, t("redirection.to_from_check"))
+        errors.add(:base, t("redirection.to_from_check"))
       elsif check_redirection_loop
       end
     end

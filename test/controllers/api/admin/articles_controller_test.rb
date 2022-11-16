@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ArticlesControllerTest < ActionDispatch::IntegrationTest
+class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
@@ -115,5 +115,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     end
     error_msg = another_article.errors.full_messages.to_sentence
     assert_match t("article.slug.immutable"), error_msg
+  end
+
+  def test_count
+    get count_api_admin_articles_path
+    assert_response :success
+    response_json = response.parsed_body
+    assert_equal response_json["count"]["count_by_status"]["All"], 1
+    assert_equal response_json["count"]["count_by_category"][@category.id.to_s], 1
+    assert_equal response_json["count"]["count_by_status"]["Published"], 1
   end
 end

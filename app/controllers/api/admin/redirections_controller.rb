@@ -31,6 +31,6 @@ class Api::Admin::RedirectionsController < ApplicationController
     end
 
     def redirection_params
-      params.require(:redirection).permit(:from, :to)
+      params.require(:redirection).permit(:to, :from)
     end
 end

@@ -48,9 +48,16 @@ const SideMenu = ({
   const handleFilterByCategories = async (category, id) => {
     setActive(category);
     setFiltering(true);
+    let newSelectedCategories = [];
     try {
-      const newSelectedCategories = [...new Set([...selectedCategories, id])];
-      setSelectedCategories(Array.from(newSelectedCategories));
+      if (selectedCategories.includes(id)) {
+        newSelectedCategories = selectedCategories.filter(
+          value => id !== value
+        );
+      } else {
+        newSelectedCategories = [...selectedCategories, id];
+      }
+      setSelectedCategories(newSelectedCategories);
       const {
         data: { articles },
       } = await articleApi.fetch({

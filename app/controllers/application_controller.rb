@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include ApiResponders
-  include ApiExceptions
+  include ApiRescuable
 
   private
 

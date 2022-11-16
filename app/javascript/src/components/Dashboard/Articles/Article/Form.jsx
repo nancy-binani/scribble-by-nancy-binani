@@ -15,11 +15,7 @@ const Form = ({ isEdit, article, history }) => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [updatedCategory, setUpdatedCategory] = useState({
-    value: "",
-    label: "",
-  });
-  const [categoryId, setCategoryId] = useState("");
+  const [updatedCategory, setUpdatedCategory] = useState(null);
   const [status, setStatus] = useState("Draft");
 
   const fetchCategories = async () => {
@@ -28,7 +24,6 @@ const Form = ({ isEdit, article, history }) => {
         data: { categories },
       } = await categoriesApi.fetch();
       setCategories(categories);
-      setLoading(false);
       const categoryList = categories.map(category => ({
         value: category.id,
         label: category.category,
@@ -56,26 +51,24 @@ const Form = ({ isEdit, article, history }) => {
         value: categories[editedArticleCategoryId].id,
         label: categories[editedArticleCategoryId].category,
       });
-      setCategoryId(editedArticleCategoryId);
     }
   };
 
   const handleSubmit = async values => {
     if (values.status === "") values.status = status;
-
     try {
       if (isEdit) {
         await articlesApi.update(
           {
             ...values,
-            category_id: updatedCategory.value,
+            category_id: values.category.value,
           },
           values.id
         );
       } else {
         await articlesApi.create({
           ...values,
-          category_id: updatedCategory.value,
+          category_id: values.category.value,
         });
       }
       await articlesApi.fetch();
@@ -85,11 +78,11 @@ const Form = ({ isEdit, article, history }) => {
     }
   };
 
-  if (loading) return <PageLoader />;
+  if (categories.length === 0 || loading) return <PageLoader />;
 
   return (
     <Formik
-      initialValues={article}
+      initialValues={{ ...article, category: updatedCategory }}
       validateOnBlur={submitted}
       validateOnChange={submitted}
       validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA(categories)}
@@ -112,16 +105,6 @@ const Form = ({ isEdit, article, history }) => {
               name="category"
               options={categories}
               placeholder="Select Category"
-              value={
-                (updatedCategory.value && updatedCategory) ||
-                categories[categoryId]
-              }
-              onChange={e =>
-                setUpdatedCategory({
-                  value: e.value,
-                  label: e.label,
-                })
-              }
             />
           </div>
           <Textarea
