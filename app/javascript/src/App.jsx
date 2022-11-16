@@ -17,7 +17,7 @@ import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
 import Settings from "./components/Dashboard/Settings";
 import Eui from "./components/Eui";
-import NavBar from "./components/Navbar";
+import NavBar from "./components/NavBar";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
