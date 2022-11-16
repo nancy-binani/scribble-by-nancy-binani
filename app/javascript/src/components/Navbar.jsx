@@ -4,7 +4,7 @@ import { ExternalLink } from "neetoicons";
 import { Button } from "neetoui";
 import { useHistory, NavLink, useLocation } from "react-router-dom";
 
-const NavBar = () => {
+const Navbar = () => {
   const history = useHistory();
   const location = useLocation();
   const handleClick = () => {
@@ -54,4 +54,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default Navbar;
