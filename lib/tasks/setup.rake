@@ -26,7 +26,7 @@ end
 def create_sample_site_data!
   puts "Seeding with sample user..."
   Site.create!(
-    sitename: "spinkart",
+    sitename: "Spinkart",
     status: "checked",
     password: "welcome1"
   )
@@ -68,8 +68,8 @@ end
 def create_sample_redirection_data!
   puts "Seeding with sample user..."
   Redirection.create!(
-    from: "https://localhost:3000/1",
-    to: "https://localhost:3000/2",
+    from: "/1",
+    to: "/2",
     site_id: 1
   )
   puts "Done! redirection is created successfully."
