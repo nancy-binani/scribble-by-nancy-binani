@@ -14,7 +14,11 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       className: "text-indigo-500",
       render: (title, { category, slug }) => (
         <span
-          onClick={() => history.push(`/public/${category.category}/${slug}`)}
+          onClick={() =>
+            slug
+              ? history.push(`/public/${category.category}/${slug}`)
+              : alert("You can only see published articles!!")
+          }
         >
           {title}
         </span>
@@ -27,7 +31,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       width: "15%",
       render: (created_at, { status }) => (
         <div>
-          {status === "draft" ? (
+          {status === "Draft" ? (
             <span>-----</span>
           ) : (
             <span>{formatDateAndTime(created_at)}</span>

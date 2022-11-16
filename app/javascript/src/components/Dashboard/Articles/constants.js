@@ -3,10 +3,7 @@ import * as yup from "yup";
 export const ARTICLES_FORM_INITIAL_VALUES = {
   title: "",
   body: "",
-  category: {
-    value: "",
-    label: "",
-  },
+  category: null,
   status: "",
 };
 export const CATEGORY_INITIAL_VALUE = {
@@ -37,12 +34,12 @@ export const ARTICLES_FORM_VALIDATION_SCHEMA = CATEGORIES =>
       .nullable()
       .shape({
         label: yup.string().oneOf(CATEGORIES.map(category => category.label)),
-        value: yup.string().oneOf(CATEGORIES.map(category => category.value)),
+        value: yup.number().oneOf(CATEGORIES.map(category => category.value)),
       })
       .required("Please select a category"),
   });
 
-export const STATUS = ["draft", "published"];
+export const STATUS = ["Draft", "Published"];
 export const FILTERING_OPTIONS = [
   "Title",
   "Categories",

@@ -57,7 +57,7 @@ def create_sample_article_data!
   Article.create!(
     title: "Scribble",
     body: "Hello world",
-    status: "published",
+    status: "Published",
     author: "Oliver Smith",
     user_id: 1,
     category_id: 1
@@ -68,8 +68,8 @@ end
 def create_sample_redirection_data!
   puts "Seeding with sample user..."
   Redirection.create!(
-    from: 'https://localhost:3000/1',
-    to: 'https://localhost:3000/2',
+    from: "https://localhost:3000/1",
+    to: "https://localhost:3000/2",
     site_id: 1
   )
   puts "Done! redirection is created successfully."

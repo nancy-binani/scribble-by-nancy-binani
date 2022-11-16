@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ArticlesControllerTest < ActionDispatch::IntegrationTest
+class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
@@ -11,17 +11,17 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_should_list_all_articles
-    get api_articles_path
+    get api_admin_articles_path
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["articles"].length, Article.count
   end
 
   def test_should_create_valid_article
-    post api_articles_path,
+    post api_admin_articles_path,
       params: {
         article: {
-          title: "Scribble", body: "Lorem", status: "published", category_id: @category.id,
+          title: "Scribble", body: "Lorem", status: "Published", category_id: @category.id,
           user: @user.id
         }
       }
@@ -32,11 +32,10 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
   def test_filter_article_by_status
     new_article = create(:article, category: @category, user: @user)
-    new_article.status = "draft"
+    new_article.status = "Draft"
     new_article.save!
-    get api_articles_path, params: { status: "draft" }
+    get api_admin_articles_path, params: { status: "Draft" }
     assert_response :success
-
     response_json = response.parsed_body
     assert_equal response_json["articles"].length, 1
   end
@@ -66,7 +65,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
   def test_should_destroy_article
     assert_difference "Article.count", -1 do
-      delete api_article_path(@article.id)
+      delete api_admin_article_path(@article.id)
     end
     assert_response :ok
   end
@@ -75,7 +74,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     new_article = create(:article, category: @category, user: @user)
     new_article.title = "Scribble"
     new_article.save!
-    get api_articles_path, params: { title: "Scribble" }
+    get api_admin_articles_path, params: { title: "Scribble" }
     assert_response :success
 
     response_json = response.parsed_body
@@ -87,7 +86,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     new_category.category = "Apps"
     new_category.save!
     new_article = create(:article, category: new_category, user: @user)
-    get api_articles_path, params: { category: [new_category.id] }
+    get api_admin_articles_path, params: { category: [new_category.id] }
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["articles"].length, 1
@@ -101,7 +100,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
         user: @user
       }
     }
-    put api_article_path(@article.id), params: article_params
+    put api_admin_article_path(@article.id), params: article_params
     assert_response :success
     @article.reload
     assert_equal @article.title, new_title
@@ -116,5 +115,14 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     end
     error_msg = another_article.errors.full_messages.to_sentence
     assert_match t("article.slug.immutable"), error_msg
+  end
+
+  def test_count
+    get count_api_admin_articles_path
+    assert_response :success
+    response_json = response.parsed_body
+    assert_equal response_json["count"]["count_by_status"]["All"], 1
+    assert_equal response_json["count"]["count_by_category"][@category.id.to_s], 1
+    assert_equal response_json["count"]["count_by_status"]["Published"], 1
   end
 end

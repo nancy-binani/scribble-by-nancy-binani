@@ -5,19 +5,21 @@ import { Container } from "neetoui/layouts";
 
 import { formatDateAndTime } from "../Dashboard/Articles/utils";
 
-const Detail = ({ title, category, date, body }) => (
+const Detail = ({ activeArticle, category }) => (
   <Container className="mx-10">
     <Typography className="my-5" style="h1">
-      {title}
+      {activeArticle["title"]}
     </Typography>
-    {title && (
+    {activeArticle.title && (
       <span className="my-3 flex">
         {" "}
         <Tag label={category} />{" "}
-        <span className="mx-2 text-gray-600">{formatDateAndTime(date)}</span>
+        <span className="mx-2 text-gray-600">
+          {formatDateAndTime(activeArticle.date)}
+        </span>
       </span>
     )}
-    <p>{body}</p>
+    <p>{activeArticle.body}</p>
   </Container>
 );
 

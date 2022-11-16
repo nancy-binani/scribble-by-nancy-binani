@@ -5,30 +5,25 @@ import { Button, PageLoader, Typography } from "neetoui";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Route, Switch, useParams } from "react-router-dom";
 
-import categoriesApi from "apis/categories";
+import categoriesApi from "apis/public/categories";
 
 import Detail from "./Detail";
 
 const SideMenu = ({ history, sitename }) => {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
   const [active, setActive] = useState(null);
-  const [slug, setSlug] = useState("");
+  const [activeArticle, setActiveArticle] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
   const params = useParams();
   const [paramCategory, paramsSlug] = params[0].split("/");
-  const handleClick = ({ title, body, date, slug }, category) => {
-    setTitle(title);
-    setBody(body);
-    setDate(date);
-    setActive(title);
-    setSlug(slug);
+
+  const handleClick = (article, category) => {
+    setActive(article.title);
+    setActiveArticle(article);
     setCategory(category);
-    history.push(`/public/${category}/${slug}`);
+    history.push(`/public/${category}/${article.slug}`);
   };
 
   const fetchCategories = async () => {
@@ -36,7 +31,10 @@ const SideMenu = ({ history, sitename }) => {
       const {
         data: { categories },
       } = await categoriesApi.fetch();
-      setCategories(categories);
+      const updatedCategories = categories.filter(
+        ({ articles }) => articles.length >= 1
+      );
+      setCategories(updatedCategories);
       detailsOfFirstArticle(categories);
     } catch (error) {
       logger.error(error);
@@ -44,17 +42,23 @@ const SideMenu = ({ history, sitename }) => {
     setLoading(false);
   };
 
-  const findFirstNotNullArticleValues = (...args) =>
-    args
-      .filter(({ articles }) => articles.length > 0)
-      .filter(({ slug }) => slug !== null)[0];
+  const findFirstNotNullArticleValues = (...categories) => {
+    categories = categories.filter(({ articles }) => articles.length > 0);
+
+    categories = categories.map(({ articles, category }) => {
+      articles = articles.filter(({ slug }) => slug !== null);
+
+      return [articles, category];
+    });
+
+    return categories.filter(category => category[0].length > 0)[0];
+  };
 
   const detailsOfFirstArticle = categories => {
     if (params[0] === "") {
       const category = findFirstNotNullArticleValues(...categories);
-      history.push(
-        `/public/${category.category}/${category["articles"][0]["slug"]}`
-      );
+      category &&
+        history.push(`/public/${category[1]}/${category[0][0]["slug"]}`);
     }
   };
 
@@ -64,16 +68,15 @@ const SideMenu = ({ history, sitename }) => {
       const filteredCategories = categories.filter(
         category => category["category"] === paramCategory
       );
-      const articleOfCorrespondingCategory =
-        filteredCategories[0].articles.filter(
-          ({ slug }) => slug === paramsSlug
-        )[0];
-
-      setTitle(articleOfCorrespondingCategory["title"]);
-      setBody(articleOfCorrespondingCategory.body);
-      setDate(articleOfCorrespondingCategory.created_at);
-      setActive(articleOfCorrespondingCategory.slug);
-      setCategory(filteredCategories[0]["category"]);
+      if (filteredCategories.length) {
+        const articleOfCorrespondingCategory =
+          filteredCategories[0].articles.filter(
+            ({ slug }) => slug === paramsSlug
+          )[0];
+        setActiveArticle(articleOfCorrespondingCategory);
+        setActive(articleOfCorrespondingCategory.slug);
+        setCategory(filteredCategories[0]["category"]);
+      }
     }
   }, [categories]);
 
@@ -93,51 +96,49 @@ const SideMenu = ({ history, sitename }) => {
         </Typography>
       </nav>
       <div className="flex h-screen w-full">
-        <Sidebar>
-          <Menu>
-            {categories.map((category, idx) => (
-              <SubMenu
-                defaultOpen={category["category"] === paramCategory}
-                key={idx}
-                label={category["category"]}
-              >
-                {category["articles"].map(
-                  ({ title, body, created_at, slug }, idx) =>
-                    slug && (
-                      <MenuItem
-                        className={`${active === slug && "text-indigo-600"}`}
-                        key={idx}
-                        active={
-                          category["category"] === paramCategory &&
-                          title === paramsSlug
-                        }
-                        onClick={() =>
-                          handleClick(
-                            { title, body, created_at, slug },
-                            category["category"]
-                          )
-                        }
-                      >
-                        {title}
-                      </MenuItem>
-                    )
-                )}
-              </SubMenu>
-            ))}
-          </Menu>
-        </Sidebar>
+        {paramsSlug ? (
+          <Sidebar>
+            <Menu>
+              {categories.map((category, idx) => (
+                <SubMenu
+                  defaultOpen={category["category"] === paramCategory}
+                  key={idx}
+                  label={category["category"]}
+                >
+                  {category["articles"].map(
+                    (article, idx) =>
+                      article.slug && (
+                        <MenuItem
+                          key={idx}
+                          active={
+                            category["category"] === paramCategory &&
+                            article.title === paramsSlug
+                          }
+                          className={`${
+                            active === article.slug && "text-indigo-600"
+                          }`}
+                          onClick={() =>
+                            handleClick(article, category["category"])
+                          }
+                        >
+                          {article.title}
+                        </MenuItem>
+                      )
+                  )}
+                </SubMenu>
+              ))}
+            </Menu>
+          </Sidebar>
+        ) : (
+          <div className="flex h-screen w-screen flex-row  justify-center">
+            <Typography style="h1">No articles present</Typography>
+          </div>
+        )}
         <Switch>
           <Route
-            path={`/public/${category}/${slug}`}
-            render={props => (
-              <Detail
-                {...props}
-                body={body}
-                category={category}
-                date={date}
-                history={history}
-                title={title}
-              />
+            path={`/public/${category}/${activeArticle.slug}`}
+            render={() => (
+              <Detail activeArticle={activeArticle} category={category} />
             )}
           />
         </Switch>

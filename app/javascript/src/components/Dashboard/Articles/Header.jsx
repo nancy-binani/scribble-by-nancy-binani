@@ -77,8 +77,10 @@ const Header = ({
       searchProps={{
         value: searchTerm,
         placeholder: "Search for title and press enter!",
-        onChange: e => setSearchTerm(e.target.value),
-        onKeyDown: e => handleSearch(e, searchTerm),
+        onChange: e => {
+          setSearchTerm(e.target.value);
+          handleSearch(e.target.value);
+        },
       }}
     />
   );

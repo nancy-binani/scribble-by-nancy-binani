@@ -11,8 +11,7 @@ class FilterCategoryService
   def process
     if params
       @categories = @categories.where("category LIKE ?", "%#{params[:category]}%%")
-    else
-      @categories
     end
+    @categories
   end
 end

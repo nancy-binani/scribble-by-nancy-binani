@@ -15,7 +15,7 @@ class ArticleTest < ActiveSupport::TestCase
   def test_article_should_not_be_valid_without_category
     @article.category = nil
     assert_not @article.save
-    assert_includes @article.errors.full_messages, t("missing_category")
+    assert_includes @article.errors_to_sentence, t("missing_category")
   end
 
   def test_article_title_should_not_exceed_maximum_length
@@ -29,9 +29,9 @@ class ArticleTest < ActiveSupport::TestCase
     assert_not_equal(new_article_1.slug, new_article_2.slug)
   end
 
-  def test_slug_not_generated_on_status_draft
+  def test_slug_not_generated_on_status_Draft
     article = Article.create(
-      title: "test1", body: "abc", status: "draft", category: @category, user: @user)
+      title: "test1", body: "abc", status: "Draft", category: @category, user: @user)
     assert_nil(article.slug, "nil")
   end
 

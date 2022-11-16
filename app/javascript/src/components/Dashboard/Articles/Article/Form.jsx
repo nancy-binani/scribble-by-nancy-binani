@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { Formik, Form as FormikForm } from "formik";
-import { Dropdown, Button, PageLoader, Toastr } from "neetoui";
+import { Dropdown, Button, PageLoader } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
 
-import articlesApi from "apis/articles";
-import categoriesApi from "apis/categories";
+import articlesApi from "apis/admin/articles";
+import categoriesApi from "apis/admin/categories";
 
 import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
 
@@ -15,12 +15,8 @@ const Form = ({ isEdit, article, history }) => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [updatedCategory, setUpdatedCategory] = useState({
-    value: "",
-    label: "",
-  });
-  const [categoryId, setCategoryId] = useState("");
-  const [status, setStatus] = useState("draft");
+  const [updatedCategory, setUpdatedCategory] = useState(null);
+  const [status, setStatus] = useState("Draft");
 
   const fetchCategories = async () => {
     try {
@@ -28,7 +24,6 @@ const Form = ({ isEdit, article, history }) => {
         data: { categories },
       } = await categoriesApi.fetch();
       setCategories(categories);
-      setLoading(false);
       const categoryList = categories.map(category => ({
         value: category.id,
         label: category.category,
@@ -56,29 +51,25 @@ const Form = ({ isEdit, article, history }) => {
         value: categories[editedArticleCategoryId].id,
         label: categories[editedArticleCategoryId].category,
       });
-      setCategoryId(editedArticleCategoryId);
     }
   };
 
   const handleSubmit = async values => {
     if (values.status === "") values.status = status;
-
     try {
       if (isEdit) {
         await articlesApi.update(
           {
             ...values,
-            category_id: updatedCategory.value,
+            category_id: values.category.value,
           },
           values.id
         );
-        Toastr.success("Article is updated successfully");
       } else {
         await articlesApi.create({
           ...values,
-          category_id: updatedCategory.value,
+          category_id: values.category.value,
         });
-        Toastr.success("Article is created successfully");
       }
       await articlesApi.fetch();
       history.push("/");
@@ -87,17 +78,17 @@ const Form = ({ isEdit, article, history }) => {
     }
   };
 
-  if (loading) return <PageLoader />;
+  if (categories.length === 0 || loading) return <PageLoader />;
 
   return (
     <Formik
-      initialValues={article}
+      initialValues={{ ...article, category: updatedCategory }}
       validateOnBlur={submitted}
       validateOnChange={submitted}
       validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA(categories)}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting, setFieldValue }) => (
+      {({ isSubmitting, setFieldValue, dirty }) => (
         <FormikForm className=" mx-auto mt-12 max-w-lg space-y-6">
           <div className="mt-1 flex w-full flex-row space-x-3 ">
             <Input
@@ -114,16 +105,6 @@ const Form = ({ isEdit, article, history }) => {
               name="category"
               options={categories}
               placeholder="Select Category"
-              value={
-                (updatedCategory.value && updatedCategory) ||
-                categories[categoryId]
-              }
-              onChange={e =>
-                setUpdatedCategory({
-                  value: e.value,
-                  label: e.label,
-                })
-              }
             />
           </div>
           <Textarea
@@ -138,7 +119,8 @@ const Form = ({ isEdit, article, history }) => {
             <div className="flex">
               <Button
                 className="mr-px"
-                label={status === "draft" ? "Save Draft" : "Published"}
+                disabled={!dirty}
+                label={status === "Draft" ? "Save Draft" : "Published"}
                 name="status"
                 size="medium"
                 style="primary"
@@ -155,7 +137,7 @@ const Form = ({ isEdit, article, history }) => {
                       onClick={() => {
                         setFieldValue(
                           "status",
-                          status !== "draft" ? "published" : "draft"
+                          status !== "Draft" ? "Published" : "Draft"
                         );
                         setStatus(status);
                       }}

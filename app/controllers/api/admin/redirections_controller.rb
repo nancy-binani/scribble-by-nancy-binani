@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::RedirectionsController < ApplicationController
+class Api::Admin::RedirectionsController < ApplicationController
   before_action :load_redirection!, only: %i[ show update destroy ]
   before_action :current_site
 
@@ -31,6 +31,6 @@ class Api::RedirectionsController < ApplicationController
     end
 
     def redirection_params
-      params.require(:redirection).permit(:from, :to)
+      params.require(:redirection).permit(:to, :from)
     end
 end

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { PageLoader, Typography } from "neetoui";
 import { Container } from "neetoui/layouts";
 
-import articleApi from "apis/articles";
+import articleApi from "apis/admin/articles";
 
 import { FILTERING_OPTIONS } from "./constants";
 import DeleteAlert from "./DeleteAlert";
@@ -49,15 +49,13 @@ const Articles = ({ history }) => {
     }
   };
 
-  const handleSearch = async (e, searchTerm) => {
+  const handleSearch = async searchTerm => {
     try {
-      if (e.key === "Enter") {
-        setFiltering(true);
-        const {
-          data: { articles },
-        } = await articleApi.fetch({ title: searchTerm });
-        setFilteredList(articles);
-      }
+      setFiltering(true);
+      const {
+        data: { articles },
+      } = await articleApi.fetch({ title: searchTerm });
+      setFilteredList(articles);
     } catch (error) {
       logger.error(error);
     }
@@ -112,7 +110,7 @@ const Articles = ({ history }) => {
             searchTerm={searchTerm}
           />
         )}
-        {showDeleteAlert && articles.length > 1 && (
+        {showDeleteAlert && (
           <DeleteAlert
             destroyArticle={destroyArticle}
             id={id}

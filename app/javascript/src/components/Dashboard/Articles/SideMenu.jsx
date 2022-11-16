@@ -4,8 +4,8 @@ import { Search, Plus, Close } from "neetoicons";
 import { PageLoader, Typography } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 
-import articleApi from "apis/articles";
-import categoriesApi from "apis/categories";
+import articleApi from "apis/admin/articles";
+import categoriesApi from "apis/admin/categories";
 
 import { CATEGORY_INITIAL_VALUE, MENU_OPTIONS } from "./constants";
 import CreateCategory from "./CreateCategory";
@@ -23,6 +23,7 @@ const SideMenu = ({
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [active, setActive] = useState(null);
   const [searchCategories, setSearchCategories] = useState([]);
+  const [count, setCount] = useState({});
   const [loading, setLoading] = useState(true);
 
   const handleFilterByStatus = async menu => {
@@ -47,9 +48,16 @@ const SideMenu = ({
   const handleFilterByCategories = async (category, id) => {
     setActive(category);
     setFiltering(true);
+    let newSelectedCategories = [];
     try {
-      const newSelectedCategories = [...new Set([...selectedCategories, id])];
-      setSelectedCategories(Array.from(newSelectedCategories));
+      if (selectedCategories.includes(id)) {
+        newSelectedCategories = selectedCategories.filter(
+          value => id !== value
+        );
+      } else {
+        newSelectedCategories = [...selectedCategories, id];
+      }
+      setSelectedCategories(newSelectedCategories);
       const {
         data: { articles },
       } = await articleApi.fetch({
@@ -62,6 +70,17 @@ const SideMenu = ({
     }
   };
 
+  const fetchCount = async () => {
+    try {
+      const {
+        data: { count },
+      } = await articleApi.count();
+      setCount(count);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   const fetchCategories = async () => {
     try {
       const {
@@ -71,28 +90,28 @@ const SideMenu = ({
     } catch (error) {
       logger.error(error);
     }
+  };
+
+  const handleSearch = async searchTerm => {
+    try {
+      setFiltering(true);
+      const {
+        data: { categories },
+      } = await categoriesApi.fetch({ category: searchTerm });
+      setSearchCategories(categories);
+    } catch (error) {
+      logger.error(error);
+    }
     setLoading(false);
   };
 
-  const handleSearch = async e => {
-    if (e.key === "Enter") {
-      setFiltering(true);
-      try {
-        {
-          const {
-            data: { categories },
-          } = await categoriesApi.fetch({ category: searchTerm });
-          setSearchCategories(categories);
-        }
-      } catch (error) {
-        logger.error(error);
-        setLoading(false);
-      }
-    }
+  const fetchCategoriesAndCount = async () => {
+    await Promise.all([fetchCount(), fetchCategories()]);
+    setLoading(false);
   };
 
   useEffect(() => {
-    fetchCategories();
+    fetchCategoriesAndCount();
   }, [createNewCategory]);
 
   if (loading) {
@@ -104,6 +123,7 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
+          count={count["count_by_status"][menu]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}
@@ -137,9 +157,11 @@ const SideMenu = ({
         collapse={isSearchCollapsed}
         placeholder="Type Category & press Enter"
         value={searchTerm}
-        onChange={e => setSearchTerm(e.target.value)}
         onCollapse={() => setIsSearchCollapsed(true)}
-        onKeyDown={e => handleSearch(e)}
+        onChange={e => {
+          setSearchTerm(e.target.value);
+          handleSearch(e.target.value);
+        }}
       />
       {createNewCategory && (
         <CreateCategory
@@ -153,6 +175,7 @@ const SideMenu = ({
       {filtering && !isSearchCollapsed
         ? searchCategories.map((category, idx) => (
             <MenuBar.Block
+              count={count["count_by_category"][category.id]}
               key={idx}
               label={category.category}
               className={`${
@@ -163,6 +186,7 @@ const SideMenu = ({
           ))
         : categories.map((category, idx) => (
             <MenuBar.Block
+              count={count["count_by_category"][category.id]}
               key={idx}
               label={category.category}
               className={`${

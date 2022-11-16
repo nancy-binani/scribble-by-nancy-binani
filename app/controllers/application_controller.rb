@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include ApiResponders
-  include ApiExceptions
+  include ApiRescuable
 
   private
 
@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
     end
 
     def current_user
-      current_site
-      @_current_user ||= @current_site.users.first
+      @_current_user ||= current_site.users.first
     end
 end
