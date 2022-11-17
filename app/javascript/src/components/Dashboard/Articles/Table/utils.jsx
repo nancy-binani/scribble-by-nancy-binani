@@ -31,7 +31,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       width: "15%",
       render: (created_at, { status }) => (
         <div>
-          {status === "Draft" ? (
+          {status === "draft" ? (
             <span>-----</span>
           ) : (
             <span>{formatDateAndTime(created_at)}</span>
@@ -61,6 +61,11 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       key: "Status",
       width: "15%",
       className: "text-gray-600",
+      render: (created_at, { status }) => (
+        <div>
+          {status === "draft" ? <span>Draft</span> : <span>Published</span>}
+        </div>
+      ),
     },
     {
       title: "",
