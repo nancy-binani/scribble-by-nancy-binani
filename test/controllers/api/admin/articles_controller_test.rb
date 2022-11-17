@@ -21,7 +21,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     post api_admin_articles_path,
       params: {
         article: {
-          title: "Scribble", body: "Lorem", status: "Published", category_id: @category.id,
+          title: "Scribble", body: "Lorem", status: "published", category_id: @category.id,
           user: @user.id
         }
       }
