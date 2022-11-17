@@ -6,5 +6,6 @@ class Site < ApplicationRecord
   has_many :users
   has_many :redirections
   validates :password, length: { minimum: 6 }, if: -> { password.present? }
+  enum status: { checked: "checked", unchecked: "unchecked" }
   validates :sitename, presence: true
 end
