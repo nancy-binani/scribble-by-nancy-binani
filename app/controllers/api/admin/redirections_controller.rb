@@ -10,7 +10,7 @@ class Api::Admin::RedirectionsController < ApplicationController
   end
 
   def create
-    redirection = current_site.redirections.create!(redirection_params)
+    current_site.redirections.create!(redirection_params)
     respond_with_success(t("successfully_created", entity: "Redirection"))
   end
 
