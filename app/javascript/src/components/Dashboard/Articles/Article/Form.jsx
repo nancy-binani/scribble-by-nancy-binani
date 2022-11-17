@@ -16,7 +16,7 @@ const Form = ({ isEdit, article, history }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatedCategory, setUpdatedCategory] = useState(null);
-  const [status, setStatus] = useState("Draft");
+  const [status, setStatus] = useState("draft");
 
   const fetchCategories = async () => {
     try {
@@ -120,7 +120,7 @@ const Form = ({ isEdit, article, history }) => {
               <Button
                 className="mr-px"
                 disabled={!dirty}
-                label={status === "Draft" ? "Save Draft" : "Published"}
+                label={status === "draft" ? "Save Draft" : "Published"}
                 name="status"
                 size="medium"
                 style="primary"
@@ -137,7 +137,7 @@ const Form = ({ isEdit, article, history }) => {
                       onClick={() => {
                         setFieldValue(
                           "status",
-                          status !== "Draft" ? "Published" : "Draft"
+                          status !== "draft" ? "published" : "draft"
                         );
                         setStatus(status);
                       }}

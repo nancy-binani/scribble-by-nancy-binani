@@ -32,9 +32,9 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
 
   def test_filter_article_by_status
     new_article = create(:article, category: @category, user: @user)
-    new_article.status = "Draft"
+    new_article.status = "draft"
     new_article.save!
-    get api_admin_articles_path, params: { status: "Draft" }
+    get api_admin_articles_path, params: { status: "draft" }
     assert_response :success
     response_json = response.parsed_body
     assert_equal response_json["articles"].length, 1
@@ -123,6 +123,6 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     response_json = response.parsed_body
     assert_equal response_json["count"]["count_by_status"]["All"], 1
     assert_equal response_json["count"]["count_by_category"][@category.id.to_s], 1
-    assert_equal response_json["count"]["count_by_status"]["Published"], 1
+    assert_equal response_json["count"]["count_by_status"]["published"], 1
   end
 end

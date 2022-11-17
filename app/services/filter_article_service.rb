@@ -10,7 +10,7 @@ class FilterArticleService
 
   def process
     if params.has_key?(:status) && params[:status] != "All"
-      @articles = @articles.where(status: params[:status])
+      @articles = @articles.where(status: params[:status].downcase)
     end
 
     if params.has_key?(:category) && params[:category] != []
