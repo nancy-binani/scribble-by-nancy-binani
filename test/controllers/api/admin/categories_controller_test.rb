@@ -5,7 +5,7 @@ require "test_helper"
 class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
-    @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
+    @user = create(:user, site: @site)
     @category = Category.create({ category: "General", position: 1, user: @user })
   end
 
