@@ -8,14 +8,17 @@ class Redirection < ApplicationRecord
   private
 
     def check_redirection_loop
-      is_cycle_present = true
+      is_cycle_present = false
       current_to = self.to
 
-      while self.from != current_to
+      while !is_cycle_present
         if Redirection.where(from: current_to).present?
           current_to = Redirection.find_by!(from: current_to).to
+          if self.from == current_to
+            is_cycle_present = true
+            break
+          end
         else
-          is_cycle_present = false
           break
         end
       end
