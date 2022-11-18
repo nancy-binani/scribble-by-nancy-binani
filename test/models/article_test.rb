@@ -7,7 +7,7 @@ class ArticleTest < ActiveSupport::TestCase
 
   def setup
     @site = create(:site)
-    @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
+    @user = create(:user, site: @site)
     @category = create(:category, user: @user)
     @article = create(:article, category: @category, user: @user)
   end
@@ -30,8 +30,7 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   def test_slug_not_generated_on_status_draft
-    article = Article.create(
-      title: "test1", body: "abc", status: "draft", category: @category, user: @user)
+    article = create(:article, title: "test1", body: "abc", status: "draft", category: @category, user: @user)
     assert_nil(article.slug, "nil")
   end
 

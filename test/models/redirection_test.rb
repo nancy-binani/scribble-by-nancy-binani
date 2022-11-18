@@ -31,7 +31,7 @@ class RedirectionTest < ActiveSupport::TestCase
   end
 
   def test_to_and_from_equal_redirection_not_possible
-    redirection = Redirection.create(to: "/1", from: "/1")
+    redirection = Redirection.create(to: "/1", from: "/1", site: @site)
     assert_not redirection.valid?
   end
 end

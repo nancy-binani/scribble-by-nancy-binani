@@ -31,8 +31,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_filter_article_by_status
-    new_article = create(:article, category: @category, user: @user)
-    new_article.status = "draft"
+    new_article = create(:article, status: "draft", category: @category, user: @user)
     new_article.save!
     get api_admin_articles_path, params: { status: "draft" }
     assert_response :success
@@ -71,8 +70,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_search_article_title
-    new_article = create(:article, category: @category, user: @user)
-    new_article.title = "Scribble"
+    new_article = create(:article, title: "Scribble", category: @category, user: @user)
     new_article.save!
     get api_admin_articles_path, params: { title: "Scribble" }
     assert_response :success
@@ -82,8 +80,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_filter_article_by_category
-    new_category = create(:category, user: @user)
-    new_category.category = "Apps"
+    new_category = create(:category, category: "Apps", user: @user)
     new_category.save!
     new_article = create(:article, category: new_category, user: @user)
     get api_admin_articles_path, params: { category: [new_category.id] }
