@@ -5,7 +5,7 @@ require "test_helper"
 class CategoryTest < ActiveSupport::TestCase
   def setup
     @site = create(:site)
-    @user = User.create(username: "Oliver Smith", email: "oliver@example.com", site: @site)
+    @user = create(:user, site: @site)
     @category = create(:category, user: @user)
   end
 
