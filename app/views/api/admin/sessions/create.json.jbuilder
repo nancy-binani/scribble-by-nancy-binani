@@ -2,5 +2,5 @@
 
 json.extract! @_current_site,
   :id,
-  :sitename,
+  :name,
   :authentication_token

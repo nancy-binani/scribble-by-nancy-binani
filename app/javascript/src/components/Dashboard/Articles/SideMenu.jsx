@@ -61,7 +61,7 @@ const SideMenu = ({
       const {
         data: { articles },
       } = await articleApi.fetch({
-        category: newSelectedCategories,
+        category_ids: newSelectedCategories,
       });
       setFilteredList(articles);
     } catch (error) {

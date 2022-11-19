@@ -11,6 +11,6 @@ class Api::Admin::SitesController < ApplicationController
   private
 
     def site_params
-      params.require(:site).permit(:sitename, :password, :status)
+      params.require(:site).permit(:name, :password, :status)
     end
 end

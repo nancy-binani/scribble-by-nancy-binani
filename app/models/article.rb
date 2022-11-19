@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
+  MAX_TITLE_LENGTH = 255
+  REGEX = /\A[a-zA-Z0-9]+\z/
+
   belongs_to :category
   belongs_to :user
 
-  validates :title, presence: true, length: { maximum: 50 }, format: { with: /\A[a-zA-Z0-9]+\z/ }
+  validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }, format: { with: /\A[a-zA-Z0-9]+\z/ }
   validate :slug_not_changed
   validates :body, presence: true
   validates :status, presence: true

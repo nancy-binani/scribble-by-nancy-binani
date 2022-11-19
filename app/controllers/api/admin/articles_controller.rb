@@ -5,7 +5,7 @@ class Api::Admin::ArticlesController < ApplicationController
 
   def index
     @articles = current_user.articles
-    @articles = FilterArticleService.new(@articles, params).process
+    @articles = FilterArticleService.new(@articles, params[:status], params[:title], params[:category_ids]).process
   end
 
   def create

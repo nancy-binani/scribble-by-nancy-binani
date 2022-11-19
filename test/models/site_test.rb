@@ -12,7 +12,7 @@ class SiteTest < ActiveSupport::TestCase
   end
 
   def test_site_name_cannot_be_null
-    @site.sitename = ""
+    @site.name = ""
     assert @site.invalid?
   end
 
@@ -26,9 +26,18 @@ class SiteTest < ActiveSupport::TestCase
     assert @site.invalid?
   end
 
+  def test_password_should_not_be_valid_without_digit
+    @site.password = "abcdef"
+    assert @site.invalid?
+  end
+
+  def test_password_should_not_be_valid_without_letter
+    @site.password = "123"
+    assert @site.invalid?
+  end
+
   def test_sites_should_have_unique_auth_token
     second_site = create(:site)
-
     assert_not_same @site.authentication_token,
       second_site.authentication_token
   end

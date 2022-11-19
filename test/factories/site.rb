@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :site do
-    sitename { Faker::Name.name }
-    password { Faker::Internet.password }
+    name { Faker::Name.name }
+    password { "welcome1" }
     status { "checked" }
   end
 end
