@@ -2,7 +2,6 @@
 
 class Api::Admin::RedirectionsController < ApplicationController
   before_action :load_redirection!, only: %i[ update destroy ]
-  before_action :current_site
 
   def index
     redirections = current_site.redirections.all
