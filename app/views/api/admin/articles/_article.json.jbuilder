@@ -9,5 +9,5 @@ json.extract! article,
   :status,
   :category_id
 
-json.category article.category, :id, :category
+json.category article.category
 json.author article.user, :username, :site_id
