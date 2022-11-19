@@ -15,7 +15,7 @@ class ArticleTest < ActiveSupport::TestCase
   def test_article_should_not_be_valid_without_category
     @article.category = nil
     assert_not @article.save
-    assert_includes @article.errors_to_sentence, t("missing_category")
+    assert_equal @article.errors_to_sentence, t("missing_category")
   end
 
   def test_article_title_should_not_exceed_maximum_length
