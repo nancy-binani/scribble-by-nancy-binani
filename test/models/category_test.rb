@@ -12,10 +12,10 @@ class CategoryTest < ActiveSupport::TestCase
   def test_category_should_not_be_valid_without_user
     @category.user_id = nil
     assert_not @category.save
-    assert_includes @category.errors.full_messages, t("missing_user")
+    assert_equal @category.errors_to_sentence, t("missing_user")
   end
 
-  def test_category_must_be_unique
+  def test_no_two_categories_must_have_same_name
     new_category = Category.create(category: @category.category, user: @user)
     assert_equal new_category.errors.full_messages.to_sentence, t("unique", entity: "Category")
   end

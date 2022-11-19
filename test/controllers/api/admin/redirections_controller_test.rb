@@ -11,16 +11,14 @@ class Api::Admin::RedirectionsControllerTest < ActionDispatch::IntegrationTest
   def test_should_list_all_redirections
     get api_admin_redirections_path
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["redirections"].length, Redirection.count
+    assert_equal response_body["redirections"].length, Redirection.count
   end
 
   def test_should_create_valid_redirection
     post api_admin_redirections_path,
       params: { redirection: { to: "abc", from: "myabc" } }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["notice"], t("successfully_created", entity: "Redirection")
+    assert_equal response_body["notice"], t("successfully_created", entity: "Redirection")
   end
 
   def test_can_update_redirection

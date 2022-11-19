@@ -13,15 +13,13 @@ class Article < ApplicationRecord
   validates :status, presence: true
   enum status: { draft: "draft", published: "published" }, _default: :draft
 
-  before_create :check_status_of_article_on_submit
-  before_update :check_status_of_article_on_submit
+  before_create :check_status_of_article_on_submit, if: -> { status == "published" }
+  before_update :check_status_of_article_on_submit, if: -> { status == "published" }
 
   private
 
     def check_status_of_article_on_submit
-      if status === "published"
-        set_slug
-      end
+      set_slug
     end
 
     def set_slug
