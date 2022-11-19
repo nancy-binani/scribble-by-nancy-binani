@@ -44,7 +44,8 @@ class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_search_by_category
-    new_category = create(:category, category: "Generalalization", position: 1, user: @user)
+    new_category_1 = create(:category, category: "Generalalization", position: 1, user: @user)
+    new_category_2 = create(:category, category: "Hello", position: 3, user: @user)
     get api_admin_categories_path, params: { category: "General" }
     assert_response :success
     response_json = response.parsed_body
