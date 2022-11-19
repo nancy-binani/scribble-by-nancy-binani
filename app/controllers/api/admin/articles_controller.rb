@@ -2,7 +2,6 @@
 
 class Api::Admin::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[update destroy]
-  before_action :current_user
 
   def index
     @articles = current_user.articles

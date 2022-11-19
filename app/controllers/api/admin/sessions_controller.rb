@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Api::Admin::SessionsController < ApplicationController
-  before_action :current_site
-
   def create
     unless current_site.authenticate(login_params[:password])
       respond_with_error(t("session.incorrect_credentials"), :unauthorized)

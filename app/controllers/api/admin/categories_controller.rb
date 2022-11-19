@@ -2,7 +2,6 @@
 
 class Api::Admin::CategoriesController < ApplicationController
   before_action :load_category!, only: %i[ update destroy update_with_position]
-  before_action :current_user
 
   def index
     @categories = current_user.categories.order(:position)
