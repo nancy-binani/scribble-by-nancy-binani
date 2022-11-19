@@ -30,3 +30,7 @@ class ActiveSupport::TestCase
 
   # fixtures :all
 end
+
+def response_body
+  response.parsed_body
+end
