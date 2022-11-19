@@ -4,7 +4,7 @@ class Api::Admin::CategoriesController < ApplicationController
   before_action :load_category!, only: %i[ update destroy update_with_position]
 
   def index
-    @categories = current_user.categories.order(:position)
+    @categories = current_user.categories.order(:position).includes(:articles)
     @categories = FilterCategoryService.new(@categories, params).process
   end
 
