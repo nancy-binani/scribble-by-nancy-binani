@@ -2,6 +2,6 @@
 
 class Api::Public::CategoriesController < ApplicationController
   def index
-    @categories = current_user.categories.order(:position)
+    @categories = current_user.categories.order(:position).includes(:articles)
   end
 end
