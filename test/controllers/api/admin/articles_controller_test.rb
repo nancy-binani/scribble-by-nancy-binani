@@ -13,8 +13,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
   def test_should_list_all_articles
     get api_admin_articles_path
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["articles"].length, Article.count
+    assert_equal response_body["articles"].length, Article.count
   end
 
   def test_should_create_valid_article
@@ -26,8 +25,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
         }
       }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["notice"], t("successfully_created", entity: "Article")
+    assert_equal response_body["notice"], t("successfully_created", entity: "Article")
   end
 
   def test_filter_article_by_status
@@ -35,8 +33,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     new_article.save!
     get api_admin_articles_path, params: { status: "draft" }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["articles"].length, 1
+    assert_equal response_body["articles"].length, 1
   end
 
   def test_article_should_not_be_created_without_title
@@ -74,9 +71,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     new_article.save!
     get api_admin_articles_path, params: { title: "Scribble" }
     assert_response :success
-
-    response_json = response.parsed_body
-    assert_equal response_json["articles"].length, 1
+    assert_equal response_body["articles"].length, 1
   end
 
   def test_filter_article_by_category
@@ -85,8 +80,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     new_article = create(:article, category: new_category, user: @user)
     get api_admin_articles_path, params: { category: [new_category.id] }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["articles"].length, 1
+    assert_equal response_body["articles"].length, 1
   end
 
   def test_user_can_update_any_article_fields
@@ -117,9 +111,8 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
   def test_count
     get count_api_admin_articles_path
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["count"]["count_by_status"]["All"], 1
-    assert_equal response_json["count"]["count_by_category"][@category.id.to_s], 1
-    assert_equal response_json["count"]["count_by_status"]["published"], 1
+    assert_equal response_body["count"]["count_by_status"]["All"], 1
+    assert_equal response_body["count"]["count_by_category"][@category.id.to_s], 1
+    assert_equal response_body["count"]["count_by_status"]["published"], 1
   end
 end

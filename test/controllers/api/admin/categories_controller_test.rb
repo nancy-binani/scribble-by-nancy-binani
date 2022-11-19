@@ -12,16 +12,14 @@ class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
   def test_should_show_all_categories
     get api_admin_categories_path
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["categories"].length, Category.count
+    assert_equal response_body["categories"].length, Category.count
   end
 
   def test_should_create_valid_category
     post api_admin_categories_path,
       params: { category: { category: "Apps", position: 2 } }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["notice"], t("successfully_created", entity: "Category")
+    assert_equal response_body["notice"], t("successfully_created", entity: "Category")
   end
 
   def test_can_update_category
@@ -47,8 +45,7 @@ class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
     new_category = create(:category, category: "Generalalization", position: 1, user: @user)
     get api_admin_categories_path, params: { category: "General" }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["categories"].length, 2
+    assert_equal response_body["categories"].length, 2
   end
 
   def test_can_update_position_on_sort
