@@ -5,7 +5,7 @@ class Api::Admin::ArticlesController < ApplicationController
 
   def index
     @articles = current_user.articles
-    @articles = FilterArticleService.new(@articles, params).process
+    @articles = FilterArticleService.new(@articles, params[:status], params[:title], params[:category_ids]).process
   end
 
   def create
@@ -24,15 +24,8 @@ class Api::Admin::ArticlesController < ApplicationController
   end
 
   def count
-    count_by_status = Article.group(:status).distinct.count
-    count_by_category = Article.group(:category_id).distinct.count
-    respond_with_json(
-      {
-        count: {
-          count_by_status: { **count_by_status, "All": (Article.count) },
-          count_by_category: count_by_category
-        }
-      })
+    @count_by_status = { **Article.group(:status).distinct.count, "all": (Article.count) }
+    @count_by_category = Article.group(:category_id).distinct.count
   end
 
   private

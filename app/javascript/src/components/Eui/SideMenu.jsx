@@ -9,7 +9,7 @@ import categoriesApi from "apis/public/categories";
 
 import Detail from "./Detail";
 
-const SideMenu = ({ history, sitename }) => {
+const SideMenu = ({ history, name }) => {
   const [category, setCategory] = useState("");
   const [active, setActive] = useState(null);
   const [activeArticle, setActiveArticle] = useState([]);
@@ -92,7 +92,7 @@ const SideMenu = ({ history, sitename }) => {
     <>
       <nav className="shadow border-text-gray-400 border-b mx-auto border-solid bg-white">
         <Typography className="p-2 text-center text-gray-700" style="h4">
-          {sitename}
+          {name}
         </Typography>
       </nav>
       <div className="flex h-screen w-full">

@@ -12,14 +12,16 @@ class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
   def test_should_show_all_categories
     get api_admin_categories_path
     assert_response :success
-    assert_equal response_body["categories"].length, Category.count
+    response_json = response.parsed_body
+    assert_equal response_json["categories"].length, Category.count
   end
 
   def test_should_create_valid_category
     post api_admin_categories_path,
       params: { category: { category: "Apps", position: 2 } }
     assert_response :success
-    assert_equal response_body["notice"], t("successfully_created", entity: "Category")
+    response_json = response.parsed_body
+    assert_equal response_json["notice"], t("successfully_created", entity: "Category")
   end
 
   def test_can_update_category
@@ -35,17 +37,10 @@ class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
     new_category = create(:category, user: @user)
     @article = create(:article, category: new_category, user: @user)
     assert_difference "Category.count", -1 do
-      delete api_admin_category_path(new_category.id), params: { category: [new_category.id, @category.id] }
+      delete api_admin_category_path(new_category.id), params: { move_category: [new_category.id, @category.id] }
     end
     assert_response :ok
     assert_equal @category.articles.length, 1
-  end
-
-  def test_search_by_category
-    new_category = create(:category, category: "Generalalization", position: 1, user: @user)
-    get api_admin_categories_path, params: { category: "General" }
-    assert_response :success
-    assert_equal response_body["categories"].length, 2
   end
 
   def test_can_update_position_on_sort

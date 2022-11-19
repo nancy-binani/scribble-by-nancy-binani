@@ -10,6 +10,6 @@ class Api::Admin::SessionsController < ApplicationController
   private
 
     def login_params
-      params.require(:login).permit(:sitename, :password)
+      params.require(:login).permit(:name, :password)
     end
 end

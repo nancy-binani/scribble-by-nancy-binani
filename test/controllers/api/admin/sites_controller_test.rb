@@ -11,10 +11,10 @@ class Api::Admin::SitesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_can_update_site
-    sitename = "Spinkart"
-    put api_admin_site_path, params: { site: { sitename: "Spinkart" } }
+    name = "Spinkart"
+    put api_admin_site_path, params: { site: { name: "Spinkart" } }
     assert_response :success
     @site.reload
-    assert_equal @site.sitename, sitename
+    assert_equal @site.name, name
   end
 end

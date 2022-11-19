@@ -9,12 +9,12 @@ import { setToLocalStorage } from "utils/storage";
 
 import Vector from "../../../../assets/images/Vector.png";
 
-const Login = ({ history, sitename }) => {
+const Login = ({ history, name }) => {
   const handleSubmit = async values => {
     try {
       const response = await authApi.login({
         password: values.password,
-        sitename,
+        name,
       });
       setToLocalStorage({
         authToken: response.data.authentication_token,
@@ -37,13 +37,13 @@ const Login = ({ history, sitename }) => {
               className="text-2xl font-semibold not-italic leading-9"
               style="h3"
             >
-              {`${sitename} is password protected!`}
+              {`${name} is password protected!`}
             </Typography>
             <Typography
               className="text-2xl font-semibold text-gray-500 "
               style="body3"
             >
-              {`Enter the password to gain access to ${sitename}.`}
+              {`Enter the password to gain access to ${name}.`}
             </Typography>
             <Input
               required

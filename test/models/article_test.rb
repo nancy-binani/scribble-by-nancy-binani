@@ -3,7 +3,7 @@
 require "test_helper"
 
 class ArticleTest < ActiveSupport::TestCase
-  MAX_TITLE_LENGTH = 50
+  MAX_TITLE_LENGTH = 255
 
   def setup
     @site = create(:site)
@@ -21,6 +21,11 @@ class ArticleTest < ActiveSupport::TestCase
   def test_article_title_should_not_exceed_maximum_length
     @article.title = "a" * (MAX_TITLE_LENGTH + 1)
     assert_not @article.valid?
+  end
+
+  def test_password_should_not_have_special_characters
+    @article.title = "//"
+    assert @article.invalid?
   end
 
   def test_unique_slug_with_same_title

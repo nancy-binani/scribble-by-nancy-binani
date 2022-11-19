@@ -61,7 +61,7 @@ const SideMenu = ({
       const {
         data: { articles },
       } = await articleApi.fetch({
-        category: newSelectedCategories,
+        category_ids: newSelectedCategories,
       });
       setFilteredList(articles);
     } catch (error) {
@@ -123,7 +123,7 @@ const SideMenu = ({
       {MENU_OPTIONS.map((menu, idx) => (
         <MenuBar.Block
           className={`${active === menu && "bg-white"}`}
-          count={count["count_by_status"][menu]}
+          count={count["count_by_status"][menu.toLowerCase()]}
           key={idx}
           label={menu}
           onClick={() => handleFilterByStatus(menu)}

@@ -11,3 +11,4 @@ json.extract! article,
 
 json.category article.category
 json.author article.user, :username, :site_id
+

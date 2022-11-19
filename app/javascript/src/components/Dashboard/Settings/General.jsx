@@ -48,31 +48,31 @@ const General = () => {
   const updatedValuesForSiteSettings = values => {
     const toggledStatus = status ? "checked" : "unchecked";
     const password = values.password;
-    const sitename = values.sitename;
+    const name = values.name;
     let updatedSiteSettings = {};
-    if (sitename !== siteDetails["sitename"] || password !== "*****") {
+    if (name !== siteDetails["name"] || password !== "*****") {
       deleteFromLocalStorage();
     }
 
     if (password === "*****") {
-      updatedSiteSettings = { status: toggledStatus, sitename };
+      updatedSiteSettings = { status: toggledStatus, name };
     } else {
       updatedSiteSettings = {
         status: toggledStatus,
         password,
-        sitename,
+        name,
       };
     }
     let validateUserInputValues = null;
     if (
-      sitename !== siteDetails["sitename"] ||
+      name !== siteDetails["name"] ||
       toggledStatus !== siteDetails["status"]
     ) {
       validateUserInputValues = true;
     }
 
     if (
-      sitename === siteDetails["sitename"] &&
+      name === siteDetails["name"] &&
       toggledStatus === siteDetails["status"] &&
       password === "*****"
     ) {
@@ -122,7 +122,7 @@ const General = () => {
         initialValues={{
           checked: { status },
           password: "*****",
-          sitename: siteDetails["sitename"],
+          name: siteDetails["name"],
         }}
         onSubmit={handleSubmit}
       >
@@ -133,7 +133,7 @@ const General = () => {
               Configure general attributes Of scribble
             </Typography>
             <div className="my-6">
-              <Input label="Site Name" name="sitename" type="text" />
+              <Input label="Site Name" name="name" type="text" />
               <Typography className="text-gray-600" style="body3">
                 Customize the site name which is used to show the site name in
               </Typography>

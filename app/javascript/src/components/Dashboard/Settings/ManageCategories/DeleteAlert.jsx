@@ -19,7 +19,7 @@ const DeleteAlert = ({
   const handleDelete = async () => {
     try {
       await categoriesApi.destroy(deletedCategory.id, {
-        category: [deletedCategory.id, moveToCategory.value],
+        move_category: [deletedCategory.id, moveToCategory.value],
       });
       setCategoriesUpdated(true);
       onClose();

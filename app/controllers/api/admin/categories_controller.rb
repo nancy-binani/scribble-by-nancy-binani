@@ -4,8 +4,8 @@ class Api::Admin::CategoriesController < ApplicationController
   before_action :load_category!, only: %i[ update destroy update_with_position]
 
   def index
-    @categories = current_user.categories.order(:position).includes(:articles)
-    @categories = FilterCategoryService.new(@categories, params).process
+    @categories = current_user.categories.order(:position)
+    @categories = SearchCategoryService.new(@categories, params[:category]).process
   end
 
   def create
@@ -19,7 +19,7 @@ class Api::Admin::CategoriesController < ApplicationController
   end
 
   def destroy
-    DeleteCategoryService.new(params[:category], @category, current_user).process
+    DeleteCategoryService.new(params[:move_category], @category, current_user).process
     respond_with_success(t("successfully_deleted", entity: "Category"))
   end
 
