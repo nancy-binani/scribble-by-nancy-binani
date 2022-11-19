@@ -48,12 +48,6 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_includes @article.errors.full_messages, t("article.description_missing_error")
   end
 
-  def test_article_should_not_be_created_without_category
-    @article.category_id = nil
-    assert_not @article.valid?
-    assert_includes @article.errors.full_messages, t("missing_category")
-  end
-
   def test_valid_slug
     @article.slug = ""
     assert_not @article.valid?
