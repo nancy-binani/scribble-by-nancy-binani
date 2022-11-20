@@ -9,10 +9,9 @@ class Api::Public::CategoriesControllerTest < ActionDispatch::IntegrationTest
     @category = create(:category, user: @user)
   end
 
-  def test_should_show_all_categories
+  def test_should_list_all_categories
     get api_admin_categories_path
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["categories"].length, Category.count
+    assert_equal response_body["categories"].length, Category.count
   end
 end
