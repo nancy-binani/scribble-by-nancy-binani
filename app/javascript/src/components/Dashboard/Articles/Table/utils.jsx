@@ -45,7 +45,7 @@ export const buildArticlesColumnData = (history, handleDelete, columns) =>
       key: "Author",
       width: "15%",
       className: "text-gray-600",
-      render: author => author.username,
+      render: author => author.name,
     },
     {
       title: "CATEGORY",

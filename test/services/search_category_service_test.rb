@@ -14,7 +14,6 @@ class SearchCategoryServiceTest < ActionDispatch::IntegrationTest
     new_category_2 = create(:category, category: "Hello", position: 3, user: @user)
     get api_admin_categories_path, params: { category: "General" }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["categories"].length, 2
+    assert_equal response_body["categories"].length, 2
   end
 end
