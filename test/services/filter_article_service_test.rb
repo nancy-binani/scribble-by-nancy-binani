@@ -15,8 +15,7 @@ class FilterArticleServiceTest < ActionDispatch::IntegrationTest
     new_article.save!
     get api_admin_articles_path, params: { status: "draft" }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["articles"][0]["id"], new_article.id
+    assert_equal response_body["articles"][0]["id"], new_article.id
   end
 
   def test_filter_article_by_category
@@ -25,7 +24,6 @@ class FilterArticleServiceTest < ActionDispatch::IntegrationTest
     new_article = create(:article, category: new_category, user: @user)
     get api_admin_articles_path, params: { category_ids: [new_category.id] }
     assert_response :success
-    response_json = response.parsed_body
-    assert_equal response_json["articles"][0]["id"], new_article.id
+    assert_equal response_body["articles"][0]["id"], new_article.id
   end
 end

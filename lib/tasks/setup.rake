@@ -36,7 +36,7 @@ end
 def create_sample_user_data!
   puts "Seeding with sample user..."
   User.create!(
-    username: "Oliver Smith",
+    name: "Oliver Smith",
     email: "oliver@example.com",
     site_id: 1
   )
