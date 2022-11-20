@@ -7,7 +7,7 @@ class Article < ApplicationRecord
   belongs_to :category
   belongs_to :user
 
-  validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }, format: { with: /\A[a-zA-Z0-9]+\z/ }
+  validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }, format: { with: REGEX }
   validate :slug_not_changed
   validates :body, presence: true
   validates :status, presence: true
