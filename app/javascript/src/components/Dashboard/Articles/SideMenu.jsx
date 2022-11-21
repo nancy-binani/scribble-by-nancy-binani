@@ -10,25 +10,19 @@ import categoriesApi from "apis/admin/categories";
 import { CATEGORY_INITIAL_VALUE, MENU_OPTIONS } from "./constants";
 import CreateCategory from "./CreateCategory";
 
-const SideMenu = ({
-  fetchArticles,
-  filtering,
-  setFiltering,
-  setFilteredList,
-}) => {
+const SideMenu = ({ fetchArticles, setArticles }) => {
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
   const [createNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [active, setActive] = useState(null);
-  const [searchCategories, setSearchCategories] = useState([]);
+  const [searchedCategories, setSearchedCategories] = useState([]);
   const [count, setCount] = useState({});
   const [loading, setLoading] = useState(true);
 
   const handleFilterByStatus = async menu => {
     setActive(menu);
-    setFiltering(true);
     setSelectedCategories([]);
     try {
       if (menu === "All") {
@@ -37,22 +31,20 @@ const SideMenu = ({
         const {
           data: { articles },
         } = await articleApi.fetch({ status: menu });
-        setFilteredList(articles);
+        setArticles(articles);
       }
     } catch (error) {
       logger.error(error);
-      setLoading(false);
     }
   };
 
   const handleFilterByCategories = async (category, id) => {
     setActive(category);
-    setFiltering(true);
     let newSelectedCategories = [];
     try {
       if (selectedCategories.includes(id)) {
         newSelectedCategories = selectedCategories.filter(
-          value => id !== value
+          selectedCategoryId => id !== selectedCategoryId
         );
       } else {
         newSelectedCategories = [...selectedCategories, id];
@@ -63,10 +55,9 @@ const SideMenu = ({
       } = await articleApi.fetch({
         category_ids: newSelectedCategories,
       });
-      setFilteredList(articles);
+      setArticles(articles);
     } catch (error) {
       logger.error(error);
-      setLoading(false);
     }
   };
 
@@ -87,6 +78,7 @@ const SideMenu = ({
         data: { categories },
       } = await categoriesApi.fetch();
       setCategories(categories);
+      setSearchedCategories(categories);
     } catch (error) {
       logger.error(error);
     }
@@ -94,15 +86,13 @@ const SideMenu = ({
 
   const handleSearch = async searchTerm => {
     try {
-      setFiltering(true);
       const {
         data: { categories },
       } = await categoriesApi.fetch({ category: searchTerm });
-      setSearchCategories(categories);
+      setSearchedCategories(categories);
     } catch (error) {
       logger.error(error);
     }
-    setLoading(false);
   };
 
   const fetchCategoriesAndCount = async () => {
@@ -172,29 +162,19 @@ const SideMenu = ({
           setCreateNewCategory={setCreateNewCategory}
         />
       )}
-      {filtering && !isSearchCollapsed
-        ? searchCategories.map((category, idx) => (
-            <MenuBar.Block
-              count={count["count_by_category"][category.id]}
-              key={idx}
-              label={category.category}
-              className={`${
-                selectedCategories.includes(category.id) && "bg-white"
-              }`}
-              onClick={() => handleFilterByCategories(category, category.id)}
-            />
-          ))
-        : categories.map((category, idx) => (
-            <MenuBar.Block
-              count={count["count_by_category"][category.id]}
-              key={idx}
-              label={category.category}
-              className={`${
-                selectedCategories.includes(category.id) && "bg-white"
-              }`}
-              onClick={() => handleFilterByCategories(category, category.id)}
-            />
-          ))}
+      {(isSearchCollapsed ? categories : searchedCategories).map(
+        (category, idx) => (
+          <MenuBar.Block
+            count={count["count_by_category"][category.id]}
+            key={idx}
+            label={category.category}
+            className={`${
+              selectedCategories.includes(category.id) && "bg-white"
+            }`}
+            onClick={() => handleFilterByCategories(category, category.id)}
+          />
+        )
+      )}
     </MenuBar>
   );
 };

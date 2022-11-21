@@ -28,7 +28,7 @@ class DeleteCategoryServiceTest < ActionDispatch::IntegrationTest
   end
 
   def test_more_than_one_category_present_deletion
-    new_category = create(:category, user: @user)
+    new_category = create(:category, category: "Ruby On Rails", user: @user)
     assert_difference "Category.count", -1 do
       delete api_admin_category_path(@category.id), params: { move_category: [@category.id, new_category.id] }
     end

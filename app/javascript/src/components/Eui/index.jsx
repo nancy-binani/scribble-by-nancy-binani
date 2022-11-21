@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { either, isEmpty, isNil } from "ramda";
 import { ProSidebarProvider } from "react-pro-sidebar";
 
-import authApi from "apis/admin/auth";
+import sitesApi from "apis/admin/sites";
 import { getFromLocalStorage } from "utils/storage";
 
 import Login from "./Login";
@@ -16,7 +16,7 @@ const Eui = ({ history }) => {
 
   const fetchSiteDetails = async () => {
     try {
-      const { data } = await authApi.fetch();
+      const { data } = await sitesApi.fetch();
       setName(data.site.name);
     } catch (error) {
       logger.error(error);

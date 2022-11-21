@@ -4,7 +4,7 @@ import { Formik, Form } from "formik";
 import { Typography, Button } from "neetoui";
 import { Input } from "neetoui/formik";
 
-import authApi from "apis/admin/auth";
+import sitesApi from "apis/admin/sites";
 import { setToLocalStorage } from "utils/storage";
 
 import Vector from "../../../../assets/images/Vector.png";
@@ -12,7 +12,7 @@ import Vector from "../../../../assets/images/Vector.png";
 const Login = ({ history, name }) => {
   const handleSubmit = async values => {
     try {
-      const response = await authApi.login({
+      const response = await sitesApi.login({
         password: values.password,
         name,
       });

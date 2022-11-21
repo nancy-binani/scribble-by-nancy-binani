@@ -15,11 +15,11 @@ const login = payload =>
     login: payload,
   });
 
-const authApi = {
+const sitesApi = {
   fetch,
   update,
   login,
   fetchUser,
 };
 
-export default authApi;
+export default sitesApi;

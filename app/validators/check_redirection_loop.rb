@@ -2,6 +2,7 @@
 
 class CheckRedirectionLoop < ActiveModel::Validator
   include ActionView::Helpers::TranslationHelper
+
   def check_redirection_loop(record)
     is_cycle_present = false
     current_to = record.to

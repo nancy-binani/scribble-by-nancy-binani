@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :category do
-    category { Faker::Name.name }
+    category { "Hello" }
     position { Faker::Number.between(from: 1, to: 157) }
   end
 end

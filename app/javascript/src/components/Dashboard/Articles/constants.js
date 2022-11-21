@@ -6,10 +6,12 @@ export const ARTICLES_FORM_INITIAL_VALUES = {
   category: null,
   status: "",
 };
+
 export const CATEGORY_INITIAL_VALUE = {
   id: "",
   category: "",
 };
+
 export const MENU_OPTIONS = ["All", "Draft", "Published"];
 
 export const CATEGORY_VALIDATION_SCHEMA = yup.object().shape({
@@ -17,8 +19,8 @@ export const CATEGORY_VALIDATION_SCHEMA = yup.object().shape({
     .string()
     .required("Category is required")
     .matches(
-      /^[a-zA-Z_ ]*$/,
-      "Category must not contain special characters or digits."
+      /^[a-zA-Z_&_ ]*$/,
+      "Category cannot have special characters or digits except &"
     ),
 });
 
@@ -40,6 +42,7 @@ export const ARTICLES_FORM_VALIDATION_SCHEMA = CATEGORIES =>
   });
 
 export const STATUS = ["draft", "published"];
+
 export const FILTERING_OPTIONS = [
   "Title",
   "Categories",

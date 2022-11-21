@@ -5,7 +5,7 @@ import { Check, Close } from "neetoicons";
 import { Typography, Button, PageLoader } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
 
-import authApi from "apis/admin/auth";
+import sitesApi from "apis/admin/sites";
 import { deleteFromLocalStorage, setToLocalStorage } from "utils/storage";
 
 import { REGEXP } from "./constants";
@@ -38,7 +38,7 @@ const General = () => {
     const updatedSiteSettings = updatedValuesForSiteSettings(values);
     try {
       if (updatedSiteSettings.validateUserInputValues || checkPassword) {
-        await authApi.update(updatedSiteSettings.updatedSiteSettings);
+        await sitesApi.update(updatedSiteSettings.updatedSiteSettings);
       }
     } catch (error) {
       logger.error(error);
@@ -86,7 +86,7 @@ const General = () => {
     try {
       const {
         data: { site },
-      } = await authApi.fetch();
+      } = await sitesApi.fetch();
       setSiteDetails(site);
       setStatus(site["status"] === "checked");
     } catch (error) {

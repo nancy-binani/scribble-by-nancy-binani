@@ -23,7 +23,7 @@ class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_can_update_category
-    new_category = "Apps & Integration"
+    new_category = "Apps and Integration"
     category_params = { category: { category: new_category } }
     put api_admin_category_path(@category.id), params: category_params
     assert_response :success
