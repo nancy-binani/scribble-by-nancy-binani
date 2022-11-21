@@ -10,6 +10,7 @@ const update = (payload, id) => {
     redirection: payload,
   });
 };
+
 const destroy = id => axios.delete(`/api/admin/redirections/${id}`);
 
 const fetchRedirection = id => axios.get(`/api/admin/redirections/${id}`);

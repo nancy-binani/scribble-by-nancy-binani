@@ -70,7 +70,7 @@ const Header = ({
           <Button
             icon="ri-add-line"
             label="Add New Article"
-            onClick={() => history.push("/articles/new_article")}
+            onClick={() => history.push("/articles/create")}
           />
         </>
       }

@@ -14,17 +14,11 @@ import Table from "./Table";
 const Articles = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [articles, setArticles] = useState([]);
-  const [id, setId] = useState("");
+  const [deleteArticleId, setDeleteArticleId] = useState(null);
   const [title, setTitle] = useState("");
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [filteredList, setFilteredList] = useState([]);
-  const [filtering, setFiltering] = useState(false);
+  const [articles, setArticles] = useState([]);
   const [columns, setColumns] = useState(FILTERING_OPTIONS);
-
-  useEffect(() => {
-    fetchArticles();
-  }, []);
 
   const fetchArticles = async () => {
     try {
@@ -32,17 +26,15 @@ const Articles = ({ history }) => {
         data: { articles },
       } = await articleApi.fetch();
       setArticles(articles);
-      setLoading(false);
-      setFilteredList(articles);
     } catch (error) {
       logger.error(error);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
-  const destroyArticle = async id => {
+
+  const destroyArticle = async deleteArticleId => {
     try {
-      await articleApi.destroy(id);
+      await articleApi.destroy(deleteArticleId);
       await fetchArticles();
     } catch (error) {
       logger.error(error);
@@ -51,21 +43,24 @@ const Articles = ({ history }) => {
 
   const handleSearch = async searchTerm => {
     try {
-      setFiltering(true);
       const {
         data: { articles },
       } = await articleApi.fetch({ title: searchTerm });
-      setFilteredList(articles);
+      setArticles(articles);
     } catch (error) {
       logger.error(error);
     }
   };
 
-  const handleDelete = (id, title) => {
-    setId(id);
+  const handleDelete = (deleteArticleId, title) => {
+    setDeleteArticleId(deleteArticleId);
     setShowDeleteAlert(true);
     setTitle(title);
   };
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
 
   if (loading) {
     return <PageLoader />;
@@ -73,14 +68,7 @@ const Articles = ({ history }) => {
 
   return (
     <div className="flex h-screen w-full">
-      <SideMenu
-        fetchArticles={fetchArticles}
-        filteredList={filteredList}
-        filtering={filtering}
-        length={articles.length}
-        setFilteredList={setFilteredList}
-        setFiltering={setFiltering}
-      />
+      <SideMenu fetchArticles={fetchArticles} setArticles={setArticles} />
       <Container>
         <Header
           columns={columns}
@@ -91,29 +79,18 @@ const Articles = ({ history }) => {
           setSearchTerm={setSearchTerm}
         />
         <Typography className="mb-3 ml-3">
-          {filtering ? filteredList.length : articles.length} Articles
+          {articles.length} Articles
         </Typography>
-        {filtering ? (
-          <Table
-            columns={columns}
-            data={filteredList}
-            handleDelete={handleDelete}
-            history={history}
-            searchTerm={searchTerm}
-          />
-        ) : (
-          <Table
-            columns={columns}
-            data={articles}
-            handleDelete={handleDelete}
-            history={history}
-            searchTerm={searchTerm}
-          />
-        )}
+        <Table
+          articles={articles}
+          columns={columns}
+          handleDelete={handleDelete}
+          history={history}
+        />
         {showDeleteAlert && (
           <DeleteAlert
+            deleteArticleId={deleteArticleId}
             destroyArticle={destroyArticle}
-            id={id}
             title={title}
             onClose={() => setShowDeleteAlert(false)}
           />

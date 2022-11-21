@@ -21,7 +21,7 @@ class CategoryTest < ActiveSupport::TestCase
   end
 
   def test_update_category_of_articles_to_general_on_delete_category
-    new_category = create(:category, user: @user)
+    new_category = create(:category, category: "JavaScript", user: @user)
     new_article = create(:article, category: new_category, user: @user)
     new_category.destroy!
     assert_equal new_article.category_id - 1, @category.id

@@ -44,7 +44,7 @@ const App = () => {
       <Route exact component={Navbar} path={["/", "/articles/", "/settings"]} />
       <Switch history={history}>
         <Route component={Edit} path="/articles/:id/edit" />
-        <Route component={Create} path="/articles/new_article" />
+        <Route component={Create} path="/articles/create" />
         <Route path="/settings" render={props => <Settings {...props} />} />
         <Route path="/public/*" render={props => <Eui {...props} />} />
         <Route exact component={Dashboard} path="/" />

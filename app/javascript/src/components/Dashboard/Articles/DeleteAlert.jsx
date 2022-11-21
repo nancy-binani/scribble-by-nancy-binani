@@ -2,9 +2,9 @@ import React from "react";
 
 import { Alert } from "neetoui";
 
-const DeleteAlert = ({ destroyArticle, id, title, onClose }) => {
+const DeleteAlert = ({ destroyArticle, deleteArticleId, title, onClose }) => {
   const handleDelete = () => {
-    destroyArticle(id);
+    destroyArticle(deleteArticleId);
     onClose();
   };
 

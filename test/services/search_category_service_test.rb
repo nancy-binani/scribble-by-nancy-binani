@@ -10,7 +10,7 @@ class SearchCategoryServiceTest < ActionDispatch::IntegrationTest
   end
 
   def test_search_category
-    new_category_1 = create(:category, category: "Generalalization", position: 1, user: @user)
+    new_category_1 = create(:category, category: "Generalization", position: 1, user: @user)
     new_category_2 = create(:category, category: "Hello", position: 3, user: @user)
     get api_admin_categories_path, params: { category: "General" }
     assert_response :success
