@@ -37,7 +37,7 @@ const CreateCategory = ({
       onSubmit={handleSubmit}
     >
       <Form>
-        <Input name="category" placeholder="Enter category" />
+        <Input name="category" placeholder="Type category and press enter!" />
       </Form>
     </Formik>
   );
