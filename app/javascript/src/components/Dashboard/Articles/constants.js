@@ -17,7 +17,6 @@ export const MENU_OPTIONS = ["All", "Draft", "Published"];
 export const CATEGORY_VALIDATION_SCHEMA = yup.object().shape({
   category: yup
     .string()
-    .required("Category is required")
     .matches(
       /^[a-zA-Z_&_ ]*$/,
       "Category cannot have special characters or digits except &"

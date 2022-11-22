@@ -17,7 +17,7 @@ class CategoryTest < ActiveSupport::TestCase
 
   def test_no_two_categories_must_have_same_name
     new_category = Category.create(category: @category.category, user: @user)
-    assert_equal new_category.errors.full_messages.to_sentence, t("unique", entity: "Category")
+    assert_equal new_category.errors_to_sentence, t("unique", entity: "Category")
   end
 
   def test_update_category_of_articles_to_general_on_delete_category
