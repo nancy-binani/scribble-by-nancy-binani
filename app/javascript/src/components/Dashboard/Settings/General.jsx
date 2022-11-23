@@ -8,7 +8,7 @@ import { Input, Checkbox } from "neetoui/formik";
 import sitesApi from "apis/admin/sites";
 import { deleteFromLocalStorage, setToLocalStorage } from "utils/storage";
 
-import { REGEXP } from "./constants";
+import { VALID_PASSWORD_REGEX } from "./constants";
 
 const General = () => {
   const [passwordRegexChecked, setPasswordRegexChecked] = useState(false);
@@ -28,7 +28,7 @@ const General = () => {
     }
     setValidationBoxOpen(true);
     setPasswordLengthChecked(password.length >= 6);
-    setPasswordRegexChecked(REGEXP.test(password));
+    setPasswordRegexChecked(VALID_PASSWORD_REGEX.test(password));
 
     return passwordLengthChecked && passwordRegexChecked;
   };

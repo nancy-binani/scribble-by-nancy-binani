@@ -1,6 +1,7 @@
 import * as yup from "yup";
 
-export const REGEXP = /[^wd]*(([0-9]+.*[A-Za-z]+.*)|[A-Za-z]+.*([0-9]+.*))/;
+export const VALID_PASSWORD_REGEX =
+  /[^wd]*(([0-9]+.*[A-Za-z]+.*)|[A-Za-z]+.*([0-9]+.*))/;
 
 export const SITE_VALIDATION_SCHEMA = yup.object().shape({
   password: yup

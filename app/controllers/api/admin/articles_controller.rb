@@ -4,7 +4,7 @@ class Api::Admin::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[update destroy]
 
   def index
-    @articles = current_user.articles
+    @articles = current_user.articles.includes(:category)
     @articles = FilterArticleService.new(@articles, params[:status], params[:title], params[:category_ids]).process
   end
 

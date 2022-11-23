@@ -5,7 +5,7 @@ class Api::Admin::SitesController < ApplicationController
 
   def update
     current_site.update!(site_params)
-    respond_with_success(t("successfully_updated", entity: "Site Details"))
+    respond_with_success(t("successfully_updated", entity: "Site"))
   end
 
   private

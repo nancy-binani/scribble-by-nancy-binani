@@ -2,25 +2,21 @@
 
 class Article < ApplicationRecord
   MAX_TITLE_LENGTH = 255
-  REGEX = /\A[a-zA-Z0-9]+\z/
+  VALID_TITLE_REGEX = /\A[a-zA-Z0-9]+\z/
 
   belongs_to :category
   belongs_to :user
 
-  validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }, format: { with: REGEX }
+  validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }, format: { with: VALID_TITLE_REGEX }
   validate :slug_not_changed
   validates :body, presence: true
   validates :status, presence: true
   enum status: { draft: "draft", published: "published" }, _default: :draft
 
-  before_create :check_status_of_article_on_submit, if: -> { status == "published" }
-  before_update :check_status_of_article_on_submit, if: -> { status == "published" }
+  before_create :set_slug, if: -> { status == "published" }
+  before_update :set_slug, if: -> { slug.nil? && status == "published" }
 
   private
-
-    def check_status_of_article_on_submit
-      set_slug
-    end
 
     def set_slug
       itr = 1
