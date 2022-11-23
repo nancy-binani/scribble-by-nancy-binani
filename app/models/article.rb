@@ -11,7 +11,6 @@ class Article < ApplicationRecord
   validate :slug_not_changed
   validates :body, presence: true
   validates :status, presence: true
-  enum status: { draft: "draft", published: "published" }, _default: :draft
 
   before_create :set_slug, if: -> { status == "published" }
   before_update :set_slug, if: -> { slug.nil? && status == "published" }
