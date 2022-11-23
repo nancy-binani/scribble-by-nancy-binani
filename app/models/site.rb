@@ -10,5 +10,6 @@ class Site < ApplicationRecord
   has_many :redirections
   validates :name, presence: true
   validates :password, length: { minimum: MIN_PASSWORD_LENGTH }, format: { with: VALID_PASSWORD_REGEX }, if: -> {
- password.present? }
+password.present? }
+  enum status: { checked: "checked", unchecked: "unchecked" }
 end
