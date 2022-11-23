@@ -16,7 +16,7 @@ const General = () => {
   const [validationBoxOpen, setValidationBoxOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [visible, setVisible] = useState("visible");
-  const [siteDetails, setSiteDetails] = useState({});
+  const [site, setSite] = useState({});
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState(false);
 
@@ -50,7 +50,7 @@ const General = () => {
     const password = values.password;
     const name = values.name;
     let updatedSiteSettings = {};
-    if (name !== siteDetails["name"] || password !== "*****") {
+    if (name !== site["name"] || password !== "*****") {
       deleteFromLocalStorage();
     }
 
@@ -64,16 +64,13 @@ const General = () => {
       };
     }
     let validateUserInputValues = null;
-    if (
-      name !== siteDetails["name"] ||
-      toggledStatus !== siteDetails["status"]
-    ) {
+    if (name !== site["name"] || toggledStatus !== site["status"]) {
       validateUserInputValues = true;
     }
 
     if (
-      name === siteDetails["name"] &&
-      toggledStatus === siteDetails["status"] &&
+      name === site["name"] &&
+      toggledStatus === site["status"] &&
       password === "*****"
     ) {
       validateUserInputValues = false;
@@ -82,12 +79,12 @@ const General = () => {
     return { updatedSiteSettings, validateUserInputValues };
   };
 
-  const fetchSiteDetails = async () => {
+  const fetchsite = async () => {
     try {
       const {
         data: { site },
       } = await sitesApi.fetch();
-      setSiteDetails(site);
+      setSite(site);
       setStatus(site["status"] === "checked");
     } catch (error) {
       logger.error(error);
@@ -98,7 +95,7 @@ const General = () => {
   const handleStatus = () => {
     status
       ? setToLocalStorage({
-          authToken: siteDetails["authentication_token"],
+          authToken: site["authentication_token"],
         })
       : deleteFromLocalStorage();
     setStatus(!status);
@@ -111,7 +108,7 @@ const General = () => {
   };
 
   useEffect(() => {
-    fetchSiteDetails();
+    fetchsite();
   }, []);
 
   if (loading) return <PageLoader />;
@@ -122,7 +119,7 @@ const General = () => {
         initialValues={{
           checked: { status },
           password: "*****",
-          name: siteDetails["name"],
+          name: site["name"],
         }}
         onSubmit={handleSubmit}
       >
