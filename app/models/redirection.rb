@@ -5,6 +5,5 @@ class Redirection < ApplicationRecord
 
   belongs_to :site
   validates :to, uniqueness: { scope: :from }
-  validates :from, uniqueness: { scope: :to }
   validates_with CheckRedirectionLoop
 end
