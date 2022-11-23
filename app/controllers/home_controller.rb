@@ -8,7 +8,7 @@ class HomeController < ApplicationController
 
   def redirect_to_path
     redirection = current_site.redirections.find_by(from: request.path)
-    if redirection != nil
+    if redirection
       redirect_to redirection.to, status: :moved_permanently
     end
   end
