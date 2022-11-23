@@ -3,7 +3,7 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 
 import General from "./General";
-import ManageCategories from "./ManageCategories";
+import ManageCategories from "./ManageCategoriesSubTask";
 import Redirections from "./Redirections";
 import SideMenu from "./SideMenu";
 

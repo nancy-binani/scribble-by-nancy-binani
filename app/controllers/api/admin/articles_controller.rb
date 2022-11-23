@@ -24,7 +24,8 @@ class Api::Admin::ArticlesController < ApplicationController
   end
 
   def count
-    @count_by_status = { **Article.group(:status).distinct.count, "all": (Article.count) }
+    counts_by_status = Article.group(:status).distinct.count
+    @count_by_status = { **counts_by_status, "all": counts_by_status.values.sum }
     @count_by_category = Article.group(:category_id).distinct.count
   end
 
