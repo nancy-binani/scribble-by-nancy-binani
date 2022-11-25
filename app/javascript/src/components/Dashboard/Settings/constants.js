@@ -1,3 +1,4 @@
+import { Settings, Text, ExternalLink } from "neetoicons";
 import * as yup from "yup";
 
 export const VALID_PASSWORD_REGEX =
@@ -28,5 +29,23 @@ export const MENU_OPTIONS = [
     id: 3,
     label: "Manage Categories",
     description: "Edit and Reorder KB Structure",
+  },
+];
+
+export const SIDENAV_LINKS = [
+  {
+    icon: Text,
+    label: "Articles",
+    to: "/articles",
+  },
+  {
+    icon: Settings,
+    label: "Settings",
+    to: "/settings",
+  },
+  {
+    icon: ExternalLink,
+    label: "Eui",
+    to: "/public/",
   },
 ];
