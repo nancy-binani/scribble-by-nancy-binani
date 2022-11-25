@@ -41,13 +41,13 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Route exact component={Navbar} path={["/", "/articles/", "/settings"]} />
+      <Route exact component={Navbar} path={["/", "/articles"]} />
       <Switch history={history}>
         <Route component={Edit} path="/articles/:id/edit" />
         <Route component={Create} path="/articles/create" />
         <Route path="/settings" render={props => <Settings {...props} />} />
         <Route path="/public/*" render={props => <Eui {...props} />} />
-        <Route exact component={Dashboard} path="/" />
+        <Route exact component={Dashboard} path={["/", "/articles"]} />
       </Switch>
     </Router>
   );

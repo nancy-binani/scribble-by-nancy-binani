@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import General from "./General";
 import ManageCategories from "./ManageCategories";
 import Redirections from "./Redirections";
+import Sidebar from "./Sidebar";
 import SideMenu from "./SideMenu";
 
 const Settings = ({ history }) => {
@@ -30,6 +31,7 @@ const Settings = ({ history }) => {
 
   return (
     <div className="flex h-screen w-full">
+      <Sidebar />
       <SideMenu history={history} menu={menu} />
       {showSelectedSettingsMenu(selectedSideMenu)}
     </div>
