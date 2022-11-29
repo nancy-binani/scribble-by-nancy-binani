@@ -13,6 +13,7 @@ class Article < ApplicationRecord
   validates :body, presence: true
   before_create :set_slug, if: -> { status.to_sym == :published }
   before_update :set_slug, if: -> { slug.nil? && status.to_sym == :published }
+  acts_as_list scope: :category
 
   private
 

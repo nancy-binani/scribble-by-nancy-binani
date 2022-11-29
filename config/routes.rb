@@ -12,6 +12,8 @@ Rails.application.routes.draw do
         resources :users, only: :index
         resource :session, only: :create
         resources :articles, except: %i[new edit show] do
+          put :update_with_position, on: :collection
+          put :move_to_category, on: :collection
           get "count", on: :collection
         end
         resources :categories do

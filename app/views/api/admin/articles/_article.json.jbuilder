@@ -7,7 +7,8 @@ json.extract! article,
   :created_at,
   :slug,
   :status,
-  :category_id
+  :category_id,
+  :position
 
 json.category article.category
 json.author article.user, :name, :site_id

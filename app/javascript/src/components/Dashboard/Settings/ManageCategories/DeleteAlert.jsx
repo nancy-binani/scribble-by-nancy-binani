@@ -9,7 +9,7 @@ const DeleteAlert = ({
   categories,
   deletedCategory,
   onClose,
-  setCategoriesUpdated,
+  fetchCategories,
 }) => {
   const [moveToCategory, setMoveToCategory] = useState({
     value: null,
@@ -21,7 +21,7 @@ const DeleteAlert = ({
       await categoriesApi.destroy(deletedCategory.id, {
         move_category: [deletedCategory.id, moveToCategory.value],
       });
-      setCategoriesUpdated(true);
+      fetchCategories();
       onClose();
     } catch (error) {
       logger.error(error);

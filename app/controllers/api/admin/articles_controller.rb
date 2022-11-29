@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class Api::Admin::ArticlesController < ApplicationController
-  before_action :load_article!, only: %i[update destroy]
+  before_action :load_article!, only: %i[update destroy update_with_position]
 
   def index
-    @articles = current_user.articles.includes(:category)
+    @articles = current_user.articles.order(:position).includes(:category)
     @articles = FilterArticleService.new(@articles, params[:status], params[:title], params[:category_ids]).process
   end
 
@@ -29,6 +29,15 @@ class Api::Admin::ArticlesController < ApplicationController
     @count_by_category = Article.group(:category_id).distinct.count
   end
 
+  def update_with_position
+    @article.insert_at(params[:article][:position].to_i)
+    respond_with_success(t("successfully_updated", entity: "Article"))
+  end
+
+  def move_to_category
+    MoveArticlesService.new(current_user, params["article_ids"], params[:category_id]).process
+  end
+
   private
 
     def load_article!
@@ -37,6 +46,6 @@ class Api::Admin::ArticlesController < ApplicationController
 
     def article_params
       params.require(:article).permit(
-        :title, :body, :author, :status, :category_id)
+        :title, :body, :author, :status, :category_id, :position)
     end
 end

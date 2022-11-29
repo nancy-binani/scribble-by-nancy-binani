@@ -49,3 +49,5 @@ export const SIDENAV_LINKS = [
     to: "/public/",
   },
 ];
+
+export const ACTIONS = ["Edit", "Delete"];
