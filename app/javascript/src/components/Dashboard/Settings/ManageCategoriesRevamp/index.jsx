@@ -9,11 +9,11 @@ import categoriesApi from "apis/admin/categories";
 
 import Banner from "./Banner";
 import Categories from "./Categories";
+import DeleteAlert from "./DeleteAlert";
 import Form from "./Form";
 import List from "./List";
 
 import { CATEGORY_INITIAL_VALUE } from "../../Articles/constants";
-import DeleteAlert from "../ManageCategories/DeleteAlert";
 
 const { Menu, MenuItem } = Dropdown;
 
