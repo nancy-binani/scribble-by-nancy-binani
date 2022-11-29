@@ -31,6 +31,7 @@ const ManageCategories = () => {
   const [searchedCategories, setSearchedCategories] = useState([]);
   const [showBanner, setShowBanner] = useState(true);
   const [selectedArticles, setSelectedArticles] = useState([]);
+  const [author, setAuthor] = useState("");
 
   const fetchCategories = async () => {
     try {
@@ -40,6 +41,7 @@ const ManageCategories = () => {
       setCategories(categories);
       setLoading(false);
       setSelectedCategory(categories[0]);
+      setAuthor(categories[0].author.name);
       setActive(categories[0].category);
     } catch (error) {
       logger.error(error);
@@ -116,8 +118,8 @@ const ManageCategories = () => {
   }
 
   return (
-    <div className="flex w-full">
-      <div className="w-60 ml-12 mt-6 mr-12">
+    <div className="flex w-2/3">
+      <div className="ml-10 mt-6 mr-12">
         <span className="flex">
           <Typography className="mb-6 mr-20" style="h2">
             Manage Categories
@@ -193,7 +195,7 @@ const ManageCategories = () => {
           showPane={showPane}
         />
       )}
-      <div className="mt-6 w-2/5">
+      <div className="mt-6 w-3/4">
         <span className="flex">
           <Typography className="mr-auto mb-6" style="h2">
             Manage Articles
@@ -236,7 +238,7 @@ const ManageCategories = () => {
         </span>
         {showBanner && <Banner setShowBanner={setShowBanner} />}
         <List
-          categories={categories}
+          author={author}
           selectedArticles={selectedArticles}
           selectedCategory={selectedCategory}
           setSelectedArticles={setSelectedArticles}

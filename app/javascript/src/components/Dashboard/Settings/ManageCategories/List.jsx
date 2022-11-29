@@ -11,7 +11,12 @@ import {
   formatDateAndTimeForToolTip,
 } from "../../Articles/utils";
 
-const List = ({ selectedCategory, selectedArticles, setSelectedArticles }) => {
+const List = ({
+  selectedCategory,
+  selectedArticles,
+  setSelectedArticles,
+  author,
+}) => {
   const handleUpdateWithPosition = async (position, id) => {
     try {
       await articlesApi.updateWithPosition(position, id);
@@ -91,7 +96,7 @@ const List = ({ selectedCategory, selectedArticles, setSelectedArticles }) => {
                             <Avatar
                               className="mx-1 mt-2"
                               size="small"
-                              user={{ name: selectedCategory.author.name }}
+                              user={{ name: author }}
                             />
                           )}
                           {article.status === "draft" ? (
