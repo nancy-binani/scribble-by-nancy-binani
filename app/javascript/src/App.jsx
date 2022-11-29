@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import { registerIntercepts, setAuthHeaders } from "apis/axios";
 import { initializeLogger } from "common/logger";
 import PageLoader from "components/PageLoader";
+import "lib/dayjs";
 
 import Dashboard from "./components/Dashboard";
 import Create from "./components/Dashboard/Articles/Article/Create";

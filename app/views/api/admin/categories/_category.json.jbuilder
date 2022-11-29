@@ -5,4 +5,5 @@ json.extract! category,
   :category,
   :position
 
-json.articles category.articles, :title, :body, :created_at, :slug
+json.articles category.articles
+json.author category.user, :name, :site_id

@@ -11,6 +11,17 @@ const update = (payload, id) => {
   });
 };
 
+const updateWithPosition = async (position, id) => {
+  await axios.put("/api/admin/articles/update_with_position", {
+    position,
+    id,
+  });
+};
+
+const moveToCategory = async params => {
+  await axios.put("/api/admin/articles/move_to_category", params);
+};
+
 const destroy = id => axios.delete(`/api/admin/articles/${id}`);
 
 const count = () => axios.get("/api/admin/articles/count");
@@ -21,6 +32,8 @@ const articlesApi = {
   update,
   destroy,
   count,
+  updateWithPosition,
+  moveToCategory,
 };
 
 export default articlesApi;

@@ -1,25 +1,37 @@
 import React, { useState, useEffect } from "react";
 
-import { Delete, Edit, Reorder, Plus } from "neetoicons";
-import { PageLoader, Typography } from "neetoui";
+import { Search } from "neetoicons";
+import { Typography, Dropdown, PageLoader, Button, Input } from "neetoui";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
+import articlesApi from "apis/admin/articles";
 import categoriesApi from "apis/admin/categories";
 
+import Banner from "./Banner";
+import Categories from "./Categories";
 import DeleteAlert from "./DeleteAlert";
+import Form from "./Form";
+import List from "./List";
 
 import { CATEGORY_INITIAL_VALUE } from "../../Articles/constants";
-import CreateCategory from "../../Articles/CreateCategory";
+
+const { Menu, MenuItem } = Dropdown;
 
 const ManageCategories = () => {
-  const [createNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [categoryValue, setCategoryValue] = useState(CATEGORY_INITIAL_VALUE);
+  const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState(null);
+  const [showPane, setShowPane] = useState(false);
+  const [category, setCategory] = useState(CATEGORY_INITIAL_VALUE);
   const [isEdit, setIsEdit] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [deletedCategory, setDeletedCategory] = useState([]);
-  const [categoriesUpdated, setCategoriesUpdated] = useState(false);
+  const [deletedCategory, setDeletedCategory] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchedCategories, setSearchedCategories] = useState([]);
+  const [showBanner, setShowBanner] = useState(true);
+  const [selectedArticles, setSelectedArticles] = useState([]);
+  const [author, setAuthor] = useState("");
 
   const fetchCategories = async () => {
     try {
@@ -28,32 +40,40 @@ const ManageCategories = () => {
       } = await categoriesApi.fetch();
       setCategories(categories);
       setLoading(false);
+      setSelectedCategory(categories[0]);
+      setAuthor(categories[0].author.name);
+      setActive(categories[0].category);
     } catch (error) {
       logger.error(error);
       setLoading(false);
     }
-    setCategoriesUpdated(false);
+  };
+
+  const handleSelectedCategory = ({ id, category, position, articles }) => {
+    setActive(category);
+    setSelectedCategory({ id, category, position, articles });
   };
 
   const handleCreateCategory = () => {
+    setShowPane(true);
     setIsEdit(false);
-    setCategoryValue(CATEGORY_INITIAL_VALUE);
-    setCreateNewCategory(!createNewCategory);
+    setCategory(CATEGORY_INITIAL_VALUE);
   };
+
   const handleEditCategory = (category, id) => {
-    setCategoriesUpdated(true);
+    setShowPane(true);
     setIsEdit(true);
-    setCategoryValue({ category, id });
-    setCreateNewCategory(!createNewCategory);
+    setCategory({ category, id });
   };
-  const handleDeleteCategory = category => {
+
+  const handleDeleteCategory = (category, id, articles) => {
     setShowDeleteAlert(true);
-    setDeletedCategory(category);
+    setDeletedCategory({ category, id, articles });
   };
+
   const handleUpdateWithPosition = async (position, id) => {
     try {
       await categoriesApi.updateWithPosition(position, id);
-      setCategoriesUpdated(true);
     } catch (error) {
       logger.error(error);
     }
@@ -66,94 +86,172 @@ const ManageCategories = () => {
     handleUpdateWithPosition(result.destination.index + 1, reorderedItem.id);
   };
 
+  const handleSearch = async searchTerm => {
+    try {
+      const {
+        data: { categories },
+      } = await categoriesApi.fetch({ category: searchTerm });
+      setSearchedCategories(categories);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  const handleMoveToCategory = async (id, selectedArticles) => {
+    try {
+      await articlesApi.moveToCategory({
+        article_ids: selectedArticles,
+        category_id: id,
+      });
+    } catch (error) {
+      logger.error(error);
+    }
+    fetchCategories();
+  };
+
   useEffect(() => {
     fetchCategories();
-  }, [categoriesUpdated, createNewCategory]);
+  }, []);
 
   if (loading) {
     return <PageLoader />;
   }
 
   return (
-    <div className="mx-auto my-6">
-      <Typography style="h2">Manage Categories</Typography>
-      <Typography className="text-gray-600" style="body1">
-        Create and configure the categories inside your scribble.
-      </Typography>
-      <div className="my-6 flex text-indigo-500" onClick={handleCreateCategory}>
-        <Plus size={20} />
-        <Typography className="ml-1" style="h4">
-          Add New Category
-        </Typography>
+    <div className="flex w-2/3">
+      <div className="ml-10 mt-6 mr-12">
+        <span className="flex">
+          <Typography className="mb-6 mr-20" style="h2">
+            Manage Categories
+          </Typography>
+          <Button
+            className="h-8"
+            label="+"
+            size="medium"
+            tooltipProps={{
+              content: "Add Article",
+            }}
+            onClick={handleCreateCategory}
+          />
+        </span>
+        <div>
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable droppableId="categories">
+              {provided => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {categories.map(
+                    ({ id, category, articles, position }, index) => (
+                      <Draggable
+                        draggableId={String(id)}
+                        index={index}
+                        key={id}
+                      >
+                        {provided => (
+                          <div
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <div
+                              key={id}
+                              className={`h-18 mb-3 p-2 ${
+                                active === category && "bg-indigo-100"
+                              }`}
+                              onClick={() =>
+                                handleSelectedCategory({
+                                  id,
+                                  category,
+                                  articles,
+                                  position,
+                                })
+                              }
+                            >
+                              <Categories
+                                articles={articles}
+                                category={category}
+                                handleDeleteCategory={handleDeleteCategory}
+                                handleEditCategory={handleEditCategory}
+                                id={id}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    )
+                  )}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
       </div>
-      {createNewCategory && (
-        <CreateCategory
-          categories={categories}
-          category={categoryValue}
-          createNewCategory={createNewCategory}
+      {showPane && (
+        <Form
+          category={category}
           fetchCategories={fetchCategories}
           isEdit={isEdit}
-          setCreateNewCategory={setCreateNewCategory}
+          setShowPane={setShowPane}
+          showPane={showPane}
         />
       )}
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Droppable droppableId="categories">
-          {provided => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {categories.map((category, index) => (
-                <Draggable
-                  draggableId={String(category["id"])}
-                  index={index}
-                  key={category["id"]}
-                >
-                  {provided => (
-                    <div
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className="border-b my-6 flex justify-between border-solid pb-3 tracking-tight"
-                      ref={provided.innerRef}
-                    >
-                      <div className="flex">
-                        <Reorder color="gray" size={20} />
-                        <Typography className="ml-3" style="h4">
-                          {category["category"]}
-                        </Typography>
-                      </div>
-                      <div className="flex">
-                        <Edit
-                          className="ml-3"
-                          color="gray"
-                          size={20}
-                          onClick={() =>
-                            handleEditCategory(
-                              category["category"],
-                              category["id"]
-                            )
-                          }
-                        />
-                        <Delete
-                          color="gray"
-                          size={20}
-                          onClick={() => handleDeleteCategory(category)}
-                        />
-                      </div>
-                    </div>
+      <div className="mt-6 w-3/4">
+        <span className="flex">
+          <Typography className="mr-auto mb-6" style="h2">
+            Manage Articles
+          </Typography>
+          <span className="mb-5">
+            <Dropdown
+              buttonSize="small"
+              buttonStyle="secondary"
+              closeOnSelect={false}
+              label="Move To"
+            >
+              <div className="flex flex-col gap-y-1 rounded-md p-3">
+                <Input
+                  placeholder="Search members"
+                  prefix={<Search />}
+                  value={searchTerm}
+                  onChange={e => {
+                    setSearchTerm(e.target.value);
+                    handleSearch(e.target.value);
+                  }}
+                />
+                <Typography style="body3">Results</Typography>
+                <Menu>
+                  {(searchTerm !== "" ? searchedCategories : categories).map(
+                    ({ category, id }) => (
+                      <MenuItem.Button
+                        key={id}
+                        onClick={() =>
+                          handleMoveToCategory(id, selectedArticles)
+                        }
+                      >
+                        {category}
+                      </MenuItem.Button>
+                    )
                   )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      {showDeleteAlert && (
-        <DeleteAlert
-          categories={categories}
-          deletedCategory={deletedCategory}
-          setCategoriesUpdated={setCategoriesUpdated}
-          onClose={() => setShowDeleteAlert(false)}
+                </Menu>
+              </div>
+            </Dropdown>
+          </span>
+        </span>
+        {showBanner && <Banner setShowBanner={setShowBanner} />}
+        <List
+          author={author}
+          selectedArticles={selectedArticles}
+          selectedCategory={selectedCategory}
+          setSelectedArticles={setSelectedArticles}
         />
-      )}
+        {showDeleteAlert && (
+          <DeleteAlert
+            categories={categories}
+            deletedCategory={deletedCategory}
+            fetchCategories={fetchCategories}
+            onClose={() => setShowDeleteAlert(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import { PageLoader } from "neetoui";
 import { Sidebar as NeetoUISidebar } from "neetoui/layouts";
 
 import sitesApi from "apis/admin/sites";
@@ -8,7 +7,6 @@ import sitesApi from "apis/admin/sites";
 import { SIDENAV_LINKS } from "./constants";
 
 const Sidebar = () => {
-  const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
 
   const fetchSiteDetails = async () => {
@@ -18,13 +16,10 @@ const Sidebar = () => {
     } catch (error) {
       logger.error(error);
     }
-    setLoading(false);
   };
   useEffect(() => {
     fetchSiteDetails();
   }, []);
-
-  if (loading) return <PageLoader />;
 
   return (
     <NeetoUISidebar

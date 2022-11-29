@@ -18,7 +18,7 @@ const SideMenu = ({ history, menu }) => {
 
   return (
     <div className="flex">
-      <MenuBar showMenu>
+      <MenuBar showMenu title="Settings">
         {MENU_OPTIONS.map(({ label, description, id }) => (
           <MenuBar.Item
             className={`${selectedMenu === label && "bg-white"}`}

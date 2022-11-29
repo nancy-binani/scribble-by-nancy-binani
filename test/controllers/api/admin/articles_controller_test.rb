@@ -98,4 +98,13 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_equal response_body["count"]["count_by_category"][@category.id.to_s], 1
     assert_equal response_body["count"]["count_by_status"]["published"], 1
   end
+
+  def test_can_update_position_on_sort
+    new_article = create(:article, title: "Scribble", category: @category, user: @user)
+    article_params = { article: { position: 1, id: new_article.id } }
+    put update_with_position_api_admin_articles_path({ params: article_params, id: new_article.id })
+    assert_response :success
+    @article.reload
+    assert_equal @article.position, 2
+  end
 end
