@@ -4,7 +4,7 @@ import { MenuBar } from "neetoui/layouts";
 
 import { MENU_OPTIONS } from "./constants";
 
-const SideMenu = ({ history, menu }) => {
+const Menubar = ({ history, menu }) => {
   const selectedMenu =
     menu === "Manage%20Categories" ? "Manage Categories" : menu;
   const handleClick = label => {
@@ -33,4 +33,4 @@ const SideMenu = ({ history, menu }) => {
   );
 };
 
-export default SideMenu;
+export default Menubar;

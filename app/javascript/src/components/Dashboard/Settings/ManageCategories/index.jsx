@@ -7,11 +7,11 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import articlesApi from "apis/admin/articles";
 import categoriesApi from "apis/admin/categories";
 
+import Articles from "./Articles";
 import Banner from "./Banner";
-import Categories from "./Categories";
+import Category from "./Category";
 import DeleteAlert from "./DeleteAlert";
 import Form from "./Form";
-import List from "./List";
 
 import { CATEGORY_INITIAL_VALUE } from "../../Articles/constants";
 
@@ -166,7 +166,7 @@ const ManageCategories = () => {
                                 })
                               }
                             >
-                              <Categories
+                              <Category
                                 articles={articles}
                                 category={category}
                                 handleDeleteCategory={handleDeleteCategory}
@@ -237,7 +237,7 @@ const ManageCategories = () => {
           </span>
         </span>
         {showBanner && <Banner setShowBanner={setShowBanner} />}
-        <List
+        <Articles
           author={author}
           selectedArticles={selectedArticles}
           selectedCategory={selectedCategory}

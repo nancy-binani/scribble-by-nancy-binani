@@ -11,7 +11,7 @@ import {
   formatDateAndTimeForToolTip,
 } from "../../Articles/utils";
 
-const List = ({
+const Articles = ({
   selectedCategory,
   selectedArticles,
   setSelectedArticles,
@@ -128,4 +128,4 @@ const List = ({
   );
 };
 
-export default List;
+export default Articles;
