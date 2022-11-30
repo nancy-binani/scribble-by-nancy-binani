@@ -4,7 +4,7 @@ class Api::Admin::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[update destroy update_with_position]
 
   def index
-    @articles = current_user.articles.order(:category_id, :position).includes(:category)
+    @articles = current_user.articles.includes(:category)
     @articles = FilterArticleService.new(@articles, params[:status], params[:title], params[:category_ids]).process
   end
 
@@ -19,6 +19,7 @@ class Api::Admin::ArticlesController < ApplicationController
   end
 
   def destroy
+    @article.remove_from_list
     @article.destroy!
     respond_with_success(t("successfully_deleted", entity: "Article"))
   end

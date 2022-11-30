@@ -16,5 +16,8 @@ class MoveArticlesService
     end
     articles = current_user.articles.where(id: article_ids)
     articles.update(category_id: category_id)
+    article_ids.each do |id|
+      current_user.articles.find(id).move_to_bottom
+    end
   end
 end

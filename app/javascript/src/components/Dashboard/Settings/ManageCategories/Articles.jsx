@@ -62,6 +62,7 @@ const Articles = ({
                   >
                     <div className="border-slate-300 shadow-slate-300 h-44 box-border items-start rounded-sm border-2 bg-white p-3 shadow-md">
                       <Checkbox
+                        checked={selectedArticles.includes(article.id)}
                         className="mb-3"
                         onChange={() => handleChecked(article)}
                       />
