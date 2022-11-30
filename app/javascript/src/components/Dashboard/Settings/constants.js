@@ -51,3 +51,6 @@ export const SIDENAV_LINKS = [
 ];
 
 export const ACTIONS = ["Edit", "Delete"];
+
+export const BANNER_DESCRIPTION =
+  "You can reorder categories or articles by drag and drop here. You can also multiselect articles and move them together to any category you have created.";

@@ -5,7 +5,7 @@ import { Typography, Dropdown } from "neetoui";
 
 const { Menu, MenuItem } = Dropdown;
 
-const Categories = ({
+const Category = ({
   handleDeleteCategory,
   handleEditCategory,
   category,
@@ -33,4 +33,4 @@ const Categories = ({
   </div>
 );
 
-export default Categories;
+export default Category;
