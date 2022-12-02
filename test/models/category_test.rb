@@ -19,11 +19,4 @@ class CategoryTest < ActiveSupport::TestCase
     new_category = Category.create(category: @category.category, user: @user)
     assert_equal new_category.errors_to_sentence, t("unique", entity: "Category")
   end
-
-  def test_update_category_of_articles_to_general_on_delete_category
-    new_category = create(:category, category: "JavaScript", user: @user)
-    new_article = create(:article, category: new_category, user: @user)
-    new_category.destroy!
-    assert_equal new_article.category_id - 1, @category.id
-  end
 end

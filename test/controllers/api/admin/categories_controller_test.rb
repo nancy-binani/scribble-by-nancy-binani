@@ -38,7 +38,7 @@ class Api::Admin::CategoriesControllerTest < ActionDispatch::IntegrationTest
       delete api_admin_category_path(new_category.id), params: { move_category: [new_category.id, @category.id] }
     end
     assert_response :ok
-    assert_equal @category.articles.length, 1
+    assert_equal Category.count, 1
   end
 
   def test_can_update_position_on_sort

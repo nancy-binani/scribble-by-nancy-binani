@@ -29,7 +29,7 @@ class DeleteCategoryService
     if current_user.categories.count === 1
       new_category_id = when_single_category_is_present
     elsif current_user.categories.count > 1
-      new_category_id = move_category[1].to_i
+      new_category_id = move_category[1]
     end
     category.articles.update(category_id: new_category_id)
     category.destroy!
