@@ -40,6 +40,7 @@ const ManageCategories = () => {
       } = await categoriesApi.fetch();
       setCategories(categories);
       setLoading(false);
+      setSelectedArticles([]);
       setSelectedCategory(categories[0]);
       setAuthor(categories[0].author.name);
       setActive(categories[0].category);
@@ -106,6 +107,7 @@ const ManageCategories = () => {
     } catch (error) {
       logger.error(error);
     }
+    setSelectedArticles([]);
     fetchCategories();
   };
 

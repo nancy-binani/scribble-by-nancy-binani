@@ -35,7 +35,7 @@ export const ARTICLES_FORM_VALIDATION_SCHEMA = CATEGORIES =>
       .nullable()
       .shape({
         label: yup.string().oneOf(CATEGORIES.map(category => category.label)),
-        value: yup.number().oneOf(CATEGORIES.map(category => category.value)),
+        value: yup.string().oneOf(CATEGORIES.map(category => category.value)),
       })
       .required("Please select a category"),
   });
