@@ -14,7 +14,10 @@ class MoveArticlesServiceTest < ActionDispatch::IntegrationTest
     new_category = create(:category, category: "Gen", user: @user)
     new_article_one = create(:article, status: "draft", category: @category, user: @user)
     new_article_two = create(:article, status: "published", category: @category, user: @user)
-    moved_articles = MoveArticlesService.new(@user, [new_article_one.id, new_article_two.id], new_category.id).process
-    assert_equal new_category.articles, moved_articles
+    put move_to_category_api_admin_articles_path,
+      params: { article_ids: [new_article_one.id, new_article_two.id], category_id: new_category.id }
+    new_category.reload
+    new_article_one.reload
+    assert_equal new_article_one.category_id, new_category.id
   end
 end
