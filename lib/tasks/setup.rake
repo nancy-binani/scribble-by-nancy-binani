@@ -35,42 +35,47 @@ end
 
 def create_sample_user_data!
   puts "Seeding with sample user..."
+  site = Site.first
   User.create!(
     name: "Oliver Smith",
     email: "oliver@example.com",
-    site_id: 1
+    site_id: site.id
   )
   puts "Done! site is created successfully."
 end
 
 def create_sample_category_data!
   puts "Seeding with sample category..."
+  user = User.first
   Category.create!(
     category: "General",
-    user_id: 1
+    user_id: user.id
   )
   puts "Done! category is created successfully"
 end
 
 def create_sample_article_data!
   puts "Seeding with sample article..."
+  user = User.first
+  category = Category.first
   Article.create!(
     title: "Scribble",
     body: "Hello world",
     status: "draft",
     author: "Oliver Smith",
-    user_id: 1,
-    category_id: 1
+    user_id: user.id,
+    category_id: category.id
   )
   puts "Done! article is created successfully."
 end
 
 def create_sample_redirection_data!
   puts "Seeding with sample user..."
+  site = Site.first
   Redirection.create!(
     from: "/1",
     to: "/2",
-    site_id: 1
+    site_id: site.id
   )
   puts "Done! redirection is created successfully."
  end
