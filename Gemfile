@@ -65,4 +65,5 @@ group :development, :test do
   gem "faker"
 end
 
+gem "paper_trail"
 gem "simplecov", require: false, group: :test

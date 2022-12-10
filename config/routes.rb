@@ -14,7 +14,8 @@ Rails.application.routes.draw do
         resources :articles, except: %i[new edit show] do
           put :update_with_position, on: :collection
           put :move_to_category, on: :collection
-          get "count", on: :collection
+          get :count, on: :collection
+          get :versions, on: :member
         end
         resources :categories do
           put :update_with_position, on: :collection

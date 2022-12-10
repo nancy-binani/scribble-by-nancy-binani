@@ -87,20 +87,20 @@ const Articles = ({
                             )}
                           >
                             <Typography className="mx-1 mt-4" style="body3">
-                              {article.status === "draft"
+                              {article.status === "drafted"
                                 ? "Drafted"
                                 : "Published"}{" "}
                               {calculateCreatedAgo(article.created_at)}
                             </Typography>
                           </Tooltip>
-                          {article.status === "draft" && (
+                          {article.status === "drafted" && (
                             <Avatar
                               className="mx-1 mt-2"
                               size="small"
                               user={{ name: author }}
                             />
                           )}
-                          {article.status === "draft" ? (
+                          {article.status === "drafted" ? (
                             <Tag
                               className="mx-1 mt-2"
                               label={article.status}

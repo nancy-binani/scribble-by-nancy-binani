@@ -3,8 +3,8 @@
 class Article < ApplicationRecord
   MAX_TITLE_LENGTH = 255
   VALID_TITLE_REGEX = /\A[a-zA-Z0-9]+\z/
-  enum status: { draft: "draft", published: "published" }
-
+  enum status: { drafted: "drafted", published: "published" }
+  has_paper_trail
   belongs_to :category
   belongs_to :user
 

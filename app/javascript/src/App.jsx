@@ -14,6 +14,7 @@ import PageLoader from "components/PageLoader";
 import "lib/dayjs";
 
 import Dashboard from "./components/Dashboard";
+import Analytics from "./components/Dashboard/Analytics";
 import Create from "./components/Dashboard/Articles/Article/Create";
 import Edit from "./components/Dashboard/Articles/Article/Edit";
 import Settings from "./components/Dashboard/Settings";
@@ -42,12 +43,18 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      <Route exact component={Navbar} path={["/", "/articles"]} />
+      <Route
+        exact
+        component={Navbar}
+        path={["/", "/settings", "/analytics"]}
+        showTag={false}
+      />
       <Switch history={history}>
         <Route component={Edit} path="/articles/:id/edit" />
         <Route component={Create} path="/articles/create" />
         <Route path="/settings" render={props => <Settings {...props} />} />
         <Route path="/public/*" render={props => <Eui {...props} />} />
+        <Route exact component={Analytics} path="/analytics" />
         <Route exact component={Dashboard} path={["/", "/articles"]} />
       </Switch>
     </Router>

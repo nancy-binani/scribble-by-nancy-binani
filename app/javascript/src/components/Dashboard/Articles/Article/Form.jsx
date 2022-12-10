@@ -16,7 +16,7 @@ const Form = ({ isEdit, article, history }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatedCategory, setUpdatedCategory] = useState(null);
-  const [status, setStatus] = useState("draft");
+  const [status, setStatus] = useState("drafted");
 
   const fetchCategories = async () => {
     try {
@@ -89,7 +89,7 @@ const Form = ({ isEdit, article, history }) => {
       onSubmit={handleSubmit}
     >
       {({ isSubmitting, setFieldValue, dirty }) => (
-        <FormikForm className=" mx-auto mt-12 max-w-lg space-y-6">
+        <FormikForm className=" mx-auto mt-12 w-2/5 space-y-6">
           <div className="mt-1 flex w-full flex-row space-x-3 ">
             <Input
               required
@@ -120,7 +120,7 @@ const Form = ({ isEdit, article, history }) => {
               <Button
                 className="mr-px"
                 disabled={!dirty}
-                label={status === "draft" ? "Save Draft" : "Published"}
+                label={status === "drafted" ? "Save Draft" : "Published"}
                 name="status"
                 size="medium"
                 style="primary"
@@ -137,7 +137,7 @@ const Form = ({ isEdit, article, history }) => {
                       onClick={() => {
                         setFieldValue(
                           "status",
-                          status !== "draft" ? "published" : "draft"
+                          status !== "drafted" ? "published" : "drafted"
                         );
                         setStatus(status);
                       }}

@@ -4,11 +4,12 @@ json.extract! article,
   :id,
   :title,
   :body,
-  :created_at,
+  :updated_at,
   :slug,
   :status,
   :category_id,
-  :position
+  :position,
+  :versions
 
 json.category article.category
 json.author article.user, :name, :site_id
