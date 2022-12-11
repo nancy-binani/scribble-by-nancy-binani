@@ -5,6 +5,7 @@ import { Button, PageLoader, Typography, Input } from "neetoui";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Route, Switch, useParams } from "react-router-dom";
 
+import articlesApi from "apis/public/articles";
 import categoriesApi from "apis/public/categories";
 
 import Detail from "./Detail";
@@ -20,8 +21,9 @@ const SideMenu = ({ history, name }) => {
   const params = useParams();
   const [paramCategory, paramsSlug] = params[0].split("/");
 
-  const handleClick = (article, category) => {
+  const handleClick = async (article, category) => {
     setActive(article.title);
+    handleUpdateVisit(article);
     setActiveArticle(article);
     setCategory(category);
     history.push(`/public/${category}/${article.slug}`);
@@ -63,6 +65,14 @@ const SideMenu = ({ history, name }) => {
     }
   };
 
+  const handleUpdateVisit = async article => {
+    try {
+      await articlesApi.update(article, article.id);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   useEffect(() => {
     if (categories.length > 0 && !loading) {
       detailsOfFirstArticle(categories);
@@ -74,6 +84,8 @@ const SideMenu = ({ history, name }) => {
           filteredCategories[0].articles.filter(
             ({ slug }) => slug === paramsSlug
           )[0];
+        handleUpdateVisit(articleOfCorrespondingCategory);
+
         setActiveArticle(articleOfCorrespondingCategory);
         setActive(articleOfCorrespondingCategory.slug);
         setCategory(filteredCategories[0]["category"]);

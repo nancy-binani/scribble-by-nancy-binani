@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   namespace :api do
     defaults format: :json do
       namespace :public do
-        resources :categories, only: :index
+        resources :categories, only: %i[index]
+        resources :articles, only: %i[index update]
       end
       namespace :admin do
         resources :redirections, except: %i[new edit]

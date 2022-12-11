@@ -11,11 +11,9 @@ export const buildArticlesColumnData = history => [
     className: "text-indigo-500",
     render: (title, { category, slug }) => (
       <span
-        onClick={() =>
-          slug
-            ? history.push(`/public/${category.category}/${slug}`)
-            : alert("You can only see published articles!!")
-        }
+        onClick={() => {
+          history.push(`/public/${category.category}/${slug}`);
+        }}
       >
         {title}
       </span>
@@ -47,9 +45,11 @@ export const buildArticlesColumnData = history => [
   },
   {
     title: "VISITS",
-    //dataIndex: "visits",
+    dataIndex: "visits",
     key: "Visits",
     width: "15%",
     className: "text-gray-600",
+    render: visits => <span>{visits}</span>,
+    sorter: (a, b) => a.visits - b.visits,
   },
 ];

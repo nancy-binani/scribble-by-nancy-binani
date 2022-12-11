@@ -1,31 +1,23 @@
 import React from "react";
 
-import { Pagination } from "antd";
 import { Table as NeetoUITable } from "neetoui";
+import { useHistory } from "react-router-dom";
 
 import { buildArticlesColumnData } from "./utils";
 
-const Table = ({ articles }) => (
-  <>
+const Table = ({ articles }) => {
+  const history = useHistory();
+
+  return (
     <NeetoUITable
       allowRowClick
+      pagination
       columnData={buildArticlesColumnData(history)}
       rowData={articles}
       onRowClick={() => {}}
       onRowSelect={() => {}}
     />
-    <br />
-    <div className="flex justify-end">
-      <Pagination
-        showQuickJumper
-        showSizeChanger
-        total={articles.length}
-        showTotal={(total, range) =>
-          `${range[0]}-${range[1]} of ${total} items`
-        }
-      />
-    </div>
-  </>
-);
+  );
+};
 
 export default Table;
