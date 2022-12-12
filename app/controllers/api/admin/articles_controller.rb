@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 class Api::Admin::ArticlesController < ApplicationController
@@ -53,6 +52,6 @@ class Api::Admin::ArticlesController < ApplicationController
 
     def article_params
       params.require(:article).permit(
-        :title, :body, :author, :status, :category_id, :position, :version_status, :restored_at)
+        :title, :body, :author, :status, :category_id, :position, :restored, :restored_at)
     end
 end

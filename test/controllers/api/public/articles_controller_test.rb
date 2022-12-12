@@ -17,9 +17,10 @@ class Api::Public::ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_update_article_on_visits
+    assert_equal @article.visits, 0
     put api_public_article_path(@article.id)
-    @article.visits = 1
-    @article.save!
     assert_response :success
+    @article.reload
+    assert_equal @article.visits, 1
   end
 end

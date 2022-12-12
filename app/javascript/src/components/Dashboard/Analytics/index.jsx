@@ -4,7 +4,7 @@ import { PageLoader } from "neetoui";
 
 import articlesApi from "apis/public/articles";
 
-import Table from "./Table/Table";
+import Table from "./Table";
 
 const Analytics = history => {
   const [articles, setArticles] = useState([]);

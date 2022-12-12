@@ -9,12 +9,12 @@ const Versions = ({ articleVersions, setVersion, setShowModal }) =>
     <div className="border mx-4 mb-2 rounded-md p-4" key={version.id}>
       <div className="flex justify-between">
         <div>
-          {!version.article.version_status && (
+          {!version.article.restored && (
             <Typography className="mr-4 text-gray-500" style="body2">
               {formatDateAndTimeForToolTip(version.article.updated_at)}
             </Typography>
           )}
-          {version.article.version_status && (
+          {version.article.restored && (
             <div className="flex">
               <Typography className="text-gray-500" style="body2">
                 From {formatDateAndTimeForToolTip(version.article.restored_at)}
@@ -32,7 +32,7 @@ const Versions = ({ articleVersions, setVersion, setShowModal }) =>
             </div>
           )}
         </div>
-        {!version.article.version_status && (
+        {!version.article.restored && (
           <Typography
             className="my-auto cursor-pointer text-indigo-500"
             style="h4"
