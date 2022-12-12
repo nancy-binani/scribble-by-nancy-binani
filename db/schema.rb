@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2022_12_08_112726) do
     t.string "status", default: "draft", null: false
     t.integer "position"
     t.datetime "restored_at"
-    t.boolean "version_status"
+    t.boolean "restored"
     t.integer "visits", default: 0
     t.uuid "user_id"
     t.uuid "category_id"

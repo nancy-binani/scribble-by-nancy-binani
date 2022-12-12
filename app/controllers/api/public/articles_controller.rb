@@ -9,11 +9,7 @@ class Api::Public::ArticlesController < ApplicationController
   end
 
   def update
-    if @article.visits
-      @article.visits = @article.visits + 1
-    else
-      @article.visits = 1
-    end
+    @article.visits = @article.visits + 1
     @article.save!
     respond_with_success(t("successfully_updated", entity: "Article"))
   end

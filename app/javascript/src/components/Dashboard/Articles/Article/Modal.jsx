@@ -18,7 +18,7 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
         body: version.article.body,
         status: "drafted",
         category_id: version.article.category_id,
-        version_status: true,
+        restored: true,
         restored_at: version.article.updated_at,
       };
       await articlesApi.update(articleData, version.article.id);
@@ -64,7 +64,7 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
       <NeetoUIModal.Footer>
         <div className="flex space-x-2">
           <Button
-            disabled={version.article.version_status}
+            disabled={version.article.restored}
             label="Restore version"
             onClick={handleRestore}
           />
