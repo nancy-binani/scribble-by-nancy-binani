@@ -6,7 +6,6 @@ import General from "./General";
 import ManageCategories from "./ManageCategories";
 import Menubar from "./Menubar";
 import Redirections from "./Redirections";
-import Sidebar from "./Sidebar";
 
 const Settings = ({ history }) => {
   const location = useLocation();
@@ -31,7 +30,6 @@ const Settings = ({ history }) => {
 
   return (
     <div className="flex h-screen w-full">
-      <Sidebar />
       <Menubar history={history} menu={menu} />
       {showSelectedSettingsMenu(selectedSideMenu)}
     </div>

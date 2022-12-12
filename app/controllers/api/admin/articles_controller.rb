@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 class Api::Admin::ArticlesController < ApplicationController
-  before_action :load_article!, only: %i[update destroy update_with_position]
+  before_action :load_article!, only: %i[update destroy update_with_position versions]
 
   def index
     @articles = current_user.articles.order(:position).includes(:category)
@@ -40,6 +40,11 @@ class Api::Admin::ArticlesController < ApplicationController
     MoveArticlesService.new(current_user, params["article_ids"], params[:category_id]).process
   end
 
+  def versions
+    @article_versions = @article.versions
+    render
+  end
+
   private
 
     def load_article!
@@ -48,6 +53,6 @@ class Api::Admin::ArticlesController < ApplicationController
 
     def article_params
       params.require(:article).permit(
-        :title, :body, :author, :status, :category_id, :position)
+        :title, :body, :author, :status, :category_id, :position, :version_status, :restored_at)
     end
 end

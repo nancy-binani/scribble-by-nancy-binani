@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { ExternalLink } from "neetoicons";
-import { Button, PageLoader, Typography } from "neetoui";
+import { Button, PageLoader, Typography, Input } from "neetoui";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Route, Switch, useParams } from "react-router-dom";
 
+import articlesApi from "apis/public/articles";
 import categoriesApi from "apis/public/categories";
 
 import Detail from "./Detail";
@@ -15,12 +16,14 @@ const SideMenu = ({ history, name }) => {
   const [activeArticle, setActiveArticle] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const params = useParams();
   const [paramCategory, paramsSlug] = params[0].split("/");
 
-  const handleClick = (article, category) => {
+  const handleClick = async (article, category) => {
     setActive(article.title);
+    handleUpdateVisit(article);
     setActiveArticle(article);
     setCategory(category);
     history.push(`/public/${category}/${article.slug}`);
@@ -62,6 +65,14 @@ const SideMenu = ({ history, name }) => {
     }
   };
 
+  const handleUpdateVisit = async article => {
+    try {
+      await articlesApi.update(article, article.id);
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   useEffect(() => {
     if (categories.length > 0 && !loading) {
       detailsOfFirstArticle(categories);
@@ -73,6 +84,8 @@ const SideMenu = ({ history, name }) => {
           filteredCategories[0].articles.filter(
             ({ slug }) => slug === paramsSlug
           )[0];
+        handleUpdateVisit(articleOfCorrespondingCategory);
+
         setActiveArticle(articleOfCorrespondingCategory);
         setActive(articleOfCorrespondingCategory.slug);
         setCategory(filteredCategories[0]["category"]);
@@ -90,12 +103,17 @@ const SideMenu = ({ history, name }) => {
 
   return (
     <>
-      <nav className="shadow border-text-gray-400 border-b mx-auto border-solid bg-white">
+      <nav className="shadow border-text-gray-400 border-b border-solid bg-white p-2">
+        <Input
+          className="fixed w-56"
+          placeholder="Search for articles here"
+          onClick={() => setShowModal(true)}
+        />
         <Typography className="p-2 text-center text-gray-700" style="h4">
           {name}
         </Typography>
       </nav>
-      <div className="flex h-screen w-full">
+      <div className="fixed flex h-screen w-full overflow-hidden">
         {paramsSlug ? (
           <Sidebar>
             <Menu>
@@ -138,7 +156,13 @@ const SideMenu = ({ history, name }) => {
           <Route
             path={`/public/${category}/${activeArticle.slug}`}
             render={() => (
-              <Detail activeArticle={activeArticle} category={category} />
+              <Detail
+                activeArticle={activeArticle}
+                categories={categories}
+                category={category}
+                setShowModal={setShowModal}
+                showModal={showModal}
+              />
             )}
           />
         </Switch>

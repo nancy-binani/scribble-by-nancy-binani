@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   namespace :api do
     defaults format: :json do
       namespace :public do
-        resources :categories, only: :index
+        resources :categories, only: %i[index]
+        resources :articles, only: %i[index update]
       end
       namespace :admin do
         resources :redirections, except: %i[new edit]
@@ -14,7 +15,8 @@ Rails.application.routes.draw do
         resources :articles, except: %i[new edit show] do
           put :update_with_position, on: :collection
           put :move_to_category, on: :collection
-          get "count", on: :collection
+          get :count, on: :collection
+          get :versions, on: :member
         end
         resources :categories do
           put :update_with_position, on: :collection

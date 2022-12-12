@@ -35,7 +35,7 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   def test_slug_not_generated_on_status_draft
-    article = create(:article, title: "test1", body: "abc", status: "draft", category: @category, user: @user)
+    article = create(:article, title: "test1", body: "abc", status: "drafted", category: @category, user: @user)
     assert_nil(article.slug, "nil")
   end
 

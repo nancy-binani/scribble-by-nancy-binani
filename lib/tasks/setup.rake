@@ -61,7 +61,7 @@ def create_sample_article_data!
   Article.create!(
     title: "Scribble",
     body: "Hello world",
-    status: "draft",
+    status: "drafted",
     author: "Oliver Smith",
     user_id: user.id,
     category_id: category.id

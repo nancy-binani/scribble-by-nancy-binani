@@ -26,6 +26,8 @@ const destroy = id => axios.delete(`/api/admin/articles/${id}`);
 
 const count = () => axios.get("/api/admin/articles/count");
 
+const versions = id => axios.get(`/api/admin/articles/${id}/versions`);
+
 const articlesApi = {
   fetch,
   create,
@@ -34,6 +36,7 @@ const articlesApi = {
   count,
   updateWithPosition,
   moveToCategory,
+  versions,
 };
 
 export default articlesApi;

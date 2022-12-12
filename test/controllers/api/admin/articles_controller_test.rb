@@ -107,4 +107,12 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     @article.reload
     assert_equal @article.position, 2
   end
+
+  def test_get_versions
+    get versions_api_admin_article_path(@article.id)
+    assert_response :success
+    versions_count = @article.versions.count
+    response_json = response.parsed_body
+    assert_equal versions_count, response_json["article_versions"].count
+  end
 end
