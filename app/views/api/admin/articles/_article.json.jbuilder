@@ -10,7 +10,9 @@ json.extract! article,
   :category_id,
   :position,
   :versions,
-  :visits
+  :restored,
+  :restored_at,
+  :visits_count
 
 json.category article.category
 json.author article.user, :name, :site_id

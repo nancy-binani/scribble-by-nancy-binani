@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_08_112726) do
+ActiveRecord::Schema.define(version: 2022_12_16_123100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -29,9 +29,9 @@ ActiveRecord::Schema.define(version: 2022_12_08_112726) do
     t.integer "position"
     t.datetime "restored_at"
     t.boolean "restored"
-    t.integer "visits", default: 0
     t.uuid "user_id"
     t.uuid "category_id"
+    t.integer "visits_count", default: 0
   end
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -77,9 +77,16 @@ ActiveRecord::Schema.define(version: 2022_12_08_112726) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  create_table "visits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "article_id"
+  end
+
   add_foreign_key "articles", "categories", on_delete: :cascade
   add_foreign_key "articles", "users", on_delete: :cascade
   add_foreign_key "categories", "users", on_delete: :cascade
   add_foreign_key "redirections", "sites", on_delete: :cascade
   add_foreign_key "users", "sites", on_delete: :cascade
+  add_foreign_key "visits", "articles", on_delete: :cascade
 end

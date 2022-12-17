@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Search } from "neetoicons";
-import { Tag, Typography, Modal, Input, Button, PageLoader } from "neetoui";
+import { Tag, Typography, Modal, Button, PageLoader, Select } from "neetoui";
 import { Container } from "neetoui/layouts";
 import { useHistory } from "react-router-dom";
 
@@ -12,11 +11,18 @@ import { formatDateAndTime } from "../Dashboard/Articles/utils";
 const Detail = ({ activeArticle, category, showModal, setShowModal }) => {
   const inputRef = React.useRef(null);
   const buttonRef = React.useRef(null);
-
-  const [searchTerm, setSearchTerm] = useState("");
   const [articles, setArticles] = useState([]);
+  const [searchedArticles, setSearchedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
+
+  const handleChange = e => {
+    const searchedArticle = articles.find(({ id }) => id === e.value);
+    history.push(
+      `/public/${searchedArticle.category.category}/${searchedArticle.slug}`
+    );
+    window.location.reload();
+  };
 
   const fetchArticles = async () => {
     try {
@@ -24,6 +30,11 @@ const Detail = ({ activeArticle, category, showModal, setShowModal }) => {
         data: { articles },
       } = await articlesApi.fetch();
       setArticles(articles);
+      const articleList = articles.map(article => ({
+        value: article.id,
+        label: article.title,
+      }));
+      setSearchedArticles(articleList);
     } catch (error) {
       logger.error(error);
     }
@@ -37,17 +48,6 @@ const Detail = ({ activeArticle, category, showModal, setShowModal }) => {
   if (loading) {
     return <PageLoader />;
   }
-
-  const handleSearch = async searchTerm => {
-    try {
-      const {
-        data: { articles },
-      } = await articlesApi.fetch({ title: searchTerm });
-      setArticles(articles);
-    } catch (error) {
-      logger.error(error);
-    }
-  };
 
   return (
     <Container className="mx-10">
@@ -73,31 +73,18 @@ const Detail = ({ activeArticle, category, showModal, setShowModal }) => {
         }}
       >
         <Modal.Header>
-          <Typography style="h2">All Articles</Typography>
+          <Typography style="h2">Articles</Typography>
         </Modal.Header>
         <Modal.Body className="space-y-2">
-          <Input
-            placeholder="Search For Articles"
-            prefix={<Search />}
-            ref={inputRef}
-            value={searchTerm}
-            onChange={e => {
-              setSearchTerm(e.target.value);
-              handleSearch(e.target.value);
-            }}
+          <Select
+            isClearable
+            isSearchable
+            openMenuOnFocus
+            name="articles"
+            options={searchedArticles}
+            placeholder="Select an article"
+            onChange={e => handleChange(e)}
           />
-          {articles.map(article => (
-            <Typography
-              key={article.id}
-              style="h4"
-              onClick={() => {
-                history.push(`/public/${category}/${article.slug}`);
-                window.location.reload();
-              }}
-            >
-              {article.title}
-            </Typography>
-          ))}
         </Modal.Body>
         <Modal.Footer className="space-x-2">
           <Button

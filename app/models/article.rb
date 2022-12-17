@@ -3,8 +3,13 @@
 class Article < ApplicationRecord
   MAX_TITLE_LENGTH = 255
   VALID_TITLE_REGEX = /\A[a-zA-Z0-9]+\z/
+  MAX_PAGINATES = 6
+  MAX_PAGES = 25
+  max_paginates_per MAX_PAGINATES
+  max_pages MAX_PAGES
   enum status: { drafted: "drafted", published: "published" }
   has_paper_trail
+  has_many :visits
   belongs_to :category
   belongs_to :user
 

@@ -11,6 +11,10 @@ import {
 import articlesApi from "apis/admin/articles";
 
 const Modal = ({ version, showModal, setShowModal, history }) => {
+  const category = version.category
+    ? version.category.category
+    : "Category doesn't exists";
+
   const handleRestore = async () => {
     try {
       const articleData = {
@@ -29,6 +33,7 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
       logger.error(error);
     }
   };
+  const restored = version.article.restored;
 
   return (
     <NeetoUIModal
@@ -36,7 +41,7 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
       size="large"
       onClose={() => setShowModal(false)}
     >
-      <NeetoUIModal.Header description="Version history of Setting up an account in Scribble.">
+      <NeetoUIModal.Header>
         <Typography style="h2">Version History</Typography>
       </NeetoUIModal.Header>
       <NeetoUIModal.Body className="space-y-2">
@@ -47,12 +52,7 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
             label="Article Title"
             value={version.article.title}
           />
-          <Input
-            disabled
-            className="w-56"
-            label="Category"
-            value={version.category.category}
-          />
+          <Input disabled className="w-56" label="Category" value={category} />
         </div>
         <Textarea
           disabled
@@ -64,7 +64,7 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
       <NeetoUIModal.Footer>
         <div className="flex space-x-2">
           <Button
-            disabled={version.article.restored}
+            disabled={!version.category || restored}
             label="Restore version"
             onClick={handleRestore}
           />
@@ -74,6 +74,11 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
             onClick={() => setShowModal(false)}
           />
         </div>
+        {!restored && version.category && (
+          <Typography className="mt-2 text-red-500" style="body3">
+            After restoring, article will be saved as draft.
+          </Typography>
+        )}
       </NeetoUIModal.Footer>
     </NeetoUIModal>
   );
