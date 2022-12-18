@@ -4,3 +4,5 @@
 json.articles @articles do | article |
   json.partial! "api/admin/articles/article", article: article
 end
+
+json.count @articles_count

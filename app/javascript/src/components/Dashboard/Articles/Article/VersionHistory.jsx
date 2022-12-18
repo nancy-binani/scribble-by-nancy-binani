@@ -21,7 +21,7 @@ const VersionHistory = ({ article, history }) => {
       const versions = article_versions.slice(1);
       versions !== null &&
         setVersions(
-          versions.map(version => ({
+          versions.reverse().map(version => ({
             id: version.id,
             article: version.object,
             category: version.category,
@@ -49,6 +49,10 @@ const VersionHistory = ({ article, history }) => {
             </Typography>
             <Typography className="text-gray-500" style="body2">
               Current Version <br />
+              {article.restored &&
+                `Restored from (${formatDateAndTimeForToolTip(
+                  article.restored_at
+                )})`}
             </Typography>
           </div>
           <Typography className="my-auto text-indigo-500" style="h4">

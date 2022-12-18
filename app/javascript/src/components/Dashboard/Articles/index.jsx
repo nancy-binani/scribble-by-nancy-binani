@@ -16,6 +16,7 @@ const Articles = ({ history }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteArticleId, setDeleteArticleId] = useState(null);
   const [title, setTitle] = useState("");
+  const [count, setCount] = useState(0);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [articles, setArticles] = useState([]);
   const [columns, setColumns] = useState(FILTERING_OPTIONS);
@@ -23,9 +24,10 @@ const Articles = ({ history }) => {
   const fetchArticles = async () => {
     try {
       const {
-        data: { articles },
+        data: { articles, count },
       } = await articleApi.fetch();
       setArticles(articles);
+      setCount(count);
     } catch (error) {
       logger.error(error);
     }
@@ -68,7 +70,11 @@ const Articles = ({ history }) => {
 
   return (
     <div className="flex h-screen w-full">
-      <SideMenu fetchArticles={fetchArticles} setArticles={setArticles} />
+      <SideMenu
+        articles={articles}
+        fetchArticles={fetchArticles}
+        setArticles={setArticles}
+      />
       <Container>
         <Header
           columns={columns}
@@ -78,14 +84,12 @@ const Articles = ({ history }) => {
           setColumns={setColumns}
           setSearchTerm={setSearchTerm}
         />
-        <Typography className="mb-3 ml-3">
-          {articles.length} Articles
-        </Typography>
+        <Typography className="mb-3 ml-3">Total {count} Articles</Typography>
         <Table
-          articles={articles}
           columns={columns}
           handleDelete={handleDelete}
           history={history}
+          length={length}
         />
         {showDeleteAlert && (
           <DeleteAlert

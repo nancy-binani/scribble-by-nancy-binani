@@ -115,4 +115,11 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     response_json = response.parsed_body
     assert_equal versions_count, response_json["article_versions"].count
   end
+
+  def test_update_article_on_visits
+    assert_equal @article.visits_count, 0
+    put update_visits_count_api_admin_article_path(@article.id)
+    @article.reload
+    assert_equal @article.visits_count, 1
+  end
 end

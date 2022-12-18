@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
 import { ExternalLink } from "neetoicons";
-import { Button, PageLoader, Typography, Input } from "neetoui";
+import { Button, PageLoader, Typography, Input, Kbd } from "neetoui";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Route, Switch, useParams } from "react-router-dom";
 
-import articlesApi from "apis/public/articles";
+import articlesApi from "apis/admin/articles";
 import categoriesApi from "apis/public/categories";
 
 import Detail from "./Detail";
@@ -67,7 +67,7 @@ const SideMenu = ({ history, name }) => {
 
   const handleUpdateVisit = async article => {
     try {
-      await articlesApi.update(article, article.id);
+      await articlesApi.updateVisits(article, article.id);
     } catch (error) {
       logger.error(error);
     }
@@ -93,8 +93,15 @@ const SideMenu = ({ history, name }) => {
     }
   }, [categories]);
 
+  const handleKeyDown = e => {
+    if (e.keyCode === 75 && e.metaKey) {
+      setShowModal(true);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
+    document.addEventListener("keydown", handleKeyDown, true);
   }, []);
 
   if (loading) {
@@ -102,12 +109,12 @@ const SideMenu = ({ history, name }) => {
   }
 
   return (
-    <>
+    <div>
       <nav className="shadow border-text-gray-400 border-b border-solid bg-white p-2">
         <Input
           className="fixed w-56"
           placeholder="Search for articles here"
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowModal(() => !showModal)}
         />
         <Typography className="p-2 text-center text-gray-700" style="h4">
           {name}
@@ -146,6 +153,14 @@ const SideMenu = ({ history, name }) => {
                 </SubMenu>
               ))}
             </Menu>
+            <div className="mt-12 ml-2 flex">
+              <Typography style="body2">Shortcut to search</Typography>
+              <div className="ml-2 flex gap-x-1">
+                <Kbd keyName="⌘" />
+                <Kbd keyName="+" />
+                <Kbd keyName="K" />
+              </div>
+            </div>
           </Sidebar>
         ) : (
           <div className="flex h-screen w-screen flex-row  justify-center">
@@ -181,7 +196,7 @@ const SideMenu = ({ history, name }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
