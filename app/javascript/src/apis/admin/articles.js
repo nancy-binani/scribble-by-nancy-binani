@@ -28,6 +28,12 @@ const count = () => axios.get("/api/admin/articles/count");
 
 const versions = id => axios.get(`/api/admin/articles/${id}/versions`);
 
+const updateVisits = (payload, id) => {
+  axios.put(`/api/admin/articles/${id}/update_visits_count`, {
+    article: payload,
+  });
+};
+
 const articlesApi = {
   fetch,
   create,
@@ -37,6 +43,7 @@ const articlesApi = {
   updateWithPosition,
   moveToCategory,
   versions,
+  updateVisits,
 };
 
 export default articlesApi;

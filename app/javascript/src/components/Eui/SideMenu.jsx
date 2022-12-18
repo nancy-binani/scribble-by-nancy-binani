@@ -5,7 +5,7 @@ import { Button, PageLoader, Typography, Input, Kbd } from "neetoui";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Route, Switch, useParams } from "react-router-dom";
 
-import articlesApi from "apis/public/articles";
+import articlesApi from "apis/admin/articles";
 import categoriesApi from "apis/public/categories";
 
 import Detail from "./Detail";
@@ -67,7 +67,7 @@ const SideMenu = ({ history, name }) => {
 
   const handleUpdateVisit = async article => {
     try {
-      await articlesApi.update(article, article.id);
+      await articlesApi.updateVisits(article, article.id);
     } catch (error) {
       logger.error(error);
     }

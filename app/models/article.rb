@@ -3,7 +3,7 @@
 class Article < ApplicationRecord
   MAX_TITLE_LENGTH = 255
   VALID_TITLE_REGEX = /\A[a-zA-Z0-9]+\z/
-  MAX_PAGINATES = 6
+  MAX_PAGINATES = 10
   MAX_PAGES = 25
   max_paginates_per MAX_PAGINATES
   max_pages MAX_PAGES

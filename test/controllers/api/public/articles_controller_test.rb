@@ -15,11 +15,4 @@ class Api::Public::ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal response_body["articles"].length, Article.count
   end
-
-  def test_update_article_on_visits
-    assert_equal @article.visits_count, 0
-    put api_public_article_path(@article.id)
-    @article.reload
-    assert_equal @article.visits_count, 1
-  end
 end

@@ -2,9 +2,11 @@
 
 class Api::Admin::ArticlesController < ApplicationController
   before_action :load_article!, only: %i[update destroy update_with_position versions]
+  before_action :create_visits_count!, only: %i[update_visits_count]
 
   def index
-    @articles = current_user.articles.order(:position).includes(:category)
+    @articles_count = current_user.articles.count
+    @articles = current_user.articles.order(:position).includes(:category).page params[:page]
     @articles = FilterArticleService.new(@articles, params[:status], params[:title], params[:category_ids]).process
   end
 
@@ -44,10 +46,20 @@ class Api::Admin::ArticlesController < ApplicationController
     render
   end
 
+  def update_visits_count
+    @article.reload
+    respond_with_success(t("successfully_updated", entity: "Article"))
+  end
+
   private
 
     def load_article!
       @article = current_user.articles.find(params[:id])
+    end
+
+    def create_visits_count!
+      load_article!
+      @article.visits.create
     end
 
     def article_params

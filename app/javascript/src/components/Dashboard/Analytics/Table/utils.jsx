@@ -2,26 +2,18 @@ import React from "react";
 
 import { formatDateAndTime } from "../../Articles/utils";
 
-export const buildArticlesColumnData = history => [
+export const buildArticlesColumnData = () => [
   {
     title: "TITLE",
     dataIndex: "title",
     key: "Title",
-    className: "text-indigo-500",
-    render: (title, { category, slug }) => (
-      <span
-        onClick={() => {
-          history.push(`/public/${category.category}/${slug}`);
-        }}
-      >
-        {title}
-      </span>
-    ),
+    className: "text-gray-600",
   },
   {
     title: "DATE",
     dataIndex: "created_at",
     key: "Date",
+    className: "text-gray-600",
     render: (created_at, { status }) => (
       <div>
         {status === "draft" ? (

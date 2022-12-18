@@ -1,20 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Table as NeetoUITable, Pagination } from "neetoui";
-import { useHistory } from "react-router-dom";
+import { Table as NeetoUITable, Pagination, PageLoader } from "neetoui";
+
+import articlesApi from "apis/public/articles";
 
 import { articleVisitsColumnData } from "./articleVisitsColumnData";
 import { buildArticlesColumnData } from "./utils";
 
-const Table = ({ articles }) => {
-  const history = useHistory();
+const Table = () => {
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [count, setCount] = useState(0);
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchArticles = async () => {
+    try {
+      const {
+        data: { articles, count },
+      } = await articlesApi.fetch({ page: currentPageNumber });
+      setArticles(articles);
+      setCount(count);
+    } catch (error) {
+      logger.error(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchArticles();
+  }, [currentPageNumber]);
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <>
       <NeetoUITable
-        pagination
         allowRowClick={false}
-        columnData={buildArticlesColumnData(history)}
+        columnData={buildArticlesColumnData()}
         rowData={articles}
         expandable={{
           expandedRowRender: article => (
@@ -32,12 +56,14 @@ const Table = ({ articles }) => {
         onRowClick={() => {}}
         onRowSelect={() => {}}
       />
-      <Pagination
-        count={articles.count}
-        navigate={() => {}}
-        pageNo={1}
-        pageSize={25}
-      />
+      <div className="m-5 flex w-full flex-row justify-end">
+        <Pagination
+          count={count}
+          navigate={pageNumber => setCurrentPageNumber(pageNumber)}
+          pageNo={currentPageNumber}
+          pageSize={10}
+        />
+      </div>
     </>
   );
 };
