@@ -16,3 +16,4 @@ json.extract! article,
 
 json.category article.category
 json.author article.user, :name, :site_id
+json.dates_and_visits article.visits.group("DATE(created_at)").distinct.count

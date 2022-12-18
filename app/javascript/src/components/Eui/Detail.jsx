@@ -4,7 +4,7 @@ import { Tag, Typography, Modal, Button, PageLoader, Select } from "neetoui";
 import { Container } from "neetoui/layouts";
 import { useHistory } from "react-router-dom";
 
-import articlesApi from "apis/public/articles";
+import articlesApi from "apis/admin/articles";
 
 import { formatDateAndTime } from "../Dashboard/Articles/utils";
 

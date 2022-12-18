@@ -6,7 +6,7 @@ class Api::Admin::ArticlesController < ApplicationController
 
   def index
     @articles_count = current_user.articles.count
-    @articles = current_user.articles.order(:position).includes(:category).page params[:page]
+    @articles = current_user.articles.order(visits_count: :desc).order(:position).includes(:category).page params[:page]
     @articles = FilterArticleService.new(@articles, params[:status], params[:title], params[:category_ids]).process
   end
 

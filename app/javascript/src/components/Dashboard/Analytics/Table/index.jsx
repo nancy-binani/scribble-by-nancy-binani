@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Table as NeetoUITable, Pagination, PageLoader } from "neetoui";
 
-import articlesApi from "apis/public/articles";
+import articlesApi from "apis/admin/articles";
 
 import { articleVisitsColumnData } from "./articleVisitsColumnData";
 import { buildArticlesColumnData } from "./utils";
