@@ -118,7 +118,7 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
 
   def test_update_article_on_visits
     assert_equal @article.visits_count, 0
-    put api_admin_article_path(@article.id)
+    put update_visits_count_api_admin_article_path(@article.id)
     @article.reload
     assert_equal @article.visits_count, 1
   end
