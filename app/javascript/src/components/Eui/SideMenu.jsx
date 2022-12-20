@@ -114,7 +114,7 @@ const SideMenu = ({ history, name }) => {
         <Input
           className="fixed w-56"
           placeholder="Search for articles here"
-          onClick={() => setShowModal(() => !showModal)}
+          onClick={() => setShowModal(true)}
         />
         <Typography className="p-2 text-center text-gray-700" style="h4">
           {name}
