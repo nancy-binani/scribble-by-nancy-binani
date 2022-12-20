@@ -21,7 +21,7 @@ const SideMenu = ({ history, name }) => {
   const params = useParams();
   const [paramCategory, paramsSlug] = params[0].split("/");
 
-  const handleClick = async (article, category) => {
+  const handleClick = (article, category) => {
     setActive(article.title);
     handleUpdateVisit(article);
     setActiveArticle(article);

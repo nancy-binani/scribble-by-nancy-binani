@@ -4,8 +4,7 @@ import { Table as NeetoUITable, Pagination, PageLoader } from "neetoui";
 
 import articlesApi from "apis/admin/articles";
 
-import { articleVisitsColumnData } from "./articleVisitsColumnData";
-import { buildArticlesColumnData } from "./utils";
+import { buildArticlesColumnData, buildArticleVisitsColumnData } from "./utils";
 
 const Table = () => {
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
@@ -45,7 +44,7 @@ const Table = () => {
             <div className="m-0 w-64">
               <NeetoUITable
                 allowRowClick={false}
-                columnData={articleVisitsColumnData}
+                columnData={buildArticleVisitsColumnData}
                 rowData={[article.dates_and_visits]}
                 onRowClick={() => {}}
                 onRowSelect={() => {}}
