@@ -13,7 +13,7 @@ import articlesApi from "apis/admin/articles";
 const Modal = ({ version, showModal, setShowModal, history }) => {
   const category = version.category
     ? version.category.category
-    : "Category doesn't exists";
+    : "Category doesn't exist";
 
   const handleRestore = async () => {
     try {
