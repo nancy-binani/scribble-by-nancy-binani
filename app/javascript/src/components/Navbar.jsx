@@ -46,20 +46,13 @@ const Navbar = ({ showTag, status }) => {
             </NavLink>
           </div>
           <div className="flex items-center justify-end">
-            {showTag &&
-              (status === "drafted" ? (
-                <Tag
-                  className="mt-2 mb-2 mr-3"
-                  label={status}
-                  style="warning"
-                />
-              ) : (
-                <Tag
-                  className="mt-2 mb-2 mr-3"
-                  label={status}
-                  style="success"
-                />
-              ))}
+            {showTag && (
+              <Tag
+                className="mt-2 mb-2 mr-3"
+                label={status}
+                style={status === "drafted" ? "warning" : "success"}
+              />
+            )}
             <Button
               icon={ExternalLink}
               label="Preview"
