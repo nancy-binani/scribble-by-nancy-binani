@@ -28,8 +28,8 @@ const count = () => axios.get("/api/admin/articles/count");
 
 const versions = id => axios.get(`/api/admin/articles/${id}/versions`);
 
-const updateVisits = (payload, id) => {
-  axios.put(`/api/admin/articles/${id}/update_visits_count`, {
+const updateVisits = async (payload, id) => {
+  await axios.put(`/api/admin/articles/${id}/update_visits_count`, {
     article: payload,
   });
 };
