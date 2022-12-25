@@ -12,7 +12,9 @@ json.extract! article,
   :versions,
   :restored,
   :restored_at,
-  :visits_count
+  :visits_count,
+  :scheduled_publish,
+  :scheduled_unpublish
 
 json.category article.category
 json.author article.user, :name, :site_id

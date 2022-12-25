@@ -1,11 +1,13 @@
 import React from "react";
 
+import { Warning } from "neetoicons";
 import {
   Modal as NeetoUIModal,
   Typography,
   Button,
   Input,
   Textarea,
+  Callout,
 } from "neetoui";
 
 import articlesApi from "apis/admin/articles";
@@ -24,6 +26,8 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
         category_id: version.article.category_id,
         restored: true,
         restored_at: version.article.updated_at,
+        scheduled_publish: null,
+        scheduled_unpublish: null,
       };
       await articlesApi.update(articleData, version.article.id);
       await articlesApi.fetch();
@@ -45,6 +49,14 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
         <Typography style="h2">Version History</Typography>
       </NeetoUIModal.Header>
       <NeetoUIModal.Body className="space-y-2">
+        {(version.article.scheduled_publish ||
+          version.article.scheduled_unpublish) && (
+          <Callout className="mb-4" icon={Warning} style="warning">
+            This article is scheduled to be published or unpublished, If you
+            restore this article version the scheduled status will be removed
+            from this article.
+          </Callout>
+        )}
         <div className="my-5 flex gap-x-4">
           <Input
             disabled

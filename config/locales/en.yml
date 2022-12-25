@@ -15,5 +15,10 @@ en:
   article:
     title_missing_error: "Title can't be blank"
     description_missing_error: "Body can't be blank"
+    schedule_time_cannot_be_same: "Published and unpublished time cannot be same"
+    invalid_publish_datetime: "Invalid publish datetime"
+    invalid_unpublish_datetime: "Invalid unpublish datetime"
+    invalid_schedule_time: "Scheduled Datetime cannot be in past"
+    invalid_schedule: "Scheduled datetime and current status cannot be same"
     slug:
       immutable: "is immutable!"

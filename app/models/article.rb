@@ -15,6 +15,9 @@ class Article < ApplicationRecord
 
   validates :title, presence: true, length: { maximum: MAX_TITLE_LENGTH }, format: { with: VALID_TITLE_REGEX }
   validate :slug_not_changed
+  validate :scheduled_times_cannot_be_same
+  validate :check_valid_datetime
+  validate :datetime_should_not_be_in_past
   validates :body, presence: true
   before_create :set_slug, if: -> { status.to_sym == :published }
   before_update :set_slug, if: -> { slug.nil? && status.to_sym == :published }
@@ -36,6 +39,32 @@ class Article < ApplicationRecord
     def slug_not_changed
       if slug && slug_changed? && self.persisted?
         errors.add(:slug, t("article.slug.immutable"))
+      end
+    end
+
+    def scheduled_times_cannot_be_same
+      if self.scheduled_publish && self.scheduled_unpublish && self.scheduled_publish == self.scheduled_unpublish
+        errors.add(:article, t("article.schedule_time_cannot_be_same"))
+      end
+    end
+
+    def check_valid_datetime
+      if self.scheduled_unpublish && self.scheduled_publish
+        if self.status == "published" && self.scheduled_unpublish > self.scheduled_publish
+          errors.add(:article, t("article.invalid_publish_datetime"))
+        end
+        if self.status == "drafted" && self.scheduled_publish > self.scheduled_unpublish
+          errors.add(:article, t("article.invalid_unpublish_datetime"))
+        end
+      end
+    end
+
+    def datetime_should_not_be_in_past
+      if self.scheduled_publish.present? && self.scheduled_publish.past?
+        errors.add(:article, t("article.invalid_schedule_time"))
+      end
+      if self.scheduled_unpublish.present? && self.scheduled_unpublish.past?
+        errors.add(:article, t("article.invalid_schedule_time"))
       end
     end
 end

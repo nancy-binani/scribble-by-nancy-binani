@@ -1,22 +1,50 @@
 import React, { useEffect, useState } from "react";
 
 import { Formik, Form as FormikForm } from "formik";
-import { Dropdown, Button, PageLoader } from "neetoui";
+import { Dropdown, Button, PageLoader, Alert } from "neetoui";
 import { Input, Textarea, Select } from "neetoui/formik";
 
 import articlesApi from "apis/admin/articles";
 import categoriesApi from "apis/admin/categories";
 
-import { ARTICLES_FORM_VALIDATION_SCHEMA, STATUS } from "../constants";
+import {
+  ARTICLES_FORM_VALIDATION_SCHEMA,
+  MENU_ITEMS as menuItems,
+} from "../constants";
 
 const { Menu, MenuItem } = Dropdown;
 
-const Form = ({ isEdit, article, history }) => {
+const Form = ({ isEdit, article, history, setIsPaneOpen }) => {
   const [submitted, setSubmitted] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatedCategory, setUpdatedCategory] = useState(null);
   const [status, setStatus] = useState("drafted");
+
+  const [buttonLabel, setButtonLabel] = useState(
+    article.status === "published" ? "Publish" : "Save Draft"
+  );
+  const [showAlert, setShowAlert] = useState(false);
+
+  const getCurrentStatus = currentStatus => {
+    let status = "";
+    if (currentStatus === "Save Draft") {
+      status = "drafted";
+    } else if (currentStatus === "Publish") {
+      status = "published";
+    } else if (currentStatus === "Publish/Unpublish later") {
+      status = "publish/unpublish later";
+    } else if (currentStatus === "Unpublish Later") {
+      status = "unpublish later";
+    }
+
+    return status;
+  };
+
+  const updateLabel = ({ setButtonLabel, setFieldValue, menu }) => {
+    setButtonLabel(menu);
+    setFieldValue("status", getCurrentStatus(menu));
+  };
 
   const fetchCategories = async () => {
     try {
@@ -56,25 +84,41 @@ const Form = ({ isEdit, article, history }) => {
 
   const handleSubmit = async values => {
     if (values.status === "") values.status = status;
-    try {
-      if (isEdit) {
-        await articlesApi.update(
-          {
+
+    if (values.status !== "publish/unpublish later") {
+      try {
+        if (isEdit) {
+          await articlesApi.update(
+            {
+              ...values,
+              category_id: values.category.value,
+            },
+            values.id
+          );
+        } else {
+          await articlesApi.create({
             ...values,
             category_id: values.category.value,
-          },
-          values.id
-        );
-      } else {
-        await articlesApi.create({
-          ...values,
-          category_id: values.category.value,
-        });
+          });
+        }
+        await articlesApi.fetch();
+        history.push("/");
+      } catch (error) {
+        logger.error(error);
       }
-      await articlesApi.fetch();
-      history.push("/");
-    } catch (error) {
-      logger.error(error);
+    } else setIsPaneOpen(true);
+  };
+
+  const handleShowAlert = values => {
+    if (article.scheduled_publish !== null && values.status === "published") {
+      setShowAlert(true);
+    } else if (
+      article.scheduled_unpublish !== null &&
+      values.status === "drafted"
+    ) {
+      setShowAlert(true);
+    } else {
+      handleSubmit(values);
     }
   };
 
@@ -82,13 +126,17 @@ const Form = ({ isEdit, article, history }) => {
 
   return (
     <Formik
-      initialValues={{ ...article, category: updatedCategory }}
+      initialValues={{ ...article, category: updatedCategory, dateTime: "" }}
       validateOnBlur={submitted}
       validateOnChange={submitted}
       validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA(categories)}
-      onSubmit={handleSubmit}
+      onSubmit={
+        buttonLabel === "publish/unpublish later"
+          ? handleSubmit
+          : handleShowAlert
+      }
     >
-      {({ isSubmitting, setFieldValue, dirty }) => (
+      {({ isSubmitting, setFieldValue, dirty, values }) => (
         <FormikForm className=" mx-auto mt-12 w-2/5 space-y-6">
           <div className="mt-1 flex w-full flex-row space-x-3 ">
             <Input
@@ -120,41 +168,54 @@ const Form = ({ isEdit, article, history }) => {
               <Button
                 className="mr-px"
                 disabled={!dirty}
-                label={status === "drafted" ? "Save Draft" : "Published"}
+                label={buttonLabel}
                 name="status"
                 size="medium"
                 style="primary"
                 type="submit"
-                onClick={() => setSubmitted(true)}
+                onClick={() => {
+                  setSubmitted(true);
+                }}
               />
               <Dropdown>
                 <Menu>
-                  {STATUS.map((status, idx) => (
+                  {menuItems.map((menu, idx) => (
                     <MenuItem.Button
                       disabled={isSubmitting}
                       key={idx}
-                      value={status}
+                      value={buttonLabel}
                       onClick={() => {
-                        setFieldValue(
-                          "status",
-                          status !== "drafted" ? "published" : "drafted"
-                        );
-                        setStatus(status);
+                        updateLabel({ setButtonLabel, setFieldValue, menu });
+                        setStatus(buttonLabel);
                       }}
                     >
-                      {status}
+                      {menu}
                     </MenuItem.Button>
                   ))}
                 </Menu>
               </Dropdown>
             </div>
             <Button
-              disabled={isSubmitting}
               label="Cancel"
               size="large"
               style="text"
               type="reset"
               onClick={() => history.push("/")}
+            />
+            <Alert
+              isOpen={showAlert}
+              message={
+                buttonLabel === "Save Draft"
+                  ? "This article has a unpublish schedule.If you save it as draft now then unpublish schedule will be removed.Are you sure you want to continue?"
+                  : "This article has a publish schedule.If you publish it now then publish schedule will be removed.Are you sure you want to continue?"
+              }
+              onClose={() => setShowAlert(false)}
+              onSubmit={() => {
+                buttonLabel === "Save Draft"
+                  ? (values.scheduled_unpublish = null)
+                  : (values.scheduled_publish = null);
+                handleSubmit(values);
+              }}
             />
           </div>
         </FormikForm>

@@ -18,6 +18,8 @@ Rails.application.routes.draw do
           put :move_to_category, on: :collection
           get :count, on: :collection
           get :versions, on: :member
+          get :list_schedules, on: :member
+          post :create_schedule, on: :member
         end
         resources :categories do
           put :update_with_position, on: :collection
