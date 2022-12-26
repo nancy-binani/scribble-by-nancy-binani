@@ -16,7 +16,7 @@ module SampleData
             current_user.articles.create!(
               title: Faker::Alphanumeric.alpha(number: 5),
               body: Faker::Lorem.paragraph,
-              status: "drafted",
+              status: "draft",
               author: "Oliver Smith",
               user_id: current_user.id,
               category_id: category.id

@@ -122,4 +122,46 @@ class Api::Admin::ArticlesControllerTest < ActionDispatch::IntegrationTest
     @article.reload
     assert_equal @article.visits_count, 1
   end
+
+  def test_restoration_of_an_article_with_valid_version
+    new_title_1 = "ScribbleUpdated"
+    article_params = {
+      article: {
+        title: new_title_1, category: @category,
+        user: @user
+      }
+    }
+    put api_admin_article_path(@article.id), params: article_params
+    @article.reload
+    assert_response :success
+
+    new_title_2 = "ScribbleUpdatedNew"
+    article_params = {
+      article: {
+        title: new_title_2, category: @category,
+        user: @user
+      }
+    }
+    put api_admin_article_path(@article.id), params: article_params
+    assert_response :success
+    @article.reload
+    v = @article.versions.second
+    article_params_new = {
+      article: {
+        title: v.object["title"],
+        body: v.object["body"],
+        status: "draft",
+        restored: true,
+        restored_at: v.object["updated_at"],
+        scheduled_publish: nil,
+        scheduled_unpublish: nil,
+        category: @category,
+        user: @user
+      }
+    }
+    put api_admin_article_path(v.object["id"]), params: article_params_new
+    @article.reload
+    assert_response :success
+    assert_equal @article.title, "hello"
+  end
 end

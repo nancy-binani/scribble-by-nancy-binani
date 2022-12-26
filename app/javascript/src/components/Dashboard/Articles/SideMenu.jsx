@@ -24,13 +24,14 @@ const SideMenu = ({ fetchArticles, setArticles }) => {
   const handleFilterByStatus = async menu => {
     setActive(menu);
     setSelectedCategories([]);
+    if (menu === "Draft") menu = "draft";
     try {
       if (menu === "All") {
         await fetchArticles();
       } else {
         const {
           data: { articles },
-        } = await articleApi.fetch({ status: menu });
+        } = await articleApi.fetch({ status: "draft" });
         setArticles(articles);
       }
     } catch (error) {

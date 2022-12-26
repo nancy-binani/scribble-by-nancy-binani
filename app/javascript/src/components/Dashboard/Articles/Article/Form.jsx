@@ -19,7 +19,7 @@ const Form = ({ isEdit, article, history, setIsPaneOpen }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatedCategory, setUpdatedCategory] = useState(null);
-  const [status, setStatus] = useState("drafted");
+  const [status, setStatus] = useState("draft");
 
   const [buttonLabel, setButtonLabel] = useState(
     article.status === "published" ? "Publish" : "Save Draft"
@@ -29,7 +29,7 @@ const Form = ({ isEdit, article, history, setIsPaneOpen }) => {
   const getCurrentStatus = currentStatus => {
     let status = "";
     if (currentStatus === "Save Draft") {
-      status = "drafted";
+      status = "draft";
     } else if (currentStatus === "Publish") {
       status = "published";
     } else if (currentStatus === "Publish/Unpublish later") {
@@ -114,7 +114,7 @@ const Form = ({ isEdit, article, history, setIsPaneOpen }) => {
       setShowAlert(true);
     } else if (
       article.scheduled_unpublish !== null &&
-      values.status === "drafted"
+      values.status === "draft"
     ) {
       setShowAlert(true);
     } else {
@@ -132,8 +132,8 @@ const Form = ({ isEdit, article, history, setIsPaneOpen }) => {
       validationSchema={ARTICLES_FORM_VALIDATION_SCHEMA(categories)}
       onSubmit={
         buttonLabel === "publish/unpublish later"
-          ? handleSubmit
-          : handleShowAlert
+          ? handleShowAlert
+          : handleSubmit
       }
     >
       {({ isSubmitting, setFieldValue, dirty, values }) => (

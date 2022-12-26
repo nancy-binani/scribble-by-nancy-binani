@@ -22,7 +22,7 @@ const Modal = ({ version, showModal, setShowModal, history }) => {
       const articleData = {
         title: version.article.title,
         body: version.article.body,
-        status: "drafted",
+        status: "draft",
         category_id: version.article.category_id,
         restored: true,
         restored_at: version.article.updated_at,

@@ -54,7 +54,7 @@ const NewScheduleUpdateForm = ({
           />
         </div>
         <Typography className="mt-2" style="body3">
-          Note: Article will be created as Draft.
+          Note: A version of article will be created with the current status.
         </Typography>
       </Pane.Body>
     </Pane>

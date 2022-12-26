@@ -16,7 +16,7 @@ const ScheduledUpdates = ({ article }) => {
   let alertMessage, scheduledPublish, scheduledUnpublish;
   const handleCancelScheduleCases = () => {
     if (
-      article.status === "drafted" &&
+      article.status === "draft" &&
       article.scheduled_publish !== null &&
       article.scheduled_unpublish !== null
     ) {
@@ -40,7 +40,7 @@ const ScheduledUpdates = ({ article }) => {
         article.scheduled_publish
       )}. Are you sure you want to continue?`;
     } else if (
-      article.status === "drafted" &&
+      article.status === "draft" &&
       article.scheduled_publish !== null &&
       article.scheduled_unpublish === null
     ) {
@@ -104,7 +104,7 @@ const ScheduledUpdates = ({ article }) => {
       )}
       {article.scheduled_unpublish && (
         <Callout style="warning">
-          Article will be drafted at{" "}
+          Article will be draft at{" "}
           {formatDateAndTimeForToolTip(article.scheduled_unpublish)}
           <span
             className="cursor-pointer text-indigo-600 underline"

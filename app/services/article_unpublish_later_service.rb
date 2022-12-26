@@ -14,6 +14,6 @@ class ArticleUnpublishLaterService
   private
 
     def unpublish
-      article.update!(status: "drafted", scheduled_unpublish: nil)
+      article.update!(status: "draft", scheduled_unpublish: nil)
     end
 end

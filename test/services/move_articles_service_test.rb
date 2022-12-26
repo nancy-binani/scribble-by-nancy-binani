@@ -12,7 +12,7 @@ class MoveArticlesServiceTest < ActionDispatch::IntegrationTest
 
   def test_move_articles_to_another_category
     new_category = create(:category, category: "Gen", user: @user)
-    new_article_one = create(:article, status: "drafted", category: @category, user: @user)
+    new_article_one = create(:article, status: "draft", category: @category, user: @user)
     new_article_two = create(:article, status: "published", category: @category, user: @user)
     put move_to_category_api_admin_articles_path,
       params: { article_ids: [new_article_one.id, new_article_two.id], category_id: new_category.id }

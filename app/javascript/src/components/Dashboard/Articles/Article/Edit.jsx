@@ -57,12 +57,12 @@ const Edit = ({ history }) => {
     ) {
       menuItems.push("Unpublish Later");
     } else if (
-      article.status === "drafted" &&
+      article.status === "draft" &&
       article?.scheduled_publish === null
     ) {
       menuItems.push("Publish Later");
     } else if (
-      article.status === "drafted" &&
+      article.status === "draft" &&
       article?.scheduled_publish !== null &&
       article?.scheduled_unpublish === null
     ) {
