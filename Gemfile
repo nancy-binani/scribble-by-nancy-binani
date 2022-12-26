@@ -67,4 +67,9 @@ end
 
 gem "kaminari"
 gem "paper_trail"
+gem "sidekiq-cron"
 gem "simplecov", require: false, group: :test
+
+group :development, :test do
+  gem "database_cleaner"
+end

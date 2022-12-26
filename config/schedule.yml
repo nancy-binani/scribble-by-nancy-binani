@@ -1,0 +1,28 @@
+default: &default
+  article_publish_later_worker:
+    cron: "0 * * * *"
+    class: "ArticlePublishLaterWorker"
+    queue: "default"
+  article_unpublish_later_worker:
+    cron: "0 * * * *"
+    class: "ArticleUnpublishLaterWorker"
+    queue: "default"
+
+development:
+  article_publish_later_worker:
+    cron: "* * * * *"
+    class: "ArticlePublishLaterWorker"
+    queue: "default"
+  article_unpublish_later_worker:
+    cron: "* * * * *"
+    class: "ArticleUnpublishLaterWorker"
+    queue: "default"
+
+test:
+  <<: *default
+
+staging:
+  <<: *default
+
+production:
+  <<: *default

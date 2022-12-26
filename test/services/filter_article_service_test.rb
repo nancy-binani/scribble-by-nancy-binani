@@ -11,9 +11,9 @@ class FilterArticleServiceTest < ActionDispatch::IntegrationTest
   end
 
   def test_filter_article_by_status
-    new_article = create(:article, status: "drafted", category: @category, user: @user)
+    new_article = create(:article, status: "draft", category: @category, user: @user)
     new_article.save!
-    get api_admin_articles_path, params: { status: "drafted" }
+    get api_admin_articles_path, params: { status: "draft" }
     assert_response :success
     assert_equal response_body["articles"][0]["id"], new_article.id
   end

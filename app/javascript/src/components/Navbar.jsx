@@ -50,7 +50,7 @@ const Navbar = ({ showTag, status }) => {
               <Tag
                 className="mt-2 mb-2 mr-3"
                 label={status}
-                style={status === "drafted" ? "warning" : "success"}
+                style={status === "draft" ? "warning" : "success"}
               />
             )}
             <Button

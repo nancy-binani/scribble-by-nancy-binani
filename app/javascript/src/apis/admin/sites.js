@@ -2,11 +2,10 @@ import axios from "axios";
 
 const fetch = () => axios.get("/api/admin/site");
 
-const update = payload => {
+const update = payload =>
   axios.put(`/api/admin/site`, {
     site: payload,
   });
-};
 
 const fetchUser = () => axios.get("/api/admin/users");
 

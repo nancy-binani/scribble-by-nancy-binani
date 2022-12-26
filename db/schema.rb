@@ -32,6 +32,9 @@ ActiveRecord::Schema.define(version: 2022_12_16_123100) do
     t.uuid "user_id"
     t.uuid "category_id"
     t.integer "visits_count", default: 0
+    t.datetime "scheduled_publish"
+    t.datetime "scheduled_unpublish"
+    t.datetime "execution_time"
   end
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

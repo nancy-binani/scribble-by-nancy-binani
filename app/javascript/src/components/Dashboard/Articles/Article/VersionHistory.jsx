@@ -18,10 +18,10 @@ const VersionHistory = ({ article, history }) => {
       const {
         data: { article_versions },
       } = await articlesApi.versions(article.id);
-      const versions = article_versions.slice(1);
-      versions?.(
+      const versionsOnUpdate = article_versions.slice(1);
+      versionsOnUpdate?.(
         setVersions(
-          versions.reverse().map(version => ({
+          versionsOnUpdate.reverse().map(version => ({
             id: version.id,
             article: version.object,
             category: version.category,

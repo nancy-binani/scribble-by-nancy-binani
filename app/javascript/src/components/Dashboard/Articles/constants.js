@@ -40,7 +40,7 @@ export const ARTICLES_FORM_VALIDATION_SCHEMA = CATEGORIES =>
       .required("Please select a category"),
   });
 
-export const STATUS = ["drafted", "published"];
+export const MENU_ITEMS = ["Save Draft", "Publish", "Publish/Unpublish later"];
 
 export const FILTERING_OPTIONS = [
   "Title",

@@ -35,7 +35,7 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   def test_slug_not_generated_on_status_draft
-    article = create(:article, title: "test1", body: "abc", status: "drafted", category: @category, user: @user)
+    article = create(:article, title: "test1", body: "abc", status: "draft", category: @category, user: @user)
     assert_nil(article.slug, "nil")
   end
 
@@ -43,5 +43,69 @@ class ArticleTest < ActiveSupport::TestCase
     articles = create_list(:article, 5, category: @category, user: @user)
     slugs = articles.pluck(:slug)
     assert_equal slugs.uniq, slugs
+  end
+
+  def test_scheduled_times_cannot_be_same
+    article_params = {
+      scheduled_publish: "2023-09-17 19:56:33 -0700",
+      scheduled_unpublish: "2023-09-17 19:56:33 -0700", category: @category,
+      user: @user
+    }
+    assert_raises ActiveRecord::RecordInvalid do
+      @article.update!(article_params)
+      @article.reload
+    end
+    error_msg = @article.errors.full_messages.to_sentence
+    assert_match t("article.schedule_time_cannot_be_same"), error_msg
+  end
+
+  def test_check_valid_datetime_for_status_published
+    assert_raises ActiveRecord::RecordInvalid do
+      @article.update!(scheduled_publish: "2014-09-17 19:56:33 -0700")
+      @article.reload
+    end
+    error_msg = @article.errors.full_messages.to_sentence
+    assert_match t("article.invalid_schedule_time"), error_msg
+  end
+
+  def test_error_raised_for_scheduled_datetime_in_past_for_status_published
+    article_params = {
+      scheduled_publish: "2023-09-17 19:56:33 -0700",
+      scheduled_unpublish: "2024-09-17 19:56:33 -0700", category: @category,
+      user: @user
+    }
+    assert_raises ActiveRecord::RecordInvalid do
+      @article.update!(article_params)
+      @article.reload
+    end
+    error_msg = @article.errors.full_messages.to_sentence
+    assert_match t("article.invalid_publish_datetime"), error_msg
+  end
+
+  def test_check_valid_datetime_for_status_draft
+    article_params = {
+      status: "draft", scheduled_unpublish: "2014-09-17 19:56:33 -0700", category: @category,
+      user: @user
+    }
+    assert_raises ActiveRecord::RecordInvalid do
+      @article.update!(article_params)
+      @article.reload
+    end
+    error_msg = @article.errors.full_messages.to_sentence
+    assert_match t("article.invalid_schedule_time"), error_msg
+  end
+
+  def test_error_raised_for_scheduled_datetime_in_past_for_status_draft
+    article_params = {
+      status: "draft", scheduled_unpublish: "2023-09-17 19:56:33 -0700",
+      scheduled_publish: "2024-09-17 19:56:33 -0700", category: @category,
+      user: @user
+    }
+    assert_raises ActiveRecord::RecordInvalid do
+      @article.update!(article_params)
+      @article.reload
+    end
+    error_msg = @article.errors.full_messages.to_sentence
+    assert_match t("article.invalid_unpublish_datetime"), error_msg
   end
 end
