@@ -5,8 +5,18 @@ Rails.application.routes.draw do
     defaults format: :json do
       namespace :public do
         resources :categories, only: %i[index]
-        resources :articles, only: %i[index]
+        resources :articles, except: %i[new edit] do
+          collection do
+            resource :report, only: %i[create], module: :articles do
+              get :download, on: :collection
+            end
+          end
+        end
+        resource :report, only: %i[create] do
+          get :download, on: :collection
+        end
       end
+
       namespace :admin do
         resources :redirections, except: %i[new edit]
         resource :site, except: %i[new edit index destroy]

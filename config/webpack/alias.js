@@ -9,6 +9,7 @@ module.exports = {
       neetoicons: "@bigbinary/neeto-icons",
       utils: "src/utils",
       lib: "src/lib",
+      channels: "src/channels",
     },
   },
 };

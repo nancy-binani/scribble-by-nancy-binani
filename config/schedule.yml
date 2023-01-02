@@ -7,6 +7,10 @@ default: &default
     cron: "0 * * * *"
     class: "ArticleUnpublishLaterWorker"
     queue: "default"
+  reports_worker:
+    cron: "0 * * * *"
+    class: "ArticleUnpublishLaterWorker"
+    queue: "default"
 
 development:
   article_publish_later_worker:
@@ -15,6 +19,10 @@ development:
     queue: "default"
   article_unpublish_later_worker:
     cron: "* * * * *"
+    class: "ArticleUnpublishLaterWorker"
+    queue: "default"
+  reports_worker:
+    cron: "0 * * * *"
     class: "ArticleUnpublishLaterWorker"
     queue: "default"
 

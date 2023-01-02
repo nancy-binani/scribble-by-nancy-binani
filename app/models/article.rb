@@ -8,6 +8,7 @@ class Article < ApplicationRecord
   max_paginates_per MAX_PAGINATES
   max_pages MAX_PAGES
   enum status: { draft: "draft", published: "published" }
+  scope :accessible_to, ->(user_id) { where("user_id = ?", user_id) }
   has_paper_trail
   has_many :visits
   belongs_to :category

@@ -1,0 +1,21 @@
+<div class="mb-4 font-bold">Articles:</div>
+<div class="p-4 mb-8 bg-white neeto-ui-shadow-s rounded">
+  <% @articles.each do |article| %>
+  <div class="flexrow w-full mb-4">
+  <table class="table table-bordered table-striped">
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Visits Count</th>
+      </tr>
+      <% if article.published? %>
+      <tr>
+      <td><%= article.title %></td>
+      <td><%= article.created_at.strftime("%Y-%m-%d") %></td>
+      <td><%= article.visits_count %></td>
+      </tr>
+      <% else %>
+      <% end %>
+    </table>
+  <% end %>
+</div>

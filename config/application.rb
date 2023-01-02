@@ -25,5 +25,7 @@ module ScribbleByNancyBinani
       g.orm :active_record, primary_key_type: :uuid
     end
     config.active_job.queue_adapter = :sidekiq
+    # Load dotenv file
+    Dotenv::Railtie.load
   end
 end
