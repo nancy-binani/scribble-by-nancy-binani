@@ -26,6 +26,6 @@ module ScribbleByNancyBinani
     end
     config.active_job.queue_adapter = :sidekiq
     # Load dotenv file
-    Dotenv::Railtie.load
+    # Dotenv::Railtie.load
   end
 end

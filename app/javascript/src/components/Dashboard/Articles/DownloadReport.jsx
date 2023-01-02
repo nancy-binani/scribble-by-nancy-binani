@@ -9,7 +9,6 @@ import { subscribeToReportDownloadChannel } from "channels/reportDownloadChannel
 import ProgressBar from "components/ProgressBar";
 
 const DownloadReport = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState("");
 
@@ -24,14 +23,11 @@ const DownloadReport = () => {
   };
 
   const downloadPdf = async () => {
-    setIsLoading(true);
     try {
       const { data } = await articlesApi.download();
       FileSaver.saveAs(data, "scribble_articles_report.pdf");
     } catch (error) {
       logger.error(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -50,7 +46,6 @@ const DownloadReport = () => {
 
   useEffect(() => {
     if (progress === 100) {
-      setIsLoading(false);
       setMessage("Report is ready to be downloaded");
     }
   }, [progress]);
@@ -59,7 +54,7 @@ const DownloadReport = () => {
     <div className="mx-auto mt-48 w-3/6 space-y-6 rounded-md border-2 p-4 text-center">
       <h1>{message}</h1>
       <ProgressBar progress={progress} />
-      <Button buttonText="Download" loading={isLoading} onClick={downloadPdf} />
+      <Button onClick={downloadPdf}>Download</Button>
     </div>
   );
 };

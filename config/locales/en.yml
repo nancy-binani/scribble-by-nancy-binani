@@ -17,6 +17,7 @@ en:
     generate: "Generating the PDF report"
     upload: "Uploading to server"
     attach: "Attaching the report to the user"
+    not_found: "not found"
   article:
     title_missing_error: "Title can't be blank"
     description_missing_error: "Body can't be blank"

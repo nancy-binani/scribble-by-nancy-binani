@@ -8,10 +8,12 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
+import sitesApi from "apis/admin/sites";
 import { registerIntercepts, setAuthHeaders } from "apis/axios";
 import { initializeLogger } from "common/logger";
 import PageLoader from "components/PageLoader";
 import "lib/dayjs";
+import { setUserToLocalStorage } from "utils/storage";
 
 import Dashboard from "./components/Dashboard";
 import Analytics from "./components/Dashboard/Analytics";
@@ -27,7 +29,16 @@ const App = () => {
 
   const history = useHistory();
 
+  const fetchSiteDetails = async () => {
+    try {
+      const { data } = await sitesApi.fetch();
+      setUserToLocalStorage({ authUserId: data.site.users[0].id });
+    } catch (error) {
+      logger.error(error);
+    }
+  };
   useEffect(() => {
+    fetchSiteDetails();
     initializeLogger();
     registerIntercepts();
     setAuthHeaders(setLoading);

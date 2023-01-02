@@ -12,8 +12,7 @@ module ApplicationCable
 
       def find_verified_user
         verified_user = User.find_by(
-          email: request.query_parameters[:email],
-          authentication_token: request.query_parameters[:auth_token])
+          id: request.query_parameters[:user_id])
         if verified_user
           verified_user
         else

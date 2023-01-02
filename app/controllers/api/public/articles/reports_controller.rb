@@ -2,15 +2,20 @@
 
 class Api::Public::Articles::ReportsController < ApplicationController
   def create
-    ReportsWorker.perform_async(current_user.id)
+    ReportsWorker.perform_async(current_user.id, report_path)
   end
 
   def download
-    unless @current_user.report.attached?
-      respond_with_error(t("not_found", entity: "report"), :not_found) and return
+    if File.exist?(report_path)
+      send_file(
+        report_path,
+        type: "application/pdf",
+        filename: pdf_file_name,
+        disposition: "attachment"
+      )
+    else
+      respond_with_error(t("not_found", entity: "report"), :not_found)
     end
-
-    send_data @current_user.report.download, filename: pdf_file_name, content_type: "application/pdf"
   end
 
   private

@@ -6,10 +6,9 @@ import { createConsumer } from "@rails/actioncable";
 import { getFromLocalStorage } from "utils/storage";
 
 const buildWebsocketURL = () => {
-  const authToken = getFromLocalStorage("authToken");
-  const email = getFromLocalStorage("authEmail");
+  const authUserId = getFromLocalStorage("authUserId");
 
-  return encodeURI(`/cable?auth_token=${authToken}&email=${email}`);
+  return encodeURI(`/cable?user_id=${authUserId}`);
 };
 
 export default () => createConsumer(buildWebsocketURL());
