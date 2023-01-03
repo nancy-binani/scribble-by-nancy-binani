@@ -17,6 +17,7 @@ class ReportsWorker
     )
     ActionCable.server.broadcast(user_id, { message: t("report.generate"), progress: 50 })
     pdf_report = WickedPdf.new.pdf_from_string content
+    current_user = User.find(user_id)
     ActionCable.server.broadcast(user_id, { message: t("report.upload"), progress: 75 })
     File.open(report_path, "wb") do |f|
       f.write(pdf_report)

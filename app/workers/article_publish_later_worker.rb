@@ -11,7 +11,7 @@ class ArticlePublishLaterWorker
 
     def publish_later_articles
       articles = Article.all.select { |article|
-        (article.scheduled_publish and article.scheduled_publish <= Time.zone.now)
+        (article.scheduled_publish && article.scheduled_publish <= Time.zone.now)
       }
       articles.each do |article|
         article_schedule_publish_later = ArticlePublishLaterService.new(article)

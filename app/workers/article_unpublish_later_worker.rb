@@ -11,7 +11,7 @@ class ArticleUnpublishLaterWorker
 
     def unpublish_later_articles
       articles = Article.all.select { |article|
-        (article.scheduled_unpublish and article.scheduled_unpublish <= Time.zone.now)
+        (article.scheduled_unpublish && article.scheduled_unpublish <= Time.zone.now)
       }
 
       articles.each do |article|
