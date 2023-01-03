@@ -5,11 +5,12 @@ import { Button } from "neetoui";
 
 import createConsumer from "channels/consumer";
 import { subscribeToReportDownloadChannel } from "channels/reportDownloadChannel";
-import ProgressBar from "components/ProgressBar";
 import useDownloadPdf from "hooks/useDownloadPdf";
 import useGeneratePdf from "hooks/useGeneratePdf";
 
-import { useProgress } from "./utils";
+import ProgressBar from "./ProgressBar";
+
+import { useProgress } from "../store";
 
 const DownloadReport = () => {
   const [isLoading, setIsLoading] = useState(true);
