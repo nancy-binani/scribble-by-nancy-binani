@@ -44,6 +44,9 @@ const Navbar = ({ showTag, status }) => {
             >
               Analytics
             </NavLink>
+            <NavLink iconClass="ri-file-download-fill" to="/report">
+              Download Report
+            </NavLink>
           </div>
           <div className="flex items-center justify-end">
             {showTag && (

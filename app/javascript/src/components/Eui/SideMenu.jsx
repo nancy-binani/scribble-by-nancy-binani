@@ -67,7 +67,7 @@ const SideMenu = ({ history, name }) => {
 
   const handleUpdateVisit = async article => {
     try {
-      await articlesApi.updateVisits(article.id, article);
+      await articlesApi.updateVisits({ id: article.id, payload: article });
     } catch (error) {
       logger.error(error);
     }
