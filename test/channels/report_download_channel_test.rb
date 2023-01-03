@@ -4,7 +4,8 @@ require "test_helper"
 
 class ReportDownloadChannelTest < ActionCable::Channel::TestCase
   def setup
-    @user = create(:user)
+    @site = create(:site)
+    @user = create(:user, site: @site)
     @pubsub_token = @user.id
   end
 
