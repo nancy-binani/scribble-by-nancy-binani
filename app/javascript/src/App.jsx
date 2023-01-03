@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { QueryClient, QueryClientProvider } from "react-query";
 import {
   BrowserRouter as Router,
   Switch,
@@ -24,11 +25,11 @@ import Settings from "./components/Dashboard/Settings";
 import Eui from "./components/Eui";
 import Navbar from "./components/Navbar";
 
+const queryClient = new QueryClient();
 const App = () => {
   const [loading, setLoading] = useState(true);
 
   const history = useHistory();
-
   const fetchSiteDetails = async () => {
     try {
       const { data } = await sitesApi.fetch();
@@ -53,24 +54,26 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <ToastContainer />
-      <Route
-        exact
-        component={Navbar}
-        path={["/", "/settings", "/analytics"]}
-        showTag={false}
-      />
-      <Switch history={history}>
-        <Route component={Edit} path="/articles/:id/edit" />
-        <Route component={Create} path="/articles/create" />
-        <Route path="/settings" render={props => <Settings {...props} />} />
-        <Route path="/public/*" render={props => <Eui {...props} />} />
-        <Route exact component={Analytics} path="/analytics" />
-        <Route exact component={DownloadReport} path="/report" />;
-        <Route exact component={Dashboard} path={["/", "/articles"]} />
-      </Switch>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <ToastContainer />
+        <Route
+          exact
+          component={Navbar}
+          path={["/", "/settings", "/analytics"]}
+          showTag={false}
+        />
+        <Switch history={history}>
+          <Route component={Edit} path="/articles/:id/edit" />
+          <Route component={Create} path="/articles/create" />
+          <Route path="/settings" render={props => <Settings {...props} />} />
+          <Route path="/public/*" render={props => <Eui {...props} />} />
+          <Route exact component={Analytics} path="/analytics" />
+          <Route exact component={DownloadReport} path="/report" />
+          <Route exact component={Dashboard} path={["/", "/articles"]} />
+        </Switch>
+      </Router>
+    </QueryClientProvider>
   );
 };
 

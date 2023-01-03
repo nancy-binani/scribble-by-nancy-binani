@@ -1,9 +1,11 @@
+import { prop, evolve, always } from "ramda";
+
 import { getFromLocalStorage } from "utils/storage";
 
 export const subscribeToReportDownloadChannel = ({
   consumer,
-  setMessage,
-  setProgress,
+  updateMessage,
+  updatePercentage,
   generatePdf,
 }) => {
   const userId = getFromLocalStorage("authUserId");
@@ -14,13 +16,20 @@ export const subscribeToReportDownloadChannel = ({
     },
     {
       connected() {
-        setMessage("Connected the Cables...");
+        updateMessage("Connected the Cables...");
         generatePdf();
       },
-      received(data) {
-        const { message, progress } = data;
-        setMessage(message);
-        setProgress(progress);
+      received: data => {
+        const message = prop(
+          "message",
+          evolve({ message: always("Report Download Progress") }, data)
+        );
+        updateMessage(message);
+        const progress = prop(
+          "progress",
+          evolve({ progress: always(100) }, data)
+        );
+        updatePercentage(progress);
       },
     }
   );
