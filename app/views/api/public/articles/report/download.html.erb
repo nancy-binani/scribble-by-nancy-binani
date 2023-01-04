@@ -15,7 +15,7 @@
       <td> <%= date.strftime("%B #{date.day.ordinalize}, %Y") %> </td>
       <td><%= article.visits_count %></td>
     </tr>
-    <% dates_and_visits = article.dates_and_visits
+    <% dates_and_visits = article.visits.group("DATE(created_at)").distinct.count
       all_keys_of_dates_and_visits = dates_and_visits.keys
       if all_keys_of_dates_and_visits.length > 0
     %>
@@ -28,7 +28,7 @@
           </tr>
           <% all_keys_of_dates_and_visits.each do |date, index| %>
           <tr style="text-align: center">
-            <td style="padding:5px"><%= date.strftime("%B #{date.day.ordinalize}, %Y") %></td>
+            <td ><%= date.strftime("%B #{date.day.ordinalize}, %Y") %></td>
             <td><%= dates_and_visits[date] %></td>
           </tr>
           <% end %>
