@@ -38,7 +38,6 @@ ActiveRecord::Schema.define(version: 2023_01_01_131032) do
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
     t.datetime "created_at", null: false
-    t.uuid "record_id", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -64,7 +63,6 @@ ActiveRecord::Schema.define(version: 2023_01_01_131032) do
     t.integer "visits_count", default: 0
     t.datetime "scheduled_publish"
     t.datetime "scheduled_unpublish"
-    t.datetime "execution_time"
   end
 
   create_table "categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

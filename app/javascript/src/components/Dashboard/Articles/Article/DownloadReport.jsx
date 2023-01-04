@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import FileSaver from "file-saver";
 import { Button } from "neetoui";
+import { useProgress } from "stores";
 
 import createConsumer from "channels/consumer";
 import { subscribeToReportDownloadChannel } from "channels/reportDownloadChannel";
@@ -9,8 +10,6 @@ import useDownloadPdf from "hooks/useDownloadPdf";
 import useGeneratePdf from "hooks/useGeneratePdf";
 
 import ProgressBar from "./ProgressBar";
-
-import { useProgress } from "../store";
 
 const DownloadReport = () => {
   const [isLoading, setIsLoading] = useState(true);

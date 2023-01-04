@@ -1,19 +1,20 @@
 # frozen_string_literal: true
 
 class ArticlePublishLaterService
-  attr_accessor :article
-
-  def initialize(article)
-    @article = article
-  end
-
   def process
-    publish
+    schedule_articles_to_be_publish_later
   end
 
   private
 
-    def publish
-      article.update!(status: "published", scheduled_publish: nil)
+    def find_articles_having_publish_schedule
+      Article.select { |article| article.scheduled_publish && article.scheduled_publish <= Time.zone.now }
+    end
+
+    def schedule_articles_to_be_publish_later
+      articles = find_articles_having_publish_schedule
+      articles.each { |article|
+        ArticlePublishAtWorker.perform_async(article)
+      }
     end
 end

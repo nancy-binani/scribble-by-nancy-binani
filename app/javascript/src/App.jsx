@@ -60,7 +60,7 @@ const App = () => {
         <Route
           exact
           component={Navbar}
-          path={["/", "/settings", "/analytics"]}
+          path={["/", "/settings", "/analytics", "/report"]}
           showTag={false}
         />
         <Switch history={history}>

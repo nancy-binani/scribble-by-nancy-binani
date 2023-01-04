@@ -15,10 +15,6 @@ class Api::Public::Articles::ReportsController < ApplicationController
 
   private
 
-    def report_path
-      @_report_path ||= Rails.root.join("tmp/#{pdf_file_name}")
-    end
-
     def pdf_file_name
       "scribble_articles_report.pdf"
     end

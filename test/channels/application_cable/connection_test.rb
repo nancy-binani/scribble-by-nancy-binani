@@ -6,8 +6,8 @@ class ApplicationCable::ConnectionTest < ActionCable::Connection::TestCase
   include FactoryBot::Syntax::Methods
 
   def setup
-    @site = create(:site)
-    @user = create(:user, site: @site)
+    site = create(:site)
+    @user = create(:user, site: site)
   end
 
   def test_connection_success_when_auth_token_and_email_is_set_correctly

@@ -4,7 +4,7 @@ class ReportsWorker
   include Sidekiq::Worker
   include ActionView::Helpers::TranslationHelper
 
-  def perform(user_id, report_path)
+  def perform(user_id)
     ActionCable.server.broadcast(user_id, { message: t("report.render"), progress: 25 })
     articles = Article.accessible_to(user_id)
 
@@ -26,9 +26,6 @@ class ReportsWorker
       io: StringIO.new(pdf_report), filename: "scribble_articles_report.pdf",
       content_type: "application/pdf")
     current_user.save
-    puts "==========bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb=========="
-    puts current_user.report.download
-    puts current_user.report
     ActionCable.server.broadcast(user_id, { message: t("report.attach"), progress: 100 })
   end
 end
