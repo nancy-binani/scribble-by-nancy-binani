@@ -19,9 +19,16 @@ class ReportsWorker
     pdf_report = WickedPdf.new.pdf_from_string content
     current_user = User.find(user_id)
     ActionCable.server.broadcast(user_id, { message: t("report.upload"), progress: 75 })
-    File.open(report_path, "wb") do |f|
-      f.write(pdf_report)
+    if current_user.report.attached?
+      current_user.report.purge_later
     end
+    current_user.report.attach(
+      io: StringIO.new(pdf_report), filename: "scribble_articles_report.pdf",
+      content_type: "application/pdf")
+    current_user.save
+    puts "==========bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb=========="
+    puts current_user.report.download
+    puts current_user.report
     ActionCable.server.broadcast(user_id, { message: t("report.attach"), progress: 100 })
   end
 end
