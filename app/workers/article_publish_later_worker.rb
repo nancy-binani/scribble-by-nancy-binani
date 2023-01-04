@@ -4,18 +4,7 @@ class ArticlePublishLaterWorker
   include Sidekiq::Worker
 
   def perform
-    publish_later_articles
+    article_schedule_publish_later = ArticlePublishLaterService.new()
+    article_schedule_publish_later.process
   end
-
-  private
-
-    def publish_later_articles
-      articles = Article.all.select { |article|
-        (article.scheduled_publish && article.scheduled_publish <= Time.zone.now)
-      }
-      articles.each do |article|
-        article_schedule_publish_later = ArticlePublishLaterService.new(article)
-        article_schedule_publish_later.process
-      end
-    end
 end

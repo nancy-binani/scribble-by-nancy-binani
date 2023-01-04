@@ -1,17 +1,41 @@
-<div class="mb-4 font-bold">Articles:</div>
-<table>
+<h3>Articles Analytics Report</h3>
+<table border="1" style="width:100%; border-collapse:collapse">
   <tr>
+    <th style="padding:15px">Serial No.</th>
     <th>Title</th>
     <th>Date</th>
-    <th>Visits Count</th>
+    <th>Total Visits</th>
   </tr>
-<% @articles.each do |article| %>
-  <% if article.published? %>
-    <tr>
+  <% itr = 1 %>
+  <%  @articles.each do |article| %>
+  <% date = article.created_at %>
+    <tr style="text-align: center">
+      <td style="padding:15px"><%= itr %>.</td>
       <td><%= article.title %></td>
-      <td><%= article.created_at.strftime("%Y-%m-%d") %></td>
+      <td> <%= date.strftime("%B #{date.day.ordinalize}, %Y") %> </td>
       <td><%= article.visits_count %></td>
     </tr>
+    <% dates_and_visits = article.dates_and_visits
+      all_keys_of_dates_and_visits = dates_and_visits.keys
+      if all_keys_of_dates_and_visits.length > 0
+    %>
+    <tr>
+      <td colspan="4">
+        <table style="width:90%">
+          <tr>
+            <th style="padding:5px">Date</th>
+            <th>Visits</th>
+          </tr>
+          <% all_keys_of_dates_and_visits.each do |date, index| %>
+          <tr style="text-align: center">
+            <td style="padding:5px"><%= date.strftime("%B #{date.day.ordinalize}, %Y") %></td>
+            <td><%= dates_and_visits[date] %></td>
+          </tr>
+          <% end %>
+        </table>
+      <td>
+    </tr>
+    <% end %>
+    <% itr = itr + 1%>
   <% end %>
-<% end %>
 </table>
