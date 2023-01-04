@@ -4,6 +4,6 @@ class ArticlePublishAtWorker
   include Sidekiq::Worker
 
   def perform(article)
-    ArticlePublishLaterService.new(article).process
+    ArticlePublishAtService.new(article).process
   end
 end

@@ -4,6 +4,6 @@ class ArticleUnpublishAtWorker
   include Sidekiq::Worker
 
   def perform(article)
-    ArticleUnPublishLaterService.new(article).process
+    ArticleUnpublishAtService.new(article).process
   end
 end
