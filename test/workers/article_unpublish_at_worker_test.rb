@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ArticlePublishLaterWorkerTest < ActionDispatch::IntegrationTest
+class ArticleUnpublishAtWorkerTest < ActionDispatch::IntegrationTest
   def setup
     @site = create(:site)
     @user = create(:user, site: @site)
@@ -10,10 +10,10 @@ class ArticlePublishLaterWorkerTest < ActionDispatch::IntegrationTest
     @article = create(:article, category: @category, user: @user)
   end
 
-  def test_should_update_the_article_status_to_published
-    article_schedule_publish_later = ArticlePublishLaterService.new(@article)
+  def test_should_update_the_article_status_to_draft
+    article_schedule_publish_later = ArticleUnpublishAtService.new(@article)
     article_schedule_publish_later.process
     @article.reload
-    assert_equal @article.status, "published"
+    assert_equal @article.status, "draft"
   end
 end
