@@ -26,7 +26,7 @@
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.4.3",
     "antd": "4.18.7",
-    "axios": "^0.27.2",
+    "axios": "^0.30.2",
     "babel-plugin-js-logger": "^1.0.17",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "classnames": "^2.3.2",
